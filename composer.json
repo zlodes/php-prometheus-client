@@ -11,7 +11,8 @@
   ],
   "require": {
     "php": "^8.1",
-    "psr/log": "^3.0"
+    "psr/log": "^3.0",
+    "webmozart/assert": "^1.11"
   },
   "require-dev": {
     "ergebnis/composer-normalize": "dev-main",

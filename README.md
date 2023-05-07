@@ -1,6 +1,7 @@
 # PHP Prometheus Exporter
 
 This package gives you an ability to collect and export [Prometheus](https://prometheus.io/) metrics from any modern PHP app.
+
 Now supports only Counter and Gauge metric types.
 
 ## Adapters
@@ -28,6 +29,7 @@ Each class should be registered as a service. As a `singleton` in Laravel or `sh
 
 - [ ] Histogram metric type
 - [ ] Summary metric type
+- [ ] Configure Semantic Release for Github Actions
 
 ## Simple example
 
@@ -38,12 +40,12 @@ use Zlodes\PrometheusExporter\Exporter\PersistentExporter;
 use Zlodes\PrometheusExporter\MetricTypes\Counter;
 use Zlodes\PrometheusExporter\MetricTypes\Gauge;
 use Zlodes\PrometheusExporter\Normalization\JsonMetricKeyDenormalizer;
+use Zlodes\PrometheusExporter\Normalization\JsonMetricKeyNormalizer;
 use Zlodes\PrometheusExporter\Registry\ArrayRegistry;
 use Zlodes\PrometheusExporter\Storage\InMemoryStorage;
 
 $registry = new ArrayRegistry();
-$storage = ;
-$metricKeyDenormalizer = new JsonMetricKeyDenormalizer();
+$storage = new InMemoryStorage();
 
 // Register your metrics
 $registry
@@ -57,7 +59,7 @@ $registry
 // Create a Collector
 $collector = new PersistentCollector(
     $registry,
-    new InMemoryStorage(),
+    $storage,
     new JsonMetricKeyDenormalizer(),
     new NullLogger(),
 );
@@ -78,8 +80,26 @@ $collector->counterIncrement('steps');
 // Export metrics
 $exporter = new PersistentExporter(
     $registry,
-    $storage
+    $storage,
+    new JsonMetricKeyNormalizer(),
+    new NullLogger(),
 );
+
+foreach ($exporter->export() as $metricOutput) {
+    echo $metricOutput . "\n\n";
+}
+```
+
+Output example:
+```
+# HELP body_temperature Body temperature in Celsius
+# TYPE body_temperature gauge
+body_temperature{source="armpit"} 36.6
+body_temperature{source="ass"} 37.2
+
+# HELP steps Steps count
+# TYPE steps counter
+steps 1
 ```
 
 ## Testing

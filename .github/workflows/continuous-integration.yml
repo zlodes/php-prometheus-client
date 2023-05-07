@@ -5,6 +5,11 @@ on:
   push:
     branches: ['*']
 
+permissions:
+  contents: read
+  checks: write
+  id-token: write
+
 jobs:
   composer-validate:
     runs-on: ubuntu-latest

@@ -16,7 +16,7 @@ Now supports only Counter and Gauge metric types.
 ## Installation
 
 ```shell
-composer require zlodes/php-prometheus-exporter
+composer require zlodes/prometheus-exporter
 ```
 
 ## Class responsibilities

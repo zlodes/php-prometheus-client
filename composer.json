@@ -1,0 +1,54 @@
+{
+  "name": "zlodes/prometheus-exporter",
+  "description": "The Prometheus Metrics exporter for PHP",
+  "license": "MIT",
+  "type": "library",
+  "authors": [
+    {
+      "name": "Zlatoslav Desyatnikov",
+      "email": "px.zlodes@gmail.com"
+    }
+  ],
+  "require": {
+    "php": "^8.1",
+    "psr/log": "^3.0"
+  },
+  "require-dev": {
+    "ergebnis/composer-normalize": "dev-main",
+    "mockery/mockery": "^1.5",
+    "phpcompatibility/php-compatibility": "^9.3",
+    "phpunit/phpunit": "^10.0",
+    "ramsey/uuid": "^4.7",
+    "roave/security-advisories": "dev-latest",
+    "slevomat/coding-standard": "^8.11",
+    "squizlabs/php_codesniffer": "^3.7",
+    "vimeo/psalm": "^5.0"
+  },
+  "minimum-stability": "beta",
+  "autoload": {
+    "psr-4": {
+      "Zlodes\\PrometheusExporter\\": "src/"
+    }
+  },
+  "autoload-dev": {
+    "psr-4": {
+      "Zlodes\\PrometheusExporter\\Tests\\": "tests/"
+    }
+  },
+  "config": {
+    "allow-plugins": {
+      "ergebnis/composer-normalize": true,
+      "dealerdirect/phpcodesniffer-composer-installer": true
+    },
+    "sort-packages": true
+  },
+  "scripts": {
+    "test": "./vendor/bin/phpunit",
+    "test:coverage": [
+      "@putenv XDEBUG_MODE=coverage",
+      "@test"
+    ],
+    "psalm": "./vendor/bin/psalm --show-info=true",
+    "phpcs": "./vendor/bin/phpcs -p src"
+  }
+}

@@ -1,5 +1,7 @@
 # PHP Prometheus Exporter
 
+[![codecov](https://codecov.io/gh/zlodes/php-prometheus-exporter/branch/master/graph/badge.svg?token=ROMQ8VBN0A)](https://codecov.io/gh/zlodes/php-prometheus-exporter)
+
 This package gives you an ability to collect and export [Prometheus](https://prometheus.io/) metrics from any modern PHP app.
 
 Now supports only Counter and Gauge metric types.
@@ -29,7 +31,7 @@ Each class should be registered as a service. As a `singleton` in Laravel or `sh
 
 - [ ] Histogram metric type
 - [ ] Summary metric type
-- [ ] Configure Semantic Release for Github Actions
+- [ ] Configure Semantic Release for GitHub Actions
 
 ## Simple example
 

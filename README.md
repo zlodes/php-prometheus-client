@@ -6,6 +6,9 @@ This package gives you an ability to collect and export [Prometheus](https://pro
 
 Now supports only Counter and Gauge metric types.
 
+> **Warning**
+> This package is still in development. Use it on your own risk until 1.0.0 release.
+
 ## Adapters
 
 * For Laravel: [zlodes/prometheus-exporter-laravel](https://github.com/zlodes/php-prometheus-exporter-laravel)

@@ -7,6 +7,7 @@ namespace Zlodes\PrometheusExporter\Tests\Storage;
 use PHPUnit\Framework\TestCase;
 use Zlodes\PrometheusExporter\Storage\InMemoryStorage;
 use Zlodes\PrometheusExporter\Storage\Storage;
+use Zlodes\PrometheusExporter\Storage\StorageTesting;
 
 class InMemoryStorageTest extends TestCase
 {

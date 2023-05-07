@@ -2,10 +2,9 @@
 
 declare(strict_types=1);
 
-namespace Zlodes\PrometheusExporter\Tests\Storage;
+namespace Zlodes\PrometheusExporter\Storage;
 
 use Ramsey\Uuid\Uuid;
-use Zlodes\PrometheusExporter\Storage\Storage;
 use function PHPUnit\Framework\assertEmpty;
 use function PHPUnit\Framework\assertEquals;
 

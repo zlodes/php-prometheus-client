@@ -117,7 +117,7 @@ php ./vendor/bin/phpunit
 
 ### Testing your storage
 
-There is a simple [trait](tests/Storage/StorageTesting.php) to tests any storage you want. Here is an example:
+There is a simple [trait](src/Storage/StorageTesting.php) to tests any storage you want. Here is an example:
 
 ```php
 class InMemoryStorageTest extends TestCase

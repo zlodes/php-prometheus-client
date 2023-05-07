@@ -70,3 +70,30 @@ jobs:
         with:
           composer-options: --optimize-autoloader
       - run: composer psalm -- --php-version=${{ matrix.php }} --stats --output-format=github
+
+  tests:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout Code
+        uses: actions/checkout@v2
+
+      - name: Install composer and dependencies
+        uses: php-actions/composer@v6
+
+      - name: PHPUnit Tests
+        uses: php-actions/phpunit@v3
+        env:
+          XDEBUG_MODE: coverage
+        with:
+          bootstrap: vendor/autoload.php
+          configuration: phpunit.xml
+          php_extensions: xdebug
+          args: tests --coverage-clover ./vendor/coverage.xml
+
+      - name: Upload to Codecov
+        uses: codecov/codecov-action@v2
+        with:
+          token: ${{ secrets.CODE_COV_TOKEN }}
+          files: ./vendor/coverage.xml
+          verbose: true

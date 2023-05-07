@@ -1,0 +1,110 @@
+name: Continuous Integration
+
+on:
+  pull_request: ~
+  push:
+    branches: ['*']
+
+permissions:
+  contents: read
+  checks: write
+  id-token: write
+
+jobs:
+  composer-validate:
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        php: [8.1]
+    steps:
+      - uses: actions/checkout@v3.3.0
+      - uses: shivammathur/setup-php@v2
+        with:
+          php-version: ${{ matrix.php }}
+          tools: composer:v2
+          coverage: none
+      - run: composer validate --strict --ansi
+
+  composer-normalize:
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        php: [8.1]
+    steps:
+      - uses: actions/checkout@v3.3.0
+      - uses: shivammathur/setup-php@v2
+        with:
+          php-version: ${{ matrix.php }}
+          tools: composer:v2
+          coverage: none
+      - uses: ramsey/composer-install@v2
+        with:
+          composer-options: --optimize-autoloader
+      - run: composer normalize --dry-run --diff --ansi
+
+  php-code-sniffer:
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        php: [8.1]
+    steps:
+      - uses: actions/checkout@v3.3.0
+      - uses: shivammathur/setup-php@v2
+        with:
+          php-version: ${{ matrix.php }}
+          tools: composer:v2, cs2pr
+          coverage: none
+      - uses: ramsey/composer-install@v2
+        with:
+          composer-options: --optimize-autoloader
+      - run: composer phpcs
+
+  psalm:
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        php: [8.1, 8.2]
+    steps:
+      - uses: actions/checkout@v3.3.0
+      - uses: shivammathur/setup-php@v2
+        with:
+          php-version: ${{ matrix.php }}
+          tools: composer:v2
+          coverage: none
+      - uses: ramsey/composer-install@v2
+        with:
+          composer-options: --optimize-autoloader
+      - run: composer psalm -- --php-version=${{ matrix.php }} --stats --output-format=github
+
+  tests:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout Code
+        uses: actions/checkout@v2
+
+      - name: Install composer and dependencies
+        uses: php-actions/composer@v6
+
+      - name: PHPUnit Tests
+        uses: php-actions/phpunit@v3
+        env:
+          XDEBUG_MODE: coverage
+        with:
+          bootstrap: vendor/autoload.php
+          configuration: phpunit.xml
+          php_extensions: xdebug
+          args: tests --coverage-clover ./vendor/coverage.xml
+
+      - name: Upload to Codecov
+        uses: codecov/codecov-action@v2
+        with:
+          token: ${{ secrets.CODE_COV_TOKEN }}
+          files: ./vendor/coverage.xml
+          verbose: true
+
+      - name: Publish Test Report
+        uses: mikepenz/action-junit-report@v3
+        if: success() || failure() # always run even if the previous step fails
+        with:
+          report_paths: './vendor/junit.xml'

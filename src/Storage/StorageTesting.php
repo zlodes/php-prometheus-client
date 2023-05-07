@@ -4,14 +4,12 @@ declare(strict_types=1);
 
 namespace Zlodes\PrometheusExporter\Storage;
 
-use Ramsey\Uuid\Uuid;
+use Ramsey\Uuid\Uuid; // phpcs:ignore
 use function PHPUnit\Framework\assertEmpty;
 use function PHPUnit\Framework\assertEquals;
 
 trait StorageTesting
 {
-    abstract private function createStorage(): Storage;
-    
     public function testGetSet(): void
     {
         $storage = $this->createStorage();
@@ -44,4 +42,6 @@ trait StorageTesting
         $storage->flush();
         assertEmpty($storage->fetch());
     }
+
+    abstract protected function createStorage(): Storage;
 }

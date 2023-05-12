@@ -19,7 +19,6 @@
     "mockery/mockery": "^1.5",
     "phpcompatibility/php-compatibility": "^9.3",
     "phpunit/phpunit": "^10.0",
-    "ramsey/uuid": "^4.7",
     "roave/security-advisories": "dev-latest",
     "slevomat/coding-standard": "^8.11",
     "squizlabs/php_codesniffer": "^3.7",
@@ -44,6 +43,11 @@
     "sort-packages": true
   },
   "scripts": {
+    "full-check": [
+      "@phpcs",
+      "@psalm",
+      "@test:coverage"
+    ],
     "phpcs": "./vendor/bin/phpcs -p src",
     "psalm": "./vendor/bin/psalm --show-info=true",
     "test": "./vendor/bin/phpunit",

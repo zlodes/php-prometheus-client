@@ -4,7 +4,9 @@ declare(strict_types=1);
 
 namespace Zlodes\PrometheusExporter\Storage;
 
-use Ramsey\Uuid\Uuid; // phpcs:ignore
+use Zlodes\PrometheusExporter\DTO\MetricNameWithLabels;
+use Zlodes\PrometheusExporter\DTO\MetricValue; // phpcs:ignore
+use function PHPUnit\Framework\assertCount;
 use function PHPUnit\Framework\assertEmpty;
 use function PHPUnit\Framework\assertEquals;
 
@@ -14,18 +16,71 @@ trait StorageTesting
     {
         $storage = $this->createStorage();
 
-        $key = Uuid::uuid4()->toString();
+        assertEmpty($storage->fetch());
 
-        assertEquals(0, $storage->getValue($key));
+        $storage->setValue(
+            new MetricValue(
+                new MetricNameWithLabels('cpu_temp', ['core' => '0']),
+                60
+            )
+        );
 
-        $storage->setValue($key, 42.69);
-        assertEquals(42.69, $storage->getValue($key));
+        $storage->setValue(
+            new MetricValue(
+                new MetricNameWithLabels('cpu_temp', ['core' => '1']),
+                62
+            )
+        );
 
-        $storage->incrementValue($key, 7.31);
-        assertEquals(50, $storage->getValue($key));
+        $storage->incrementValue(
+            new MetricValue(
+                new MetricNameWithLabels('system_restarts_total'),
+                1
+            )
+        );
 
-        $storage->incrementValue($key, -2.5);
-        assertEquals(47.5, $storage->getValue($key));
+        $storage->incrementValue(
+            new MetricValue(
+                new MetricNameWithLabels('system_restarts_total'),
+                1
+            )
+        );
+
+        $storage->setValue(
+            new MetricValue(
+                new MetricNameWithLabels('days_left'),
+                10
+            )
+        );
+
+        $storage->incrementValue(
+            new MetricValue(
+                new MetricNameWithLabels('days_left'),
+                -1
+            )
+        );
+
+        $fetched = $storage->fetch();
+        $expected = [
+            new MetricValue(
+                new MetricNameWithLabels('cpu_temp', ['core' => '0']),
+                60
+            ),
+            new MetricValue(
+                new MetricNameWithLabels('cpu_temp', ['core' => '1']),
+                62
+            ),
+            new MetricValue(
+                new MetricNameWithLabels('system_restarts_total'),
+                2
+            ),
+            new MetricValue(
+                new MetricNameWithLabels('days_left'),
+                9
+            ),
+        ];
+
+        assertEquals($expected, $fetched);
     }
 
     public function testGetAllAndFlush(): void
@@ -35,9 +90,14 @@ trait StorageTesting
         $storage->flush();
         assertEmpty($storage->fetch());
 
-        $storage->setValue('foo', 0);
-        $storage->setValue('bar', 3.14);
-        assertEquals(['foo' => 0, 'bar' => 3.14], $storage->fetch());
+        $storage->setValue(
+            new MetricValue(
+                new MetricNameWithLabels('cpu_temp'),
+                70
+            )
+        );
+
+        assertCount(1, $storage->fetch());
 
         $storage->flush();
         assertEmpty($storage->fetch());

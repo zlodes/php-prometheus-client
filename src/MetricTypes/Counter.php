@@ -6,7 +6,7 @@ namespace Zlodes\PrometheusExporter\MetricTypes;
 
 use Zlodes\PrometheusExporter\Enum\MetricType;
 
-final class Counter extends Metric
+final class Counter extends SimpleMetric
 {
     public function getType(): MetricType
     {

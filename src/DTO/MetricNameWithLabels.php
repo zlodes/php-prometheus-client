@@ -17,7 +17,6 @@ final class MetricNameWithLabels
         public readonly array $labels = [],
     ) {
         Assert::allString(array_keys($labels));
-        Assert::allString($labels);
-        Assert::allNotEmpty($labels);
+        Assert::allStringNotEmpty($labels);
     }
 }

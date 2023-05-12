@@ -4,7 +4,8 @@ declare(strict_types=1);
 
 namespace Zlodes\PrometheusExporter\Normalization;
 
-use Throwable;
+use InvalidArgumentException;
+use JsonException;
 use Webmozart\Assert\Assert;
 use Zlodes\PrometheusExporter\DTO\MetricNameWithLabels;
 use Zlodes\PrometheusExporter\Normalization\Contracts\MetricKeyNormalizer;
@@ -27,12 +28,11 @@ final class JsonMetricKeyNormalizer implements MetricKeyNormalizer
                 : [];
 
             Assert::isArray($labels);
-            Assert::allNotEmpty($labels);
-            Assert::allString($labels);
+            Assert::allStringNotEmpty($labels);
             /** @psalm-var array<non-empty-string, non-empty-string> $labels */
 
             return new MetricNameWithLabels($name, $labels);
-        } catch (Throwable $e) {
+        } catch (JsonException | InvalidArgumentException $e) {
             throw new CannotNormalizeMetricsKey(
                 "Cannot normalize metrics key: {$e->getMessage()}",
                 previous: $e

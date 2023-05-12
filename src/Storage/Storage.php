@@ -4,38 +4,33 @@ declare(strict_types=1);
 
 namespace Zlodes\PrometheusExporter\Storage;
 
+use Zlodes\PrometheusExporter\DTO\MetricValue;
+use Zlodes\PrometheusExporter\Exceptions\StorageReadException;
+use Zlodes\PrometheusExporter\Exceptions\StorageWriteException;
+
 interface Storage
 {
     /**
-     * @return array<non-empty-string, float|int> Metrics array with denormalized keys and values
+     * @return list<MetricValue> Metrics array with denormalized keys and values
+     *
+     * @throws StorageReadException
      */
     public function fetch(): array;
 
     /**
      * Removes all the keys
+     *
+     * @throws StorageWriteException
      */
     public function flush(): void;
 
     /**
-     * @param non-empty-string $key
-     *
-     * @return float|int
+     * @throws StorageWriteException
      */
-    public function getValue(string $key): float|int;
+    public function setValue(MetricValue $value): void;
 
     /**
-     * @param non-empty-string $key
-     * @param float|int $value
-     *
-     * @return void
+     * @throws StorageWriteException
      */
-    public function setValue(string $key, float|int $value): void;
-
-    /**
-     * @param non-empty-string $key
-     * @param float|int $value
-     *
-     * @return void
-     */
-    public function incrementValue(string $key, float|int $value): void;
+    public function incrementValue(MetricValue $value): void;
 }

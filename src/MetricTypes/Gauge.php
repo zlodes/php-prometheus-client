@@ -6,7 +6,7 @@ namespace Zlodes\PrometheusExporter\MetricTypes;
 
 use Zlodes\PrometheusExporter\Enum\MetricType;
 
-final class Gauge extends Metric
+final class Gauge extends SimpleMetric
 {
     public function getType(): MetricType
     {

@@ -2,6 +2,13 @@
 
 [![codecov](https://codecov.io/gh/zlodes/php-prometheus-exporter/branch/master/graph/badge.svg?token=ROMQ8VBN0A)](https://codecov.io/gh/zlodes/php-prometheus-exporter)
 
+## Why?
+
+* Until now, there was no working Prometheus Exporter for modern PHP
+* Framework-agnostic
+* Almost zero dependencies
+* Ready to use with static analysis tools (Psalm)
+
 This package gives you an ability to collect and export [Prometheus](https://prometheus.io/) metrics from any modern PHP app.
 
 Now supports only Counter and Gauge metric types.
@@ -21,12 +28,11 @@ composer require zlodes/prometheus-exporter
 
 ## Class responsibilities
 
-| Interface                                | Description                  | Default implementation                                       |
-|------------------------------------------|------------------------------|--------------------------------------------------------------|
-| [Collector](src/Collector/Collector.php) | To collect metrics           | [PersistentCollector](src/Collector/PersistentCollector.php) |
-| [Registry](src/Registry/Registry.php)    | To declare a specific metric | [ArrayRegistry](src/Registry/ArrayRegistry.php)              |
-| [Storage](src/Storage/Storage.php)       | Metrics values storage       | [InMemoryStorage](src/Storage/InMemoryStorage.php)           |
-| [Exporter](src/Exporter/Exporter.php)    | Output collected metrics     | [PersistentExporter](src/Exporter/PersistentExporter.php)    |
+| Interface                             | Description                  | Default implementation                                          |
+|---------------------------------------|------------------------------|-----------------------------------------------------------------|
+| [Registry](src/Registry/Registry.php) | To declare a specific metric | [ArrayRegistry](src/Registry/ArrayRegistry.php)                 |
+| [Storage](src/Storage/Storage.php)    | Metrics values storage       | [InMemoryStorage](src/Storage/InMemoryStorage.php)              |
+| [Exporter](src/Exporter/Exporter.php) | Output collected metrics     | [StoredMetricsExporter](src/Exporter/StoredMetricsExporter.php) |
 
 Each class should be registered as a service. As a `singleton` in Laravel or `shared` service in Symfony.
 
@@ -39,13 +45,13 @@ Each class should be registered as a service. As a `singleton` in Laravel or `sh
 ## Simple example
 
 ```php
+<?php
+
 use Psr\Log\NullLogger;
-use Zlodes\PrometheusExporter\Collector\PersistentCollector;
-use Zlodes\PrometheusExporter\Exporter\PersistentExporter;
+use Zlodes\PrometheusExporter\Collector\CollectorFactory;
+use Zlodes\PrometheusExporter\Exporter\StoredMetricsExporter;
 use Zlodes\PrometheusExporter\MetricTypes\Counter;
 use Zlodes\PrometheusExporter\MetricTypes\Gauge;
-use Zlodes\PrometheusExporter\Normalization\JsonMetricKeyDenormalizer;
-use Zlodes\PrometheusExporter\Normalization\JsonMetricKeyNormalizer;
 use Zlodes\PrometheusExporter\Registry\ArrayRegistry;
 use Zlodes\PrometheusExporter\Storage\InMemoryStorage;
 
@@ -62,31 +68,31 @@ $registry
     );
 
 // Create a Collector
-$collector = new PersistentCollector(
+$collectorFactory = new CollectorFactory(
     $registry,
     $storage,
-    new JsonMetricKeyDenormalizer(),
     new NullLogger(),
 );
 
 // Collect metrics
-$collector->gaugeSet(
-    gaugeName: 'body_temperature',
-    labels: ['source' => 'armpit'],
-    value: 36.6
-);
-$collector->gaugeSet(
-    gaugeName: 'body_temperature',
-    labels: ['source' => 'ass'],
-    value: 37.2
-);
-$collector->counterIncrement('steps');
+$bodyTemperatureGauge = $collectorFactory->gauge('body_temperature');
+
+$bodyTemperatureGauge
+    ->withLabels(['source' => 'armpit'])
+    ->setValue(36.6);
+
+$bodyTemperatureGauge
+    ->withLabels(['source' => 'ass'])
+    ->setValue(37.2);
+
+$collectorFactory
+    ->counter('steps')
+    ->increment();
 
 // Export metrics
-$exporter = new PersistentExporter(
+$exporter = new StoredMetricsExporter(
     $registry,
     $storage,
-    new JsonMetricKeyNormalizer(),
     new NullLogger(),
 );
 
@@ -115,7 +121,18 @@ steps 1
 php ./vendor/bin/phpunit
 ```
 
-### Testing your storage
+### Creating your own Storage
+
+#### Keys normalization/denormalization
+
+There are two interfaces (with JSON-based implementations) to simplify work with a key-value storage:
+
+* [MetricKeyNormalizer](src/Normalization/Contracts/MetricKeyNormalizer.php)
+* [MetricKeyDenormalizer](src/Normalization/Contracts/MetricKeyDenormalizer.php)
+
+Example can be found in [InMemoryStorage](src/Storage/InMemoryStorage.php).
+
+#### Storage Testing
 
 There is a simple [trait](src/Storage/StorageTesting.php) to tests any storage you want. Here is an example:
 

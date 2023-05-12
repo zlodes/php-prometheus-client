@@ -9,10 +9,11 @@ use Mockery\Adapter\Phpunit\MockeryPHPUnitIntegration;
 use PHPUnit\Framework\TestCase;
 use Psr\Log\NullLogger;
 use Throwable;
-use Zlodes\PrometheusExporter\Exporter\PersistentExporter;
+use Zlodes\PrometheusExporter\DTO\MetricNameWithLabels;
+use Zlodes\PrometheusExporter\DTO\MetricValue;
+use Zlodes\PrometheusExporter\Exporter\StoredMetricsExporter;
 use Zlodes\PrometheusExporter\MetricTypes\Counter;
 use Zlodes\PrometheusExporter\MetricTypes\Gauge;
-use Zlodes\PrometheusExporter\Normalization\JsonMetricKeyNormalizer;
 use Zlodes\PrometheusExporter\Registry\ArrayRegistry;
 use Zlodes\PrometheusExporter\Storage\Storage;
 
@@ -25,10 +26,9 @@ final class ExporterTest extends TestCase
      */
     public function testExport(): void
     {
-        $exporter = new PersistentExporter(
+        $exporter = new StoredMetricsExporter(
             $registry = new ArrayRegistry(),
             $storageMock = Mockery::mock(Storage::class),
-            new JsonMetricKeyNormalizer(),
             new NullLogger(),
         );
 
@@ -43,8 +43,14 @@ final class ExporterTest extends TestCase
         $storageMock
             ->expects('fetch')
             ->andReturn([
-                'temperature|{"source":"armpit","side":"left"}' => 36.5,
-                'temperature|{"source":"ass"}' => 37.2,
+                new MetricValue(
+                    new MetricNameWithLabels('temperature', ['source' => 'armpit', 'side' => 'left']),
+                    36.5
+                ),
+                new MetricValue(
+                    new MetricNameWithLabels('temperature', ['source' => 'ass']),
+                    37.2
+                ),
             ]);
 
         $exportedStrings = [];

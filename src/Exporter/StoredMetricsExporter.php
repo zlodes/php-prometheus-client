@@ -5,41 +5,35 @@ declare(strict_types=1);
 namespace Zlodes\PrometheusExporter\Exporter;
 
 use Psr\Log\LoggerInterface;
-use Zlodes\PrometheusExporter\Normalization\Contracts\MetricKeyNormalizer;
+use Zlodes\PrometheusExporter\DTO\MetricValue;
 use Zlodes\PrometheusExporter\Registry\Registry;
 use Zlodes\PrometheusExporter\Storage\Storage;
 
-final class PersistentExporter implements Exporter
+final class StoredMetricsExporter implements Exporter
 {
     public function __construct(
         public readonly Registry $registry,
         public readonly Storage $storage,
-        public readonly MetricKeyNormalizer $keyNormalizer,
         public readonly LoggerInterface $logger,
     ) {
     }
 
     public function export(): iterable
     {
-        $valuesRaw = $this->storage->fetch();
+        $values = $this->storage->fetch();
 
-        /** @var array<string, list<array{0: array<string, string>, 1: float}>> $normalized */
-        $normalized = [];
+        /** @var array<string, list<MetricValue>> $valuesGroupedByMetric */
+        $valuesGroupedByMetric = [];
 
-        foreach ($valuesRaw as $key => $value) {
-            $nameWithLabels = $this->keyNormalizer->normalize($key);
-
-            $normalized[$nameWithLabels->metricName][] = [
-                $nameWithLabels->labels,
-                $value,
-            ];
+        foreach ($values as $value) {
+            $valuesGroupedByMetric[$value->metricNameWithLabels->metricName][] = $value;
         }
 
         foreach ($this->registry->getAll() as $name => $metric) {
             $prometheusString = "# HELP $name {$metric->getHelp()}\n";
             $prometheusString .= "# TYPE $name {$metric->getType()->value}\n";
 
-            $values = $normalized[$name] ?? null;
+            $values = $valuesGroupedByMetric[$name] ?? null;
 
             // Yield single metric with default labels and initial value
             if ($values === null) {
@@ -57,12 +51,12 @@ final class PersistentExporter implements Exporter
 
             $valuesCount = count($values);
 
-            foreach ($values as $index => [$labels, $value]) {
+            foreach ($values as $index => $value) {
                 $prometheusString .= sprintf(
                     "%s%s %s",
                     $name,
-                    $this->buildLabelsString($labels),
-                    $value
+                    $this->buildLabelsString($value->metricNameWithLabels->labels),
+                    $value->value
                 );
 
                 if ($index < $valuesCount - 1) {

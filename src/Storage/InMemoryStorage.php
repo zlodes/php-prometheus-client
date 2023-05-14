@@ -44,7 +44,7 @@ final class InMemoryStorage implements Storage
         return $results;
     }
 
-    public function flush(): void
+    public function empty(): void
     {
         $this->storage = [];
     }

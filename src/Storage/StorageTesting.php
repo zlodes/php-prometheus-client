@@ -83,11 +83,11 @@ trait StorageTesting
         assertEquals($expected, $fetched);
     }
 
-    public function testGetAllAndFlush(): void
+    public function testGetAllAndEmpty(): void
     {
         $storage = $this->createStorage();
 
-        $storage->flush();
+        $storage->empty();
         assertEmpty($storage->fetch());
 
         $storage->setValue(
@@ -99,7 +99,7 @@ trait StorageTesting
 
         assertCount(1, $storage->fetch());
 
-        $storage->flush();
+        $storage->empty();
         assertEmpty($storage->fetch());
     }
 

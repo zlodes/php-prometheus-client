@@ -87,7 +87,7 @@ trait StorageTesting
     {
         $storage = $this->createStorage();
 
-        $storage->empty();
+        $storage->clear();
         assertEmpty($storage->fetch());
 
         $storage->setValue(
@@ -99,7 +99,7 @@ trait StorageTesting
 
         assertCount(1, $storage->fetch());
 
-        $storage->empty();
+        $storage->clear();
         assertEmpty($storage->fetch());
     }
 

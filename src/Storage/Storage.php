@@ -22,7 +22,7 @@ interface Storage
      *
      * @throws StorageWriteException
      */
-    public function empty(): void;
+    public function clear(): void;
 
     /**
      * @throws StorageWriteException

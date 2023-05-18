@@ -5,10 +5,10 @@ declare(strict_types=1);
 namespace Zlodes\PrometheusExporter\Collector\ByType;
 
 use Psr\Log\LoggerInterface;
-use Zlodes\PrometheusExporter\DTO\MetricNameWithLabels;
-use Zlodes\PrometheusExporter\DTO\MetricValue;
 use Zlodes\PrometheusExporter\Exceptions\StorageWriteException;
 use Zlodes\PrometheusExporter\MetricTypes\Gauge;
+use Zlodes\PrometheusExporter\Storage\DTO\MetricNameWithLabels;
+use Zlodes\PrometheusExporter\Storage\DTO\MetricValue;
 use Zlodes\PrometheusExporter\Storage\Storage;
 
 final class GaugeCollector

@@ -8,3 +8,4 @@
 /phpunit.xml        export-ignore
 /psalm.xml          export-ignore
 /phpcs.xml          export-ignore
+/.cspell.json       export-ignore

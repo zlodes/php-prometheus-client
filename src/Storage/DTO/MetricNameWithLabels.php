@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Zlodes\PrometheusExporter\DTO;
+namespace Zlodes\PrometheusExporter\Storage\DTO;
 
 use Webmozart\Assert\Assert;
 

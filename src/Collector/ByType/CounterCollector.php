@@ -6,10 +6,10 @@ namespace Zlodes\PrometheusExporter\Collector\ByType;
 
 use Psr\Log\LoggerInterface;
 use Webmozart\Assert\Assert;
-use Zlodes\PrometheusExporter\DTO\MetricNameWithLabels;
-use Zlodes\PrometheusExporter\DTO\MetricValue;
 use Zlodes\PrometheusExporter\Exceptions\StorageWriteException;
 use Zlodes\PrometheusExporter\MetricTypes\Counter;
+use Zlodes\PrometheusExporter\Storage\DTO\MetricNameWithLabels;
+use Zlodes\PrometheusExporter\Storage\DTO\MetricValue;
 use Zlodes\PrometheusExporter\Storage\Storage;
 
 final class CounterCollector

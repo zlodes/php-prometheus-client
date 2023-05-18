@@ -123,12 +123,11 @@ php ./vendor/bin/phpunit
 
 ### Creating your own Storage
 
-#### Keys normalization/denormalization
+#### Keys serialization
 
-There are two interfaces (with JSON-based implementations) to simplify work with a key-value storage:
+There is an interfaces (with JSON-based implementation) to simplify work with a key-value storage:
 
-* [MetricKeyNormalizer](src/Normalization/Contracts/MetricKeyNormalizer.php)
-* [MetricKeyDenormalizer](src/Normalization/Contracts/MetricKeyDenormalizer.php)
+[Serializer](src/KeySerialization/Serializer.php)
 
 Example can be found in [InMemoryStorage](src/Storage/InMemoryStorage.php).
 

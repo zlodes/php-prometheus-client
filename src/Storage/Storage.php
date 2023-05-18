@@ -4,14 +4,14 @@ declare(strict_types=1);
 
 namespace Zlodes\PrometheusExporter\Storage;
 
-use Zlodes\PrometheusExporter\DTO\MetricValue;
 use Zlodes\PrometheusExporter\Exceptions\StorageReadException;
 use Zlodes\PrometheusExporter\Exceptions\StorageWriteException;
+use Zlodes\PrometheusExporter\Storage\DTO\MetricValue;
 
 interface Storage
 {
     /**
-     * @return list<MetricValue> Metrics array with denormalized keys and values
+     * @return list<MetricValue>
      *
      * @throws StorageReadException
      */

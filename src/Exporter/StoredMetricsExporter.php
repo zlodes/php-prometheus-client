@@ -5,8 +5,8 @@ declare(strict_types=1);
 namespace Zlodes\PrometheusExporter\Exporter;
 
 use Psr\Log\LoggerInterface;
-use Zlodes\PrometheusExporter\DTO\MetricValue;
 use Zlodes\PrometheusExporter\Registry\Registry;
+use Zlodes\PrometheusExporter\Storage\DTO\MetricValue;
 use Zlodes\PrometheusExporter\Storage\Storage;
 
 final class StoredMetricsExporter implements Exporter

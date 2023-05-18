@@ -7,13 +7,13 @@ namespace Zlodes\PrometheusExporter\Tests\Collector\ByType;
 use Mockery;
 use Mockery\Adapter\Phpunit\MockeryPHPUnitIntegration;
 use PHPUnit\Framework\Attributes\DataProvider;
+use PHPUnit\Framework\TestCase;
 use Psr\Log\LoggerInterface;
 use Psr\Log\NullLogger;
-use PHPUnit\Framework\TestCase;
 use Zlodes\PrometheusExporter\Collector\ByType\GaugeCollector;
-use Zlodes\PrometheusExporter\DTO\MetricValue;
 use Zlodes\PrometheusExporter\Exceptions\StorageWriteException;
 use Zlodes\PrometheusExporter\MetricTypes\Gauge;
+use Zlodes\PrometheusExporter\Storage\DTO\MetricValue;
 use Zlodes\PrometheusExporter\Storage\Storage;
 
 class GaugeCollectorTest extends TestCase

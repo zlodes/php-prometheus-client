@@ -4,13 +4,13 @@ declare(strict_types=1);
 
 namespace Zlodes\PrometheusExporter\Storage;
 
-use Zlodes\PrometheusExporter\DTO\MetricValue;
+use Zlodes\PrometheusExporter\Exceptions\MetricKeySerializationException;
+use Zlodes\PrometheusExporter\Exceptions\MetricKeyUnserializationException;
 use Zlodes\PrometheusExporter\Exceptions\StorageReadException;
-use Zlodes\PrometheusExporter\Normalization\Contracts\MetricKeyDenormalizer;
-use Zlodes\PrometheusExporter\Normalization\Contracts\MetricKeyNormalizer;
-use Zlodes\PrometheusExporter\Normalization\Exceptions\CannotNormalizeMetricsKey;
-use Zlodes\PrometheusExporter\Normalization\JsonMetricKeyDenormalizer;
-use Zlodes\PrometheusExporter\Normalization\JsonMetricKeyNormalizer;
+use Zlodes\PrometheusExporter\Exceptions\StorageWriteException;
+use Zlodes\PrometheusExporter\KeySerialization\JsonSerializer;
+use Zlodes\PrometheusExporter\KeySerialization\Serializer;
+use Zlodes\PrometheusExporter\Storage\DTO\MetricValue;
 
 final class InMemoryStorage implements Storage
 {
@@ -18,8 +18,7 @@ final class InMemoryStorage implements Storage
     private array $storage = [];
 
     public function __construct(
-        private readonly MetricKeyNormalizer $metricKeyNormalizer = new JsonMetricKeyNormalizer(),
-        private readonly MetricKeyDenormalizer $metricKeyDenormalizer = new JsonMetricKeyDenormalizer(),
+        private readonly Serializer $metricKeySerializer = new JsonSerializer(),
     ) {
     }
 
@@ -27,15 +26,15 @@ final class InMemoryStorage implements Storage
     {
         $results = [];
 
-        foreach ($this->storage as $denormalizedKey => $value) {
+        foreach ($this->storage as $serializedKey => $value) {
             try {
                 $results[] = new MetricValue(
-                    $this->metricKeyNormalizer->normalize($denormalizedKey),
+                    $this->metricKeySerializer->unserialize($serializedKey),
                     $value
                 );
-            } catch (CannotNormalizeMetricsKey $e) {
+            } catch (MetricKeyUnserializationException $e) {
                 throw new StorageReadException(
-                    "Fetch error. Cannot normalize metrics key for key: $denormalizedKey",
+                    "Fetch error. Cannot unserialize metrics key for key: $serializedKey",
                     previous: $e
                 );
             }
@@ -51,14 +50,22 @@ final class InMemoryStorage implements Storage
 
     public function setValue(MetricValue $value): void
     {
-        $key = $this->metricKeyDenormalizer->denormalize($value->metricNameWithLabels);
+        try {
+            $key = $this->metricKeySerializer->serialize($value->metricNameWithLabels);
+        } catch (MetricKeySerializationException $e) {
+            throw new StorageWriteException('Cannot serialize metric key', previous: $e);
+        }
 
         $this->storage[$key] = $value->value;
     }
 
     public function incrementValue(MetricValue $value): void
     {
-        $key = $this->metricKeyDenormalizer->denormalize($value->metricNameWithLabels);
+        try {
+            $key = $this->metricKeySerializer->serialize($value->metricNameWithLabels);
+        } catch (MetricKeySerializationException $e) {
+            throw new StorageWriteException('Cannot serialize metric key', previous: $e);
+        }
 
         if (!array_key_exists($key, $this->storage)) {
             $this->storage[$key] = $value->value;

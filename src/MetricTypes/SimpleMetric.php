@@ -6,6 +6,9 @@ namespace Zlodes\PrometheusExporter\MetricTypes;
 
 use Webmozart\Assert\Assert;
 
+/**
+ * @internal Zlodes\PrometheusExporter\MetricTypes
+ */
 abstract class SimpleMetric implements Metric
 {
     /**

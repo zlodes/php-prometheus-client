@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Zlodes\PrometheusExporter\Enum;
+namespace Zlodes\PrometheusExporter\MetricTypes;
 
 /**
  * @see https://prometheus.io/docs/concepts/metric_types/

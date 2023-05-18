@@ -9,12 +9,12 @@ use Mockery\Adapter\Phpunit\MockeryPHPUnitIntegration;
 use PHPUnit\Framework\TestCase;
 use Psr\Log\NullLogger;
 use Throwable;
-use Zlodes\PrometheusExporter\DTO\MetricNameWithLabels;
-use Zlodes\PrometheusExporter\DTO\MetricValue;
 use Zlodes\PrometheusExporter\Exporter\StoredMetricsExporter;
 use Zlodes\PrometheusExporter\MetricTypes\Counter;
 use Zlodes\PrometheusExporter\MetricTypes\Gauge;
 use Zlodes\PrometheusExporter\Registry\ArrayRegistry;
+use Zlodes\PrometheusExporter\Storage\DTO\MetricNameWithLabels;
+use Zlodes\PrometheusExporter\Storage\DTO\MetricValue;
 use Zlodes\PrometheusExporter\Storage\Storage;
 
 final class ExporterTest extends TestCase

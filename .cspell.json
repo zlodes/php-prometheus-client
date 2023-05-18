@@ -1,0 +1,14 @@
+{
+    "language": "en",
+    "dictionaries": [
+        "php",
+        "bash",
+        "filetypes"
+    ],
+    "allowCompoundWords": true,
+    "ignorePaths": [],
+    "words": [
+        "unserialize",
+        "unserialization"
+    ]
+}

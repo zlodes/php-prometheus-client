@@ -4,8 +4,8 @@ declare(strict_types=1);
 
 namespace Zlodes\PrometheusExporter\Storage;
 
-use Zlodes\PrometheusExporter\DTO\MetricNameWithLabels;
-use Zlodes\PrometheusExporter\DTO\MetricValue; // phpcs:ignore
+use Zlodes\PrometheusExporter\Storage\DTO\MetricNameWithLabels;
+use Zlodes\PrometheusExporter\Storage\DTO\MetricValue; // phpcs:ignore
 use function PHPUnit\Framework\assertCount;
 use function PHPUnit\Framework\assertEmpty;
 use function PHPUnit\Framework\assertEquals;

@@ -125,9 +125,7 @@ php ./vendor/bin/phpunit
 
 #### Keys serialization
 
-There is an interfaces (with JSON-based implementation) to simplify work with a key-value storage:
-
-[Serializer](src/KeySerialization/Serializer.php)
+There is a [Serializer](src/KeySerialization/Serializer.php) interface (with JSON-based implementation) to simplify work with a key-value storage.
 
 Example can be found in [InMemoryStorage](src/Storage/InMemoryStorage.php).
 

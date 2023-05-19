@@ -67,7 +67,7 @@ $registry
         new Counter('steps', 'Steps count')
     );
 
-// Create a Collector
+// Create a Collector factory
 $collectorFactory = new CollectorFactory(
     $registry,
     $storage,

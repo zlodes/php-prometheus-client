@@ -46,7 +46,7 @@ class CollectorFactoryTest extends TestCase
         $registryMock
             ->expects('getCounter')
             ->with('counter_name')
-            ->andReturnNull();
+            ->andThrow(new MetricNotFound());
 
         $this->expectException(MetricNotFound::class);
 
@@ -80,7 +80,7 @@ class CollectorFactoryTest extends TestCase
         $registryMock
             ->expects('getGauge')
             ->with('gauge_name')
-            ->andReturnNull();
+            ->andThrow(new MetricNotFound());
 
         $this->expectException(MetricNotFound::class);
 

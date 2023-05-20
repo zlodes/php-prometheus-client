@@ -6,6 +6,7 @@ namespace Zlodes\PrometheusExporter\Tests\Registry;
 
 use PHPUnit\Framework\TestCase;
 use Zlodes\PrometheusExporter\Exceptions\MetricAlreadyRegistered;
+use Zlodes\PrometheusExporter\Exceptions\MetricHasWrongType;
 use Zlodes\PrometheusExporter\MetricTypes\Counter;
 use Zlodes\PrometheusExporter\MetricTypes\Gauge;
 use Zlodes\PrometheusExporter\Registry\ArrayRegistry;
@@ -16,9 +17,7 @@ final class ArrayRegistryTest extends TestCase
     {
         $registry = new ArrayRegistry();
 
-        self::assertEmpty(
-            iterator_to_array($registry->getAll(), false)
-        );
+        self::assertEmpty($registry->getAll());
 
         $registry->registerMetric(
             new Counter('foo_counter', 'help')
@@ -28,10 +27,7 @@ final class ArrayRegistryTest extends TestCase
             new Gauge('bar_gauge', 'help')
         );
 
-        self::assertCount(
-            2,
-            iterator_to_array($registry->getAll(), false)
-        );
+        self::assertCount(2, $registry->getAll());
 
         self::assertInstanceOf(
             Gauge::class,
@@ -66,7 +62,22 @@ final class ArrayRegistryTest extends TestCase
         );
     }
 
-    public function testGetWrongType(): void
+    public function testGetCounterWithWrongType(): void
+    {
+        $registry = new ArrayRegistry();
+
+        $registry->registerMetric(
+            new Gauge('gauge', 'help')
+        );
+
+        $this->expectException(MetricHasWrongType::class);
+
+        self::assertNull(
+            $registry->getCounter('gauge')
+        );
+    }
+
+    public function testGetGaugeWithWrongType(): void
     {
         $registry = new ArrayRegistry();
 
@@ -74,16 +85,10 @@ final class ArrayRegistryTest extends TestCase
             new Counter('counter', 'help')
         );
 
-        $registry->registerMetric(
-            new Gauge('gauge', 'help')
-        );
+        $this->expectException(MetricHasWrongType::class);
 
         self::assertNull(
             $registry->getGauge('counter')
-        );
-
-        self::assertNull(
-            $registry->getCounter('gauge')
         );
     }
 }

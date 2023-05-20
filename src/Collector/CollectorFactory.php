@@ -7,6 +7,7 @@ namespace Zlodes\PrometheusExporter\Collector;
 use Psr\Log\LoggerInterface;
 use Zlodes\PrometheusExporter\Collector\ByType\CounterCollector;
 use Zlodes\PrometheusExporter\Collector\ByType\GaugeCollector;
+use Zlodes\PrometheusExporter\Exceptions\MetricHasWrongType;
 use Zlodes\PrometheusExporter\Exceptions\MetricNotFound;
 use Zlodes\PrometheusExporter\Registry\Registry;
 use Zlodes\PrometheusExporter\Storage\Storage;
@@ -29,11 +30,11 @@ class CollectorFactory
      * @return CounterCollector
      *
      * @throws MetricNotFound
+     * @throws MetricHasWrongType
      */
     final public function counter(string $counterName): CounterCollector
     {
-        $counter = $this->registry->getCounter($counterName)
-            ?? throw new MetricNotFound("Counter $counterName not found");
+        $counter = $this->registry->getCounter($counterName);
 
         return new CounterCollector(
             $counter,
@@ -48,11 +49,11 @@ class CollectorFactory
      * @return GaugeCollector
      *
      * @throws MetricNotFound
+     * @throws MetricHasWrongType
      */
     final public function gauge(string $gaugeName): GaugeCollector
     {
-        $gauge = $this->registry->getGauge($gaugeName)
-            ?? throw new MetricNotFound("Counter $gaugeName not found");
+        $gauge = $this->registry->getGauge($gaugeName);
 
         return new GaugeCollector(
             $gauge,

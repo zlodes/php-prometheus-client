@@ -4,11 +4,13 @@ declare(strict_types=1);
 
 namespace Zlodes\PrometheusExporter\Registry;
 
-use Generator;
 use Zlodes\PrometheusExporter\Exceptions\MetricAlreadyRegistered;
+use Zlodes\PrometheusExporter\Exceptions\MetricHasWrongType;
+use Zlodes\PrometheusExporter\Exceptions\MetricNotFound;
 use Zlodes\PrometheusExporter\MetricTypes\Counter;
 use Zlodes\PrometheusExporter\MetricTypes\Gauge;
 use Zlodes\PrometheusExporter\MetricTypes\Metric;
+use Zlodes\PrometheusExporter\MetricTypes\MetricType;
 
 final class ArrayRegistry implements Registry
 {
@@ -33,9 +35,9 @@ final class ArrayRegistry implements Registry
         return $this;
     }
 
-    public function getAll(): Generator
+    public function getAll(): array
     {
-        yield from $this->metrics;
+        return $this->metrics;
     }
 
     public function getMetric(string $name): ?Metric
@@ -43,25 +45,25 @@ final class ArrayRegistry implements Registry
         return $this->metrics[$name] ?? null;
     }
 
-    public function getCounter(string $name): ?Counter
+    public function getCounter(string $name): Counter
     {
-        $metric = $this->getMetric($name);
+        $metric = $this->getMetric($name) ?? throw new MetricNotFound("Metric $name is not registered");
 
-        if ($metric instanceof Counter) {
-            return $metric;
+        if (!$metric instanceof Counter) {
+            throw new MetricHasWrongType(MetricType::COUNTER, $metric->getType());
         }
 
-        return null;
+        return $metric;
     }
 
-    public function getGauge(string $name): ?Gauge
+    public function getGauge(string $name): Gauge
     {
-        $metric = $this->getMetric($name);
+        $metric = $this->getMetric($name) ?? throw new MetricNotFound("Metric $name is not registered");
 
-        if ($metric instanceof Gauge) {
-            return $metric;
+        if (!$metric instanceof Gauge) {
+            throw new MetricHasWrongType(MetricType::GAUGE, $metric->getType());
         }
 
-        return null;
+        return $metric;
     }
 }

@@ -110,7 +110,7 @@ jobs:
         with:
           bootstrap: vendor/autoload.php
           configuration: phpunit.xml
-          php_extensions: xdebug,redis
+          php_extensions: xdebug
           args: tests --coverage-clover ./vendor/coverage.xml
 
       - name: Upload to Codecov

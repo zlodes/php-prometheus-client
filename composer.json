@@ -18,6 +18,7 @@
     "ergebnis/composer-normalize": "dev-main",
     "mockery/mockery": "^1.5",
     "phpcompatibility/php-compatibility": "^9.3",
+    "phpmd/phpmd": "^2.13",
     "phpunit/phpunit": "^10.0",
     "roave/security-advisories": "dev-latest",
     "slevomat/coding-standard": "^8.11",
@@ -46,10 +47,12 @@
     "full-check": [
       "@phpcs",
       "@psalm",
+      "@phpmd",
       "@test:coverage"
     ],
     "phpcs": "./vendor/bin/phpcs -p src",
     "psalm": "./vendor/bin/psalm --show-info=true",
+    "phpmd": "./vendor/bin/phpmd src text phpmd.xml",
     "test": "./vendor/bin/phpunit",
     "test:coverage": [
       "@putenv XDEBUG_MODE=coverage",

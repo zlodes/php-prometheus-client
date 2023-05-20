@@ -51,8 +51,8 @@
       "@test:coverage"
     ],
     "phpcs": "./vendor/bin/phpcs -p src",
-    "psalm": "./vendor/bin/psalm --show-info=true",
     "phpmd": "./vendor/bin/phpmd src text phpmd.xml",
+    "psalm": "./vendor/bin/psalm --show-info=true",
     "test": "./vendor/bin/phpunit",
     "test:coverage": [
       "@putenv XDEBUG_MODE=coverage",

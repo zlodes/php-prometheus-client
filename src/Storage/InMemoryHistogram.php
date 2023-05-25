@@ -23,6 +23,8 @@ final class InMemoryHistogram
             $quantiles[(string) $bucket] = 0.0;
         }
 
+        $quantiles["+Inf"] = 0.0;
+
         $this->quantiles = $quantiles;
     }
 

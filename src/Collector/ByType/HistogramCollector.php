@@ -6,46 +6,49 @@ namespace Zlodes\PrometheusExporter\Collector\ByType;
 
 use Psr\Log\LoggerInterface;
 use Webmozart\Assert\Assert;
+use Zlodes\PrometheusExporter\Collector\ByType\Histogram\HistogramTimer;
 use Zlodes\PrometheusExporter\Collector\WithLabels;
 use Zlodes\PrometheusExporter\Exceptions\StorageWriteException;
-use Zlodes\PrometheusExporter\MetricTypes\Counter;
+use Zlodes\PrometheusExporter\MetricTypes\Histogram;
 use Zlodes\PrometheusExporter\Storage\DTO\MetricNameWithLabels;
 use Zlodes\PrometheusExporter\Storage\DTO\MetricValue;
 use Zlodes\PrometheusExporter\Storage\Storage;
 
-final class CounterCollector
+final class HistogramCollector
 {
     use WithLabels;
 
     public function __construct(
-        private readonly Counter $counter,
+        private readonly Histogram $histogram,
         private readonly Storage $storage,
         private readonly LoggerInterface $logger,
     ) {
     }
 
-    /**
-     * @param positive-int|float $value
-     *
-     * @return void
-     */
-    public function increment(int|float $value = 1): void
+    public function update(float|int $value): void
     {
-        Assert::true($value > 0, 'Increment value of Counter metric MUST be positive');
+        Assert::true($value > 0, 'Value of Histogram metric MUST be positive');
 
-        $counter = $this->counter;
+        $histogram = $this->histogram;
         $labels = $this->composeLabels();
+        $buckets = $this->histogram->getBuckets();
 
         try {
-            $this->storage->incrementValue(
+            $this->storage->persistHistogram(
                 new MetricValue(
-                    new MetricNameWithLabels($counter->getName(), $labels),
-                    $value
-                )
+                    new MetricNameWithLabels($histogram->getName(), $labels),
+                    $value,
+                ),
+                $buckets
             );
         } catch (StorageWriteException $e) {
-            $this->logger->error("Cannot increment counter {$counter->getName()}: $e");
+            $this->logger->error("Cannot persist Histogram {$histogram->getName()}: $e");
         }
+    }
+
+    public function startTimer(): HistogramTimer
+    {
+        return new HistogramTimer($this);
     }
 
     /**
@@ -53,6 +56,6 @@ final class CounterCollector
      */
     private function composeLabels(): array
     {
-        return array_merge($this->counter->getInitialLabels(), $this->labels);
+        return array_merge($this->histogram->getInitialLabels(), $this->labels);
     }
 }

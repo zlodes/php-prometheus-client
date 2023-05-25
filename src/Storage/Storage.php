@@ -33,4 +33,12 @@ interface Storage
      * @throws StorageWriteException
      */
     public function incrementValue(MetricValue $value): void;
+
+    /**
+     * @param MetricValue $value
+     * @param non-empty-list<float> $buckets
+     *
+     * @throws StorageWriteException
+     */
+    public function persistHistogram(MetricValue $value, array $buckets): void;
 }

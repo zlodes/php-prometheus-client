@@ -349,7 +349,7 @@
     <rule ref="SlevomatCodingStandard.Numbers.RequireNumericLiteralSeparator">
         <properties>
             <property name="minDigitsBeforeDecimalPoint" value="5"/>
-            <property name="minDigitsAfterDecimalPoint" value="3"/>
+            <property name="minDigitsAfterDecimalPoint" value="5"/>
             <property name="ignoreOctalNumbers" value="true"/>
         </properties>
     </rule>

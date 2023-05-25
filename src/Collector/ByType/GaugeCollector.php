@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace Zlodes\PrometheusExporter\Collector\ByType;
 
 use Psr\Log\LoggerInterface;
+use Zlodes\PrometheusExporter\Collector\WithLabels;
 use Zlodes\PrometheusExporter\Exceptions\StorageWriteException;
 use Zlodes\PrometheusExporter\MetricTypes\Gauge;
 use Zlodes\PrometheusExporter\Storage\DTO\MetricNameWithLabels;
@@ -13,27 +14,13 @@ use Zlodes\PrometheusExporter\Storage\Storage;
 
 final class GaugeCollector
 {
-    /** @var array<non-empty-string, non-empty-string> */
-    private array $labels = [];
+    use WithLabels;
 
     public function __construct(
         private readonly Gauge $gauge,
         private readonly Storage $storage,
         private readonly LoggerInterface $logger,
     ) {
-    }
-
-    /**
-     * @param non-empty-array<non-empty-string, non-empty-string> $labels
-     *
-     * @return self
-     */
-    public function withLabels(array $labels): self
-    {
-        $instance = clone $this;
-        $instance->labels = $labels;
-
-        return $instance;
     }
 
     /**
@@ -58,7 +45,7 @@ final class GaugeCollector
         }
     }
 
-    public function setValue(int|float $value): void
+    public function update(int|float $value): void
     {
         $gauge = $this->gauge;
         $labels = $this->composeLabels();

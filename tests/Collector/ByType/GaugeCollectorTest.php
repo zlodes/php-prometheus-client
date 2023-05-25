@@ -39,7 +39,7 @@ class GaugeCollectorTest extends TestCase
             ->withLabels([
                 'source' => 'armpit',
             ])
-            ->setValue(36.6);
+            ->update(36.6);
 
         $expectedLabels = [
             'source' => 'armpit',
@@ -118,7 +118,7 @@ class GaugeCollectorTest extends TestCase
         $loggerMock
             ->expects('error');
 
-        $collector->setValue(42);
+        $collector->update(42);
     }
 
     public static function incrementDataProvider(): iterable

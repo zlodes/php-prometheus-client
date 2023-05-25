@@ -79,11 +79,11 @@ $bodyTemperatureGauge = $collectorFactory->gauge('body_temperature');
 
 $bodyTemperatureGauge
     ->withLabels(['source' => 'armpit'])
-    ->setValue(36.6);
+    ->update(36.6);
 
 $bodyTemperatureGauge
     ->withLabels(['source' => 'ass'])
-    ->setValue(37.2);
+    ->update(37.2);
 
 $collectorFactory
     ->counter('steps')

@@ -9,6 +9,7 @@ use Zlodes\PrometheusExporter\Exceptions\MetricHasWrongType;
 use Zlodes\PrometheusExporter\Exceptions\MetricNotFound;
 use Zlodes\PrometheusExporter\MetricTypes\Counter;
 use Zlodes\PrometheusExporter\MetricTypes\Gauge;
+use Zlodes\PrometheusExporter\MetricTypes\Histogram;
 use Zlodes\PrometheusExporter\MetricTypes\Metric;
 use Zlodes\PrometheusExporter\MetricTypes\MetricType;
 
@@ -62,6 +63,17 @@ final class ArrayRegistry implements Registry
 
         if (!$metric instanceof Gauge) {
             throw new MetricHasWrongType(MetricType::GAUGE, $metric->getType());
+        }
+
+        return $metric;
+    }
+
+    public function getHistogram(string $name): Histogram
+    {
+        $metric = $this->getMetric($name) ?? throw new MetricNotFound("Metric $name is not registered");
+
+        if (!$metric instanceof Histogram) {
+            throw new MetricHasWrongType(MetricType::HISTOGRAM, $metric->getType());
         }
 
         return $metric;

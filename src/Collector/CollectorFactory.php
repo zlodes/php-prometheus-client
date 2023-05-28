@@ -7,6 +7,7 @@ namespace Zlodes\PrometheusExporter\Collector;
 use Psr\Log\LoggerInterface;
 use Zlodes\PrometheusExporter\Collector\ByType\CounterCollector;
 use Zlodes\PrometheusExporter\Collector\ByType\GaugeCollector;
+use Zlodes\PrometheusExporter\Collector\ByType\HistogramCollector;
 use Zlodes\PrometheusExporter\Exceptions\MetricHasWrongType;
 use Zlodes\PrometheusExporter\Exceptions\MetricNotFound;
 use Zlodes\PrometheusExporter\Registry\Registry;
@@ -57,6 +58,17 @@ class CollectorFactory
 
         return new GaugeCollector(
             $gauge,
+            $this->storage,
+            $this->logger
+        );
+    }
+
+    final public function histogram(string $histogramName): HistogramCollector
+    {
+        $histogram = $this->registry->getHistogram($histogramName);
+
+        return new HistogramCollector(
+            $histogram,
             $this->storage,
             $this->logger
         );

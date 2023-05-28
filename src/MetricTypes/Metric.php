@@ -25,4 +25,9 @@ interface Metric
      * @return array<non-empty-string, non-empty-string>
      */
     public function getInitialLabels(): array;
+
+    /**
+     * @return list<non-empty-string> List of dependent metrics, e.g. metrics with _count and _sum suffix for Histogram
+     */
+    public function getDependentMetrics(): array;
 }

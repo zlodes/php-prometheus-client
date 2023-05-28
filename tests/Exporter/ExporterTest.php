@@ -51,6 +51,10 @@ final class ExporterTest extends TestCase
                     new MetricNameWithLabels('temperature', ['source' => 'ass']),
                     37.2
                 ),
+                new MetricValue(
+                    new MetricNameWithLabels('jumps'),
+                    42
+                ),
             ]);
 
         $exportedStrings = [];
@@ -69,7 +73,7 @@ EOF;
         $expectedSecond = <<<EOF
 # HELP jumps Number of Bob's jumps
 # TYPE jumps counter
-jumps 0
+jumps 42
 EOF;
 
         self::assertEquals($expectedFirst, $exportedStrings[0]);

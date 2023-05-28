@@ -28,41 +28,28 @@ final class StoredMetricsExporter implements Exporter
         }
 
         foreach ($this->registry->getAll() as $name => $metric) {
-            $prometheusString = "# HELP $name {$metric->getHelp()}\n";
-            $prometheusString .= "# TYPE $name {$metric->getType()->value}\n";
+            $metricStrings = [
+                "# HELP $name {$metric->getHelp()}",
+                "# TYPE $name {$metric->getType()->value}",
+            ];
 
-            $values = $valuesGroupedByMetric[$name] ?? null;
+            $metricNameWithDependant = [
+                $metric->getName(),
+                ...$metric->getDependentMetrics(),
+            ];
 
-            // Yield single metric with default labels and initial value
-            if ($values === null) {
-                $prometheusString .= sprintf(
-                    "%s%s %s",
-                    $name,
-                    $this->buildLabelsString($metric->getInitialLabels()),
-                    0
-                );
-
-                yield $prometheusString;
-
-                continue;
-            }
-
-            $valuesCount = count($values);
-
-            foreach ($values as $index => $value) {
-                $prometheusString .= sprintf(
-                    "%s%s %s",
-                    $name,
-                    $this->buildLabelsString($value->metricNameWithLabels->labels),
-                    $value->value
-                );
-
-                if ($index < $valuesCount - 1) {
-                    $prometheusString .= "\n";
+            foreach ($metricNameWithDependant as $metricName) {
+                foreach ($valuesGroupedByMetric[$metricName] ?? [] as $value) {
+                    $metricStrings[] = sprintf(
+                        "%s%s %s",
+                        $metricName,
+                        $this->buildLabelsString($value->metricNameWithLabels->labels),
+                        $value->value
+                    );
                 }
             }
 
-            yield $prometheusString;
+            yield implode(PHP_EOL, $metricStrings);
         }
     }
 

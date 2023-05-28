@@ -9,6 +9,7 @@ use Zlodes\PrometheusExporter\Exceptions\MetricHasWrongType;
 use Zlodes\PrometheusExporter\Exceptions\MetricNotFound;
 use Zlodes\PrometheusExporter\MetricTypes\Counter;
 use Zlodes\PrometheusExporter\MetricTypes\Gauge;
+use Zlodes\PrometheusExporter\MetricTypes\Histogram;
 use Zlodes\PrometheusExporter\MetricTypes\Metric;
 
 interface Registry
@@ -21,9 +22,9 @@ interface Registry
     public function registerMetric(Metric $metric): self;
 
     /**
-     * @return iterable<string, Metric> Name => Metric
+     * @return array<string, Metric> Name => Metric
      */
-    public function getAll(): iterable;
+    public function getAll(): array;
 
     /**
      * @throws MetricNotFound Will be thrown when a metric with specified name isn't registered
@@ -36,4 +37,10 @@ interface Registry
      * @throws MetricHasWrongType Will be thrown when found metric has unexpected type (e.g. Counter)
      */
     public function getGauge(string $name): Gauge;
+
+    /**
+     * @throws MetricNotFound Will be thrown when a metric with specified name isn't registered
+     * @throws MetricHasWrongType Will be thrown when found metric has unexpected type (e.g. Counter)
+     */
+    public function getHistogram(string $name): Histogram;
 }

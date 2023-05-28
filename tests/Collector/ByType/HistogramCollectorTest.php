@@ -77,6 +77,7 @@ class HistogramCollectorTest extends TestCase
         self::assertEquals(['route' => '/'], $metricValue->metricNameWithLabels->labels);
     }
 
+
     public function testsPersistError(): void
     {
         $histogram = new Histogram('response_time', 'App response time');

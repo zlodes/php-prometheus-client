@@ -19,6 +19,18 @@ class HistogramTest extends TestCase
         self::assertSame(MetricType::HISTOGRAM, $histogram->getType());
     }
 
+    public function testGetDependentMetrics(): void
+    {
+        $histogram = new Histogram('response_time', 'App response time');
+
+        $expectedDependentMetrics = [
+            'response_time_sum',
+            'response_time_count',
+        ];
+
+        self::assertEquals($expectedDependentMetrics, $histogram->getDependentMetrics());
+    }
+
     public function testWithBuckets(): void
     {
         $histogram = new Histogram('response_time', 'App response time');

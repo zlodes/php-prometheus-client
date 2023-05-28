@@ -12,6 +12,7 @@ use Zlodes\PrometheusExporter\Collector\CollectorFactory;
 use Zlodes\PrometheusExporter\Exceptions\MetricNotFound;
 use Zlodes\PrometheusExporter\MetricTypes\Counter;
 use Zlodes\PrometheusExporter\MetricTypes\Gauge;
+use Zlodes\PrometheusExporter\MetricTypes\Histogram;
 use Zlodes\PrometheusExporter\Registry\Registry;
 use Zlodes\PrometheusExporter\Storage\Storage;
 
@@ -85,5 +86,39 @@ class CollectorFactoryTest extends TestCase
         $this->expectException(MetricNotFound::class);
 
         $factory->gauge('gauge_name');
+    }
+
+    public function testHistogramFound(): void
+    {
+        $factory = new CollectorFactory(
+            $registryMock = Mockery::mock(Registry::class),
+            Mockery::mock(Storage::class),
+            new NullLogger(),
+        );
+
+        $registryMock
+            ->expects('getHistogram')
+            ->with('histogram_name')
+            ->andReturn(new Histogram('histogram_name', 'Foo'));
+
+        $factory->histogram('histogram_name');
+    }
+
+    public function testHistogramNotFound(): void
+    {
+        $factory = new CollectorFactory(
+            $registryMock = Mockery::mock(Registry::class),
+            Mockery::mock(Storage::class),
+            new NullLogger(),
+        );
+
+        $registryMock
+            ->expects('getHistogram')
+            ->with('histogram_name')
+            ->andThrow(new MetricNotFound());
+
+        $this->expectException(MetricNotFound::class);
+
+        $factory->histogram('histogram_name');
     }
 }

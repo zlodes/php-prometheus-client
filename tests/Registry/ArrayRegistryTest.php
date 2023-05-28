@@ -9,6 +9,7 @@ use Zlodes\PrometheusExporter\Exceptions\MetricAlreadyRegistered;
 use Zlodes\PrometheusExporter\Exceptions\MetricHasWrongType;
 use Zlodes\PrometheusExporter\MetricTypes\Counter;
 use Zlodes\PrometheusExporter\MetricTypes\Gauge;
+use Zlodes\PrometheusExporter\MetricTypes\Histogram;
 use Zlodes\PrometheusExporter\Registry\ArrayRegistry;
 
 final class ArrayRegistryTest extends TestCase
@@ -27,7 +28,11 @@ final class ArrayRegistryTest extends TestCase
             new Gauge('bar_gauge', 'help')
         );
 
-        self::assertCount(2, $registry->getAll());
+        $registry->registerMetric(
+            new Histogram('baz_histogram', 'help')
+        );
+
+        self::assertCount(3, $registry->getAll());
 
         self::assertInstanceOf(
             Gauge::class,
@@ -44,6 +49,10 @@ final class ArrayRegistryTest extends TestCase
 
         self::assertNotNull(
             $registry->getGauge('bar_gauge')
+        );
+
+        self::assertNotNull(
+            $registry->getHistogram('baz_histogram')
         );
     }
 
@@ -89,6 +98,21 @@ final class ArrayRegistryTest extends TestCase
 
         self::assertNull(
             $registry->getGauge('counter')
+        );
+    }
+
+    public function testGetHistogramWithWrongType(): void
+    {
+        $registry = new ArrayRegistry();
+
+        $registry->registerMetric(
+            new Counter('counter', 'help')
+        );
+
+        $this->expectException(MetricHasWrongType::class);
+
+        self::assertNull(
+            $registry->getHistogram('counter')
         );
     }
 }

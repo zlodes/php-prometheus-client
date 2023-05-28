@@ -49,4 +49,9 @@ abstract class SimpleMetric implements Metric
     {
         return $this->initialLabels;
     }
+
+    public function getDependentMetrics(): array
+    {
+        return [];
+    }
 }

@@ -49,7 +49,7 @@ class InMemoryStorageTest extends TestCase
         $this->expectException(StorageReadException::class);
         $this->expectExceptionMessage('Cannot unserialize metrics key');
 
-        $storage->fetch();
+        iterator_to_array($storage->fetch());
     }
 
     public function testSetValueError(): void
@@ -119,7 +119,7 @@ class InMemoryStorageTest extends TestCase
             );
         }
 
-        $fetched = $storage->fetch();
+        $fetched = iterator_to_array($storage->fetch(), false);
         self::assertSameSize($expectedFetched, $fetched);
 
         $actualFetched = [];
@@ -224,7 +224,7 @@ class InMemoryStorageTest extends TestCase
         $this->expectException(StorageReadException::class);
         $this->expectExceptionMessage('Cannot unserialize metrics key');
 
-        $storage->fetch();
+        iterator_to_array($storage->fetch());
     }
 
     public function testSerializationExceptionWhilePersistingHistogram(): void

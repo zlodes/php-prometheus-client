@@ -11,11 +11,11 @@ use Zlodes\PrometheusExporter\Storage\DTO\MetricValue;
 interface Storage
 {
     /**
-     * @return list<MetricValue>
+     * @return iterable<int, MetricValue>
      *
      * @throws StorageReadException
      */
-    public function fetch(): array;
+    public function fetch(): iterable;
 
     /**
      * Removes all the keys

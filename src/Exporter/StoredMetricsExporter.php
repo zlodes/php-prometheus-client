@@ -20,12 +20,10 @@ final class StoredMetricsExporter implements Exporter
 
     public function export(): iterable
     {
-        $values = $this->storage->fetch();
-
         /** @var array<string, list<MetricValue>> $valuesGroupedByMetric */
         $valuesGroupedByMetric = [];
 
-        foreach ($values as $value) {
+        foreach ($this->storage->fetch() as $value) {
             $valuesGroupedByMetric[$value->metricNameWithLabels->metricName][] = $value;
         }
 

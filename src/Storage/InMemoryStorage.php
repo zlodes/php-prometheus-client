@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Zlodes\PrometheusExporter\Storage;
 
+use Generator;
 use Zlodes\PrometheusExporter\Exceptions\MetricKeySerializationException;
 use Zlodes\PrometheusExporter\Exceptions\MetricKeyUnserializationException;
 use Zlodes\PrometheusExporter\Exceptions\StorageReadException;
@@ -26,65 +27,11 @@ final class InMemoryStorage implements Storage
     ) {
     }
 
-    public function fetch(): array
+    public function fetch(): Generator
     {
-        $results = [];
+        yield from $this->fetchGaugeAndCounterMetrics();
 
-        foreach ($this->simpleMetricsStorage as $serializedKey => $value) {
-            try {
-                $results[] = new MetricValue(
-                    $this->metricKeySerializer->unserialize($serializedKey),
-                    $value
-                );
-            } catch (MetricKeyUnserializationException $e) {
-                throw new StorageReadException(
-                    "Fetch error. Cannot unserialize metrics key for key: $serializedKey",
-                    previous: $e
-                );
-            }
-        }
-
-        foreach ($this->histogramStorage as $serializedKey => $histogram) {
-            try {
-                $keyWithLabels = $this->metricKeySerializer->unserialize($serializedKey);
-            } catch (MetricKeyUnserializationException $e) {
-                throw new StorageReadException(
-                    "Fetch error. Cannot unserialize metrics key for key: $serializedKey",
-                    previous: $e
-                );
-            }
-
-            foreach ($histogram->getQuantiles() as $quantile => $value) {
-                $results[] = new MetricValue(
-                    new MetricNameWithLabels(
-                        $keyWithLabels->metricName,
-                        [
-                            ...$keyWithLabels->labels,
-                            'le' => (string) $quantile,
-                        ]
-                    ),
-                    $value
-                );
-            }
-
-            $results[] = new MetricValue(
-                new MetricNameWithLabels(
-                    $keyWithLabels->metricName . '_sum',
-                    $keyWithLabels->labels
-                ),
-                $histogram->getSum()
-            );
-
-            $results[] = new MetricValue(
-                new MetricNameWithLabels(
-                    $keyWithLabels->metricName . '_count',
-                    $keyWithLabels->labels
-                ),
-                $histogram->getCount()
-            );
-        }
-
-        return $results;
+        yield from $this->fetchHistogramMetrics();
     }
 
     public function clear(): void
@@ -137,5 +84,71 @@ final class InMemoryStorage implements Storage
         $histogram = $this->histogramStorage[$key] ??= new InMemoryHistogram($buckets);
 
         $histogram->registerValue($value->value);
+    }
+
+    /**
+     * @return Generator<int, MetricValue>
+     */
+    private function fetchGaugeAndCounterMetrics(): Generator
+    {
+        foreach ($this->simpleMetricsStorage as $serializedKey => $value) {
+            try {
+                yield new MetricValue(
+                    $this->metricKeySerializer->unserialize($serializedKey),
+                    $value
+                );
+            } catch (MetricKeyUnserializationException $e) {
+                throw new StorageReadException(
+                    "Fetch error. Cannot unserialize metrics key for key: $serializedKey",
+                    previous: $e
+                );
+            }
+        }
+    }
+
+    /**
+     * @return Generator<int, MetricValue>
+     */
+    private function fetchHistogramMetrics(): Generator
+    {
+        foreach ($this->histogramStorage as $serializedKey => $histogram) {
+            try {
+                $keyWithLabels = $this->metricKeySerializer->unserialize($serializedKey);
+            } catch (MetricKeyUnserializationException $e) {
+                throw new StorageReadException(
+                    "Fetch error. Cannot unserialize metrics key for key: $serializedKey",
+                    previous: $e
+                );
+            }
+
+            foreach ($histogram->getQuantiles() as $quantile => $value) {
+                yield new MetricValue(
+                    new MetricNameWithLabels(
+                        $keyWithLabels->metricName,
+                        [
+                            ...$keyWithLabels->labels,
+                            'le' => (string) $quantile,
+                        ]
+                    ),
+                    $value
+                );
+            }
+
+            yield new MetricValue(
+                new MetricNameWithLabels(
+                    $keyWithLabels->metricName . '_sum',
+                    $keyWithLabels->labels
+                ),
+                $histogram->getSum()
+            );
+
+            yield new MetricValue(
+                new MetricNameWithLabels(
+                    $keyWithLabels->metricName . '_count',
+                    $keyWithLabels->labels
+                ),
+                $histogram->getCount()
+            );
+        }
     }
 }

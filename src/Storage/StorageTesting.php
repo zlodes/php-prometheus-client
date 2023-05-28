@@ -16,7 +16,7 @@ trait StorageTesting
     {
         $storage = $this->createStorage();
 
-        assertEmpty($storage->fetch());
+        assertEmpty($this->fetchList($storage));
 
         $storage->setValue(
             new MetricValue(
@@ -60,7 +60,7 @@ trait StorageTesting
             )
         );
 
-        $fetched = $storage->fetch();
+        $fetched = $this->fetchList($storage);
         $expected = [
             new MetricValue(
                 new MetricNameWithLabels('cpu_temp', ['core' => '0']),
@@ -88,7 +88,7 @@ trait StorageTesting
         $storage = $this->createStorage();
 
         $storage->clear();
-        assertEmpty($storage->fetch());
+        assertEmpty($this->fetchList($storage));
 
         $storage->setValue(
             new MetricValue(
@@ -97,11 +97,25 @@ trait StorageTesting
             )
         );
 
-        assertCount(1, $storage->fetch());
+        assertCount(1, $this->fetchList($storage));
 
         $storage->clear();
-        assertEmpty($storage->fetch());
+        assertEmpty($this->fetchList($storage));
     }
 
     abstract protected function createStorage(): Storage;
+
+    /**
+     * @return list<MetricValue>
+     */
+    protected function fetchList(Storage $storage): array
+    {
+        $fetched = [];
+
+        foreach ($storage->fetch() as $value) {
+            $fetched[] = $value;
+        }
+
+        return $fetched;
+    }
 }

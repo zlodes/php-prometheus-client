@@ -52,6 +52,7 @@ use Zlodes\PrometheusExporter\Collector\CollectorFactory;
 use Zlodes\PrometheusExporter\Exporter\StoredMetricsExporter;
 use Zlodes\PrometheusExporter\MetricTypes\Counter;
 use Zlodes\PrometheusExporter\MetricTypes\Gauge;
+use Zlodes\PrometheusExporter\MetricTypes\Histogram;
 use Zlodes\PrometheusExporter\Registry\ArrayRegistry;
 use Zlodes\PrometheusExporter\Storage\InMemoryStorage;
 
@@ -65,6 +66,9 @@ $registry
     )
     ->registerMetric(
         new Counter('steps', 'Steps count')
+    )
+    ->registerMetric(
+        new Histogram('request_duration', 'Request duration in seconds'),
     );
 
 // Create a Collector factory
@@ -88,6 +92,14 @@ $bodyTemperatureGauge
 $collectorFactory
     ->counter('steps')
     ->increment();
+
+$requestTimer = $collectorFactory
+    ->histogram('request_duration')
+    ->startTimer();
+
+usleep(50_000);
+
+$requestTimer->stop();
 
 // Export metrics
 $exporter = new StoredMetricsExporter(

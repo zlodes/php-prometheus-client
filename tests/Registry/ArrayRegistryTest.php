@@ -5,8 +5,8 @@ declare(strict_types=1);
 namespace Zlodes\PrometheusExporter\Tests\Registry;
 
 use PHPUnit\Framework\TestCase;
-use Zlodes\PrometheusExporter\Exceptions\MetricAlreadyRegistered;
-use Zlodes\PrometheusExporter\Exceptions\MetricHasWrongType;
+use Zlodes\PrometheusExporter\Exceptions\MetricAlreadyRegisteredException;
+use Zlodes\PrometheusExporter\Exceptions\MetricHasWrongTypeException;
 use Zlodes\PrometheusExporter\MetricTypes\Counter;
 use Zlodes\PrometheusExporter\MetricTypes\Gauge;
 use Zlodes\PrometheusExporter\MetricTypes\Histogram;
@@ -64,7 +64,7 @@ final class ArrayRegistryTest extends TestCase
             new Counter('foo_counter', 'help')
         );
 
-        $this->expectException(MetricAlreadyRegistered::class);
+        $this->expectException(MetricAlreadyRegisteredException::class);
 
         $registry->registerMetric(
             new Counter('foo_counter', 'help')
@@ -79,7 +79,7 @@ final class ArrayRegistryTest extends TestCase
             new Gauge('gauge', 'help')
         );
 
-        $this->expectException(MetricHasWrongType::class);
+        $this->expectException(MetricHasWrongTypeException::class);
 
         self::assertNull(
             $registry->getCounter('gauge')
@@ -94,7 +94,7 @@ final class ArrayRegistryTest extends TestCase
             new Counter('counter', 'help')
         );
 
-        $this->expectException(MetricHasWrongType::class);
+        $this->expectException(MetricHasWrongTypeException::class);
 
         self::assertNull(
             $registry->getGauge('counter')
@@ -109,7 +109,7 @@ final class ArrayRegistryTest extends TestCase
             new Counter('counter', 'help')
         );
 
-        $this->expectException(MetricHasWrongType::class);
+        $this->expectException(MetricHasWrongTypeException::class);
 
         self::assertNull(
             $registry->getHistogram('counter')

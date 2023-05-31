@@ -9,7 +9,7 @@ use PHPUnit\Framework\TestCase;
 use Mockery\Adapter\Phpunit\MockeryPHPUnitIntegration;
 use Psr\Log\NullLogger;
 use Zlodes\PrometheusExporter\Collector\CollectorFactory;
-use Zlodes\PrometheusExporter\Exceptions\MetricNotFound;
+use Zlodes\PrometheusExporter\Exceptions\MetricNotFoundException;
 use Zlodes\PrometheusExporter\MetricTypes\Counter;
 use Zlodes\PrometheusExporter\MetricTypes\Gauge;
 use Zlodes\PrometheusExporter\MetricTypes\Histogram;
@@ -47,9 +47,9 @@ class CollectorFactoryTest extends TestCase
         $registryMock
             ->expects('getCounter')
             ->with('counter_name')
-            ->andThrow(new MetricNotFound());
+            ->andThrow(new MetricNotFoundException());
 
-        $this->expectException(MetricNotFound::class);
+        $this->expectException(MetricNotFoundException::class);
 
         $factory->counter('counter_name');
     }
@@ -81,9 +81,9 @@ class CollectorFactoryTest extends TestCase
         $registryMock
             ->expects('getGauge')
             ->with('gauge_name')
-            ->andThrow(new MetricNotFound());
+            ->andThrow(new MetricNotFoundException());
 
-        $this->expectException(MetricNotFound::class);
+        $this->expectException(MetricNotFoundException::class);
 
         $factory->gauge('gauge_name');
     }
@@ -115,9 +115,9 @@ class CollectorFactoryTest extends TestCase
         $registryMock
             ->expects('getHistogram')
             ->with('histogram_name')
-            ->andThrow(new MetricNotFound());
+            ->andThrow(new MetricNotFoundException());
 
-        $this->expectException(MetricNotFound::class);
+        $this->expectException(MetricNotFoundException::class);
 
         $factory->histogram('histogram_name');
     }

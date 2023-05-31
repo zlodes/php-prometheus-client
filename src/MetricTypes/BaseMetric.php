@@ -7,9 +7,13 @@ namespace Zlodes\PrometheusExporter\MetricTypes;
 use Webmozart\Assert\Assert;
 
 /**
+ * TODO: Might be refactored
+ *
+ * This class shouldn't be used directly anywhere.
+ *
  * @internal Zlodes\PrometheusExporter\MetricTypes
  */
-abstract class SimpleMetric implements Metric
+abstract class BaseMetric implements Metric
 {
     /**
      * @param non-empty-string $name Metric name

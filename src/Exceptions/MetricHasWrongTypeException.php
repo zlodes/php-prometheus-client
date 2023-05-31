@@ -6,7 +6,7 @@ namespace Zlodes\PrometheusExporter\Exceptions;
 
 use Zlodes\PrometheusExporter\MetricTypes\MetricType;
 
-final class MetricHasWrongType extends MetricsException
+final class MetricHasWrongTypeException extends MetricsException
 {
     public function __construct(MetricType $expected, MetricType $actual)
     {

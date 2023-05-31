@@ -4,7 +4,6 @@ declare(strict_types=1);
 
 namespace Zlodes\PrometheusExporter\Exporter;
 
-use Psr\Log\LoggerInterface;
 use Zlodes\PrometheusExporter\Registry\Registry;
 use Zlodes\PrometheusExporter\Storage\DTO\MetricValue;
 use Zlodes\PrometheusExporter\Storage\Storage;
@@ -12,9 +11,8 @@ use Zlodes\PrometheusExporter\Storage\Storage;
 final class StoredMetricsExporter implements Exporter
 {
     public function __construct(
-        public readonly Registry $registry,
-        public readonly Storage $storage,
-        public readonly LoggerInterface $logger,
+        private readonly Registry $registry,
+        private readonly Storage $storage,
     ) {
     }
 

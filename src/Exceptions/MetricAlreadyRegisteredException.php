@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace Zlodes\PrometheusExporter\Exceptions;
 
-final class MetricAlreadyRegistered extends MetricsException
+final class MetricAlreadyRegisteredException extends MetricsException
 {
     public function __construct(public readonly string $metricName)
     {

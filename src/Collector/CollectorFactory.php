@@ -8,8 +8,8 @@ use Psr\Log\LoggerInterface;
 use Zlodes\PrometheusExporter\Collector\ByType\CounterCollector;
 use Zlodes\PrometheusExporter\Collector\ByType\GaugeCollector;
 use Zlodes\PrometheusExporter\Collector\ByType\HistogramCollector;
-use Zlodes\PrometheusExporter\Exceptions\MetricHasWrongType;
-use Zlodes\PrometheusExporter\Exceptions\MetricNotFound;
+use Zlodes\PrometheusExporter\Exceptions\MetricHasWrongTypeException;
+use Zlodes\PrometheusExporter\Exceptions\MetricNotFoundException;
 use Zlodes\PrometheusExporter\Registry\Registry;
 use Zlodes\PrometheusExporter\Storage\Storage;
 
@@ -30,8 +30,8 @@ class CollectorFactory
      *
      * @return CounterCollector
      *
-     * @throws MetricNotFound
-     * @throws MetricHasWrongType
+     * @throws MetricNotFoundException
+     * @throws MetricHasWrongTypeException
      */
     final public function counter(string $counterName): CounterCollector
     {
@@ -49,8 +49,8 @@ class CollectorFactory
      *
      * @return GaugeCollector
      *
-     * @throws MetricNotFound
-     * @throws MetricHasWrongType
+     * @throws MetricNotFoundException
+     * @throws MetricHasWrongTypeException
      */
     final public function gauge(string $gaugeName): GaugeCollector
     {

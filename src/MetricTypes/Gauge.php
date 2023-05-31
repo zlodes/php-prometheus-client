@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace Zlodes\PrometheusExporter\MetricTypes;
 
-final class Gauge extends SimpleMetric
+final class Gauge extends BaseMetric
 {
     public function getType(): MetricType
     {

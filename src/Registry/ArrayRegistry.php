@@ -4,9 +4,9 @@ declare(strict_types=1);
 
 namespace Zlodes\PrometheusExporter\Registry;
 
-use Zlodes\PrometheusExporter\Exceptions\MetricAlreadyRegistered;
-use Zlodes\PrometheusExporter\Exceptions\MetricHasWrongType;
-use Zlodes\PrometheusExporter\Exceptions\MetricNotFound;
+use Zlodes\PrometheusExporter\Exceptions\MetricAlreadyRegisteredException;
+use Zlodes\PrometheusExporter\Exceptions\MetricHasWrongTypeException;
+use Zlodes\PrometheusExporter\Exceptions\MetricNotFoundException;
 use Zlodes\PrometheusExporter\MetricTypes\Counter;
 use Zlodes\PrometheusExporter\MetricTypes\Gauge;
 use Zlodes\PrometheusExporter\MetricTypes\Histogram;
@@ -21,14 +21,14 @@ final class ArrayRegistry implements Registry
     /**
      * @return $this
      *
-     * @throws MetricAlreadyRegistered
+     * @throws MetricAlreadyRegisteredException
      */
     public function registerMetric(Metric $metric): self
     {
         $name = $metric->getName();
 
         if (array_key_exists($name, $this->metrics)) {
-            throw new MetricAlreadyRegistered($name);
+            throw new MetricAlreadyRegisteredException($name);
         }
 
         $this->metrics[$name] = $metric;
@@ -48,10 +48,10 @@ final class ArrayRegistry implements Registry
 
     public function getCounter(string $name): Counter
     {
-        $metric = $this->getMetric($name) ?? throw new MetricNotFound("Metric $name is not registered");
+        $metric = $this->getMetric($name) ?? throw new MetricNotFoundException("Metric $name is not registered");
 
         if (!$metric instanceof Counter) {
-            throw new MetricHasWrongType(MetricType::COUNTER, $metric->getType());
+            throw new MetricHasWrongTypeException(MetricType::COUNTER, $metric->getType());
         }
 
         return $metric;
@@ -59,10 +59,10 @@ final class ArrayRegistry implements Registry
 
     public function getGauge(string $name): Gauge
     {
-        $metric = $this->getMetric($name) ?? throw new MetricNotFound("Metric $name is not registered");
+        $metric = $this->getMetric($name) ?? throw new MetricNotFoundException("Metric $name is not registered");
 
         if (!$metric instanceof Gauge) {
-            throw new MetricHasWrongType(MetricType::GAUGE, $metric->getType());
+            throw new MetricHasWrongTypeException(MetricType::GAUGE, $metric->getType());
         }
 
         return $metric;
@@ -70,10 +70,10 @@ final class ArrayRegistry implements Registry
 
     public function getHistogram(string $name): Histogram
     {
-        $metric = $this->getMetric($name) ?? throw new MetricNotFound("Metric $name is not registered");
+        $metric = $this->getMetric($name) ?? throw new MetricNotFoundException("Metric $name is not registered");
 
         if (!$metric instanceof Histogram) {
-            throw new MetricHasWrongType(MetricType::HISTOGRAM, $metric->getType());
+            throw new MetricHasWrongTypeException(MetricType::HISTOGRAM, $metric->getType());
         }
 
         return $metric;

@@ -7,7 +7,7 @@ namespace Zlodes\PrometheusExporter\MetricTypes;
 use InvalidArgumentException;
 use Webmozart\Assert\Assert;
 
-final class Histogram extends SimpleMetric
+final class Histogram extends BaseMetric
 {
     /** @var non-empty-list<float> */
     private array $buckets = [

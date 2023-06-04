@@ -23,6 +23,8 @@ jobs:
         uses: actions/setup-node@v3
         with:
           node-version: "lts/*"
+      - name: Dependencies
+        run: npm i --no-save semantic-release @commitlint/config-conventional @semantic-release/changelog @semantic-release/git @semantic-release/exec @semantic-release/github
       - name: Release
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}

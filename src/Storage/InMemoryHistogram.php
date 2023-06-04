@@ -7,25 +7,24 @@ namespace Zlodes\PrometheusExporter\Storage;
 final class InMemoryHistogram
 {
     /** @var non-empty-array<non-empty-string, int|float> */
-    private array $quantiles;
+    private array $buckets;
     private int $count = 0;
     private float $sum = 0;
 
     /**
-     * @param non-empty-list<float> $buckets
+     * @param non-empty-list<float> $bucketThresholds
      */
-    public function __construct(
-        private readonly array $buckets,
-    ) {
-        $quantiles = [];
+    public function __construct(private readonly array $bucketThresholds)
+    {
+        $buckets = [];
 
-        foreach ($this->buckets as $bucket) {
-            $quantiles[(string) $bucket] = 0.0;
+        foreach ($this->bucketThresholds as $threshold) {
+            $buckets[(string) $threshold] = 0.0;
         }
 
-        $quantiles["+Inf"] = 0.0;
+        $buckets["+Inf"] = 0.0;
 
-        $this->quantiles = $quantiles;
+        $this->buckets = $buckets;
     }
 
     public function registerValue(float|int $value): void
@@ -33,23 +32,23 @@ final class InMemoryHistogram
         $this->count++;
         $this->sum += $value;
 
-        foreach ($this->buckets as $bucket) {
+        foreach ($this->bucketThresholds as $bucket) {
             if ($value <= $bucket) {
                 $key = (string) $bucket;
 
-                $this->quantiles[$key]++;
+                $this->buckets[$key]++;
             }
         }
 
-        $this->quantiles["+Inf"]++;
+        $this->buckets["+Inf"]++;
     }
 
     /**
      * @return non-empty-array<non-empty-string|positive-int, int|float>
      */
-    public function getQuantiles(): array
+    public function getBuckets(): array
     {
-        return $this->quantiles;
+        return $this->buckets;
     }
 
     public function getCount(): int

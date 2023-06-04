@@ -121,13 +121,13 @@ final class InMemoryStorage implements Storage
                 );
             }
 
-            foreach ($histogram->getQuantiles() as $quantile => $value) {
+            foreach ($histogram->getBuckets() as $bucket => $value) {
                 yield new MetricValue(
                     new MetricNameWithLabels(
                         $keyWithLabels->metricName,
                         [
                             ...$keyWithLabels->labels,
-                            'le' => (string) $quantile,
+                            'le' => (string) $bucket,
                         ]
                     ),
                     $value

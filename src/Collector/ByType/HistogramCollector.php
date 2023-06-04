@@ -6,7 +6,6 @@ namespace Zlodes\PrometheusExporter\Collector\ByType;
 
 use Psr\Log\LoggerInterface;
 use Webmozart\Assert\Assert;
-use Zlodes\PrometheusExporter\Collector\ByType\Histogram\HistogramTimer;
 use Zlodes\PrometheusExporter\Collector\WithLabels;
 use Zlodes\PrometheusExporter\Exceptions\StorageWriteException;
 use Zlodes\PrometheusExporter\MetricTypes\Histogram;

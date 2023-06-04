@@ -11,7 +11,7 @@
 
 This package gives you an ability to collect and export [Prometheus](https://prometheus.io/) metrics from any modern PHP app.
 
-Now supports only Counter and Gauge metric types.
+Now it still doesn't support Summary.
 
 > **Warning**
 > This package is still in development. Use it on your own risk until 1.0.0 release.

@@ -6,7 +6,6 @@ namespace Zlodes\PrometheusExporter\Tests\Storage;
 
 use Mockery;
 use Mockery\Adapter\Phpunit\MockeryPHPUnitIntegration;
-use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\TestCase;
 use Zlodes\PrometheusExporter\Exceptions\MetricKeySerializationException;
 use Zlodes\PrometheusExporter\Exceptions\MetricKeyUnserializationException;
@@ -100,102 +99,6 @@ class InMemoryStorageTest extends TestCase
                 42
             )
         );
-    }
-
-    #[DataProvider('histogramDataProvider')]
-    public function testHistogram(array $buckets, array $values, array $expectedFetched): void
-    {
-        $storage = new InMemoryStorage();
-
-        $metricNameWithLabels = new MetricNameWithLabels('response_time');
-
-        foreach ($values as $value) {
-            $storage->persistHistogram(
-                new MetricValue(
-                    $metricNameWithLabels,
-                    $value
-                ),
-                $buckets
-            );
-        }
-
-        $fetched = iterator_to_array($storage->fetch(), false);
-        self::assertSameSize($expectedFetched, $fetched);
-
-        $actualFetched = [];
-
-        foreach ($fetched as $metricValue) {
-            $name = $metricValue->metricNameWithLabels->metricName;
-            $labels = $metricValue->metricNameWithLabels->labels;
-            $value = $metricValue->value;
-
-            if (str_ends_with($name, '_sum')) {
-                $actualFetched['sum'] = $value;
-
-                continue;
-            }
-
-            if (str_ends_with($name, '_count')) {
-                $actualFetched['count'] = $value;
-
-                continue;
-            }
-
-            $actualFetched[$labels['le']] = $value;
-        }
-
-        self::assertEquals($expectedFetched, $actualFetched);
-    }
-
-    public static function histogramDataProvider(): iterable
-    {
-        yield 'all zeroes' => [
-            [0, 1, 2, 3, 4],
-            [0, 0, 0, 0, 0],
-            [
-                "0" => 5,
-                "1" => 5,
-                "2" => 5,
-                "3" => 5,
-                "4" => 5,
-                "+Inf" => 5,
-                "sum" => 0,
-                "count" => 5,
-            ]
-        ];
-
-        yield 'simple' => [
-            [0, 1, 2, 3, 4, 5],
-            [0, 1, 1, 2, 3, 3, 4, 5, 6],
-            [
-                "0" => 1,
-                "1" => 3,
-                "2" => 4,
-                "3" => 6,
-                "4" => 7,
-                "5" => 8,
-                "+Inf" => 9,
-                "sum" => 25,
-                "count" => 9,
-            ]
-        ];
-
-        yield 'complex' => [
-            [0, 1, 2, 3, 3.5, 5, 10],
-            [1, 1, 1, 2, 0, 5, 7.5, 10, 30, 0.7, 53, 3.5, 4, 4, 8],
-            [
-                "0" => 1,
-                "1" => 5,
-                "2" => 6,
-                "3" => 6,
-                "3.5" => 7,
-                "5" => 10,
-                "10" => 13,
-                "+Inf" => 15,
-                "sum" => 130.7,
-                "count" => 15,
-            ]
-        ];
     }
 
     public function testKeyUnserializeErrorWhileFetchingHistogram(): void

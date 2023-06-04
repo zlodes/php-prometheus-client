@@ -7,7 +7,7 @@
 * Until now, there was no working Prometheus Exporter for modern PHP
 * Framework-agnostic
 * Almost zero dependencies
-* Ready to use with static analysis tools (Psalm)
+* Ready to use with static analysis tools (PHPStan, Psalm)
 
 This package gives you an ability to collect and export [Prometheus](https://prometheus.io/) metrics from any modern PHP app.
 

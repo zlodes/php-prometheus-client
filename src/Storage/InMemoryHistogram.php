@@ -6,6 +6,8 @@ namespace Zlodes\PrometheusExporter\Storage;
 
 final class InMemoryHistogram
 {
+    private const INFINITY_KEY = "+Inf";
+
     /** @var non-empty-array<non-empty-string, int|float> */
     private array $buckets;
     private int $count = 0;
@@ -19,10 +21,13 @@ final class InMemoryHistogram
         $buckets = [];
 
         foreach ($this->bucketThresholds as $threshold) {
-            $buckets[(string) $threshold] = 0.0;
+            /** @phpstan-var non-empty-string $key */
+            $key = (string) $threshold;
+
+            $buckets[$key] = 0.0;
         }
 
-        $buckets["+Inf"] = 0.0;
+        $buckets[self::INFINITY_KEY] = 0.0;
 
         $this->buckets = $buckets;
     }
@@ -34,13 +39,14 @@ final class InMemoryHistogram
 
         foreach ($this->bucketThresholds as $bucket) {
             if ($value <= $bucket) {
+                /** @phpstan-var non-empty-string $key */
                 $key = (string) $bucket;
 
                 $this->buckets[$key]++;
             }
         }
 
-        $this->buckets["+Inf"]++;
+        $this->buckets[self::INFINITY_KEY]++;
     }
 
     /**

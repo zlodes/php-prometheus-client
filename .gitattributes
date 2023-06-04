@@ -10,3 +10,4 @@
 /phpcs.xml          export-ignore
 /phpmd.xml          export-ignore
 /.cspell.json       export-ignore
+/phpstan.neon       export-ignore

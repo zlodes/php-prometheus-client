@@ -19,6 +19,7 @@
     "mockery/mockery": "^1.5",
     "phpcompatibility/php-compatibility": "^9.3",
     "phpmd/phpmd": "^2.13",
+    "phpstan/phpstan": "^1.10",
     "phpunit/phpunit": "^10.0",
     "roave/security-advisories": "dev-latest",
     "slevomat/coding-standard": "^8.11",
@@ -47,11 +48,13 @@
     "full-check": [
       "@phpcs",
       "@psalm",
+      "@phpstan",
       "@phpmd",
       "@test:coverage"
     ],
     "phpcs": "./vendor/bin/phpcs -p src",
     "phpmd": "./vendor/bin/phpmd src text phpmd.xml",
+    "phpstan": "./vendor/bin/phpstan",
     "psalm": "./vendor/bin/psalm --show-info=true",
     "test": "./vendor/bin/phpunit",
     "test:coverage": [

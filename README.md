@@ -39,8 +39,8 @@ Each class should be registered as a service. As a `singleton` in Laravel or `sh
 ## Roadmap
 
 - [x] Histogram metric type
+- [x] Configure Semantic Release for GitHub Actions
 - [ ] Summary metric type
-- [ ] Configure Semantic Release for GitHub Actions
 
 ## Simple example
 

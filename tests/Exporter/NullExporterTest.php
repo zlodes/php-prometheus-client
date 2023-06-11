@@ -2,9 +2,9 @@
 
 declare(strict_types=1);
 
-namespace Zlodes\PrometheusExporter\Tests\Exporter;
+namespace Zlodes\PrometheusClient\Tests\Exporter;
 
-use Zlodes\PrometheusExporter\Exporter\NullExporter;
+use Zlodes\PrometheusClient\Exporter\NullExporter;
 use PHPUnit\Framework\TestCase;
 
 class NullExporterTest extends TestCase

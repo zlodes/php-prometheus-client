@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Zlodes\PrometheusExporter\Exporter;
+namespace Zlodes\PrometheusClient\Exporter;
 
 interface Exporter
 {

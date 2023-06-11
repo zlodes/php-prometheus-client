@@ -1,12 +1,13 @@
-# PHP Prometheus Exporter
+# PHP Prometheus Client
 
 [![codecov](https://codecov.io/gh/zlodes/php-prometheus-exporter/branch/master/graph/badge.svg?token=ROMQ8VBN0A)](https://codecov.io/gh/zlodes/php-prometheus-exporter)
 
 ## Why?
 
-* Until now, there was no working Prometheus Exporter for modern PHP
+* Until now, there was no working Prometheus client for modern PHP
 * Framework-agnostic
 * Almost zero dependencies
+* Won't break your business logic even if something is wrong with Metrics Storage
 * Ready to use with static analysis tools (PHPStan, Psalm)
 
 This package gives you an ability to collect and export [Prometheus](https://prometheus.io/) metrics from any modern PHP app.
@@ -48,13 +49,13 @@ Each class should be registered as a service. As a `singleton` in Laravel or `sh
 <?php
 
 use Psr\Log\NullLogger;
-use Zlodes\PrometheusExporter\Collector\CollectorFactory;
-use Zlodes\PrometheusExporter\Exporter\StoredMetricsExporter;
-use Zlodes\PrometheusExporter\MetricTypes\Counter;
-use Zlodes\PrometheusExporter\MetricTypes\Gauge;
-use Zlodes\PrometheusExporter\MetricTypes\Histogram;
-use Zlodes\PrometheusExporter\Registry\ArrayRegistry;
-use Zlodes\PrometheusExporter\Storage\InMemoryStorage;
+use Zlodes\PrometheusClient\Collector\CollectorFactory;
+use Zlodes\PrometheusClient\Exporter\StoredMetricsExporter;
+use Zlodes\PrometheusClient\MetricTypes\Counter;
+use Zlodes\PrometheusClient\MetricTypes\Gauge;
+use Zlodes\PrometheusClient\MetricTypes\Histogram;
+use Zlodes\PrometheusClient\Registry\ArrayRegistry;
+use Zlodes\PrometheusClient\Storage\InMemoryStorage;
 
 $registry = new ArrayRegistry();
 $storage = new InMemoryStorage();
@@ -137,13 +138,13 @@ php ./vendor/bin/phpunit
 
 #### Keys serialization
 
-There is a [Serializer](src/KeySerialization/Serializer.php) interface (with JSON-based implementation) to simplify work with a key-value storage.
+There is a [Serializer](PrometheusClient/KeySerialization/Serializer.php) interface (with JSON-based implementation) to simplify work with a key-value storage.
 
-Example can be found in [InMemoryStorage](src/Storage/InMemoryStorage.php).
+Example can be found in [InMemoryStorage](PrometheusClient/Storage/InMemoryStorage.php).
 
 #### Storage Testing
 
-There is a simple [trait](src/Storage/StorageTesting.php) to tests any storage you want. Here is an example:
+There is a simple [trait](PrometheusClient/Storage/StorageTesting.php) to tests any storage you want. Here is an example:
 
 ```php
 class InMemoryStorageTest extends TestCase

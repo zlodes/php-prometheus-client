@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Zlodes\PrometheusExporter\Collector\ByType;
+namespace Zlodes\PrometheusClient\Collector\ByType;
 
 final class HistogramTimer
 {

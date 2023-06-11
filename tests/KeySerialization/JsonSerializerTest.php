@@ -2,14 +2,14 @@
 
 declare(strict_types=1);
 
-namespace Zlodes\PrometheusExporter\Tests\KeySerialization;
+namespace Zlodes\PrometheusClient\Tests\KeySerialization;
 
 use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\TestCase;
-use Zlodes\PrometheusExporter\Exceptions\MetricKeySerializationException;
-use Zlodes\PrometheusExporter\Exceptions\MetricKeyUnserializationException;
-use Zlodes\PrometheusExporter\KeySerialization\JsonSerializer;
-use Zlodes\PrometheusExporter\Storage\DTO\MetricNameWithLabels;
+use Zlodes\PrometheusClient\Exceptions\MetricKeySerializationException;
+use Zlodes\PrometheusClient\Exceptions\MetricKeyUnserializationException;
+use Zlodes\PrometheusClient\KeySerialization\JsonSerializer;
+use Zlodes\PrometheusClient\Storage\DTO\MetricNameWithLabels;
 
 class JsonSerializerTest extends TestCase
 {

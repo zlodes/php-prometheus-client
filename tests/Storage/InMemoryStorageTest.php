@@ -2,21 +2,21 @@
 
 declare(strict_types=1);
 
-namespace Zlodes\PrometheusExporter\Tests\Storage;
+namespace Zlodes\PrometheusClient\Tests\Storage;
 
 use Mockery;
 use Mockery\Adapter\Phpunit\MockeryPHPUnitIntegration;
 use PHPUnit\Framework\TestCase;
-use Zlodes\PrometheusExporter\Exceptions\MetricKeySerializationException;
-use Zlodes\PrometheusExporter\Exceptions\MetricKeyUnserializationException;
-use Zlodes\PrometheusExporter\Exceptions\StorageReadException;
-use Zlodes\PrometheusExporter\Exceptions\StorageWriteException;
-use Zlodes\PrometheusExporter\KeySerialization\Serializer;
-use Zlodes\PrometheusExporter\Storage\DTO\MetricNameWithLabels;
-use Zlodes\PrometheusExporter\Storage\DTO\MetricValue;
-use Zlodes\PrometheusExporter\Storage\InMemoryStorage;
-use Zlodes\PrometheusExporter\Storage\Storage;
-use Zlodes\PrometheusExporter\Storage\StorageTesting;
+use Zlodes\PrometheusClient\Exceptions\MetricKeySerializationException;
+use Zlodes\PrometheusClient\Exceptions\MetricKeyUnserializationException;
+use Zlodes\PrometheusClient\Exceptions\StorageReadException;
+use Zlodes\PrometheusClient\Exceptions\StorageWriteException;
+use Zlodes\PrometheusClient\KeySerialization\Serializer;
+use Zlodes\PrometheusClient\Storage\DTO\MetricNameWithLabels;
+use Zlodes\PrometheusClient\Storage\DTO\MetricValue;
+use Zlodes\PrometheusClient\Storage\InMemoryStorage;
+use Zlodes\PrometheusClient\Storage\Storage;
+use Zlodes\PrometheusClient\Storage\StorageTesting;
 
 class InMemoryStorageTest extends TestCase
 {

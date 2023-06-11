@@ -2,11 +2,11 @@
 
 declare(strict_types=1);
 
-namespace Zlodes\PrometheusExporter\Storage;
+namespace Zlodes\PrometheusClient\Storage;
 
 use PHPUnit\Framework\Attributes\DataProvider;
-use Zlodes\PrometheusExporter\Storage\DTO\MetricNameWithLabels;
-use Zlodes\PrometheusExporter\Storage\DTO\MetricValue; // phpcs:ignore
+use Zlodes\PrometheusClient\Storage\DTO\MetricNameWithLabels;
+use Zlodes\PrometheusClient\Storage\DTO\MetricValue; // phpcs:ignore
 use function PHPUnit\Framework\assertCount;
 use function PHPUnit\Framework\assertEmpty;
 use function PHPUnit\Framework\assertEquals;

@@ -2,16 +2,16 @@
 
 declare(strict_types=1);
 
-namespace Zlodes\PrometheusExporter\Collector;
+namespace Zlodes\PrometheusClient\Collector;
 
 use Psr\Log\LoggerInterface;
-use Zlodes\PrometheusExporter\Collector\ByType\CounterCollector;
-use Zlodes\PrometheusExporter\Collector\ByType\GaugeCollector;
-use Zlodes\PrometheusExporter\Collector\ByType\HistogramCollector;
-use Zlodes\PrometheusExporter\Exceptions\MetricHasWrongTypeException;
-use Zlodes\PrometheusExporter\Exceptions\MetricNotFoundException;
-use Zlodes\PrometheusExporter\Registry\Registry;
-use Zlodes\PrometheusExporter\Storage\Storage;
+use Zlodes\PrometheusClient\Collector\ByType\CounterCollector;
+use Zlodes\PrometheusClient\Collector\ByType\GaugeCollector;
+use Zlodes\PrometheusClient\Collector\ByType\HistogramCollector;
+use Zlodes\PrometheusClient\Exceptions\MetricHasWrongTypeException;
+use Zlodes\PrometheusClient\Exceptions\MetricNotFoundException;
+use Zlodes\PrometheusClient\Registry\Registry;
+use Zlodes\PrometheusClient\Storage\Storage;
 
 /**
  * @final

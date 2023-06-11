@@ -1,6 +1,6 @@
 {
-  "name": "zlodes/prometheus-exporter",
-  "description": "The Prometheus Metrics exporter for PHP",
+  "name": "zlodes/prometheus-client",
+  "description": "The Prometheus Metrics client for PHP",
   "license": "MIT",
   "type": "library",
   "authors": [
@@ -31,12 +31,12 @@
   "minimum-stability": "beta",
   "autoload": {
     "psr-4": {
-      "Zlodes\\PrometheusExporter\\": "src/"
+      "Zlodes\\PrometheusClient\\": "src/"
     }
   },
   "autoload-dev": {
     "psr-4": {
-      "Zlodes\\PrometheusExporter\\Tests\\": "tests/"
+      "Zlodes\\PrometheusClient\\Tests\\": "tests/"
     }
   },
   "config": {

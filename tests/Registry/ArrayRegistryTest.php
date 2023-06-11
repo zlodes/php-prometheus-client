@@ -2,15 +2,15 @@
 
 declare(strict_types=1);
 
-namespace Zlodes\PrometheusExporter\Tests\Registry;
+namespace Zlodes\PrometheusClient\Tests\Registry;
 
 use PHPUnit\Framework\TestCase;
-use Zlodes\PrometheusExporter\Exceptions\MetricAlreadyRegisteredException;
-use Zlodes\PrometheusExporter\Exceptions\MetricHasWrongTypeException;
-use Zlodes\PrometheusExporter\MetricTypes\Counter;
-use Zlodes\PrometheusExporter\MetricTypes\Gauge;
-use Zlodes\PrometheusExporter\MetricTypes\Histogram;
-use Zlodes\PrometheusExporter\Registry\ArrayRegistry;
+use Zlodes\PrometheusClient\Exceptions\MetricAlreadyRegisteredException;
+use Zlodes\PrometheusClient\Exceptions\MetricHasWrongTypeException;
+use Zlodes\PrometheusClient\MetricTypes\Counter;
+use Zlodes\PrometheusClient\MetricTypes\Gauge;
+use Zlodes\PrometheusClient\MetricTypes\Histogram;
+use Zlodes\PrometheusClient\Registry\ArrayRegistry;
 
 final class ArrayRegistryTest extends TestCase
 {

@@ -2,14 +2,14 @@
 
 declare(strict_types=1);
 
-namespace Zlodes\PrometheusExporter\KeySerialization;
+namespace Zlodes\PrometheusClient\KeySerialization;
 
 use InvalidArgumentException;
 use JsonException;
 use Webmozart\Assert\Assert;
-use Zlodes\PrometheusExporter\Exceptions\MetricKeySerializationException;
-use Zlodes\PrometheusExporter\Exceptions\MetricKeyUnserializationException;
-use Zlodes\PrometheusExporter\Storage\DTO\MetricNameWithLabels;
+use Zlodes\PrometheusClient\Exceptions\MetricKeySerializationException;
+use Zlodes\PrometheusClient\Exceptions\MetricKeyUnserializationException;
+use Zlodes\PrometheusClient\Storage\DTO\MetricNameWithLabels;
 
 final class JsonSerializer implements Serializer
 {

@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Zlodes\PrometheusExporter\MetricTypes;
+namespace Zlodes\PrometheusClient\MetricTypes;
 
 /**
  * @see https://prometheus.io/docs/concepts/metric_types/

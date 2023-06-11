@@ -2,20 +2,20 @@
 
 declare(strict_types=1);
 
-namespace Zlodes\PrometheusExporter\Tests\Exporter;
+namespace Zlodes\PrometheusClient\Tests\Exporter;
 
 use Mockery;
 use Mockery\Adapter\Phpunit\MockeryPHPUnitIntegration;
 use PHPUnit\Framework\TestCase;
 use Psr\Log\NullLogger;
 use Throwable;
-use Zlodes\PrometheusExporter\Exporter\StoredMetricsExporter;
-use Zlodes\PrometheusExporter\MetricTypes\Counter;
-use Zlodes\PrometheusExporter\MetricTypes\Gauge;
-use Zlodes\PrometheusExporter\Registry\ArrayRegistry;
-use Zlodes\PrometheusExporter\Storage\DTO\MetricNameWithLabels;
-use Zlodes\PrometheusExporter\Storage\DTO\MetricValue;
-use Zlodes\PrometheusExporter\Storage\Storage;
+use Zlodes\PrometheusClient\Exporter\StoredMetricsExporter;
+use Zlodes\PrometheusClient\MetricTypes\Counter;
+use Zlodes\PrometheusClient\MetricTypes\Gauge;
+use Zlodes\PrometheusClient\Registry\ArrayRegistry;
+use Zlodes\PrometheusClient\Storage\DTO\MetricNameWithLabels;
+use Zlodes\PrometheusClient\Storage\DTO\MetricValue;
+use Zlodes\PrometheusClient\Storage\Storage;
 
 final class ExporterTest extends TestCase
 {

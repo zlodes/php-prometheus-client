@@ -2,9 +2,9 @@
 
 declare(strict_types=1);
 
-namespace Zlodes\PrometheusExporter\Exceptions;
+namespace Zlodes\PrometheusClient\Exceptions;
 
-use Zlodes\PrometheusExporter\MetricTypes\MetricType;
+use Zlodes\PrometheusClient\MetricTypes\MetricType;
 
 final class MetricHasWrongTypeException extends MetricsException
 {

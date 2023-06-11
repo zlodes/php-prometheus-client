@@ -2,19 +2,19 @@
 
 declare(strict_types=1);
 
-namespace Zlodes\PrometheusExporter\Tests\Collector;
+namespace Zlodes\PrometheusClient\Tests\Collector;
 
 use Mockery;
 use PHPUnit\Framework\TestCase;
 use Mockery\Adapter\Phpunit\MockeryPHPUnitIntegration;
 use Psr\Log\NullLogger;
-use Zlodes\PrometheusExporter\Collector\CollectorFactory;
-use Zlodes\PrometheusExporter\Exceptions\MetricNotFoundException;
-use Zlodes\PrometheusExporter\MetricTypes\Counter;
-use Zlodes\PrometheusExporter\MetricTypes\Gauge;
-use Zlodes\PrometheusExporter\MetricTypes\Histogram;
-use Zlodes\PrometheusExporter\Registry\Registry;
-use Zlodes\PrometheusExporter\Storage\Storage;
+use Zlodes\PrometheusClient\Collector\CollectorFactory;
+use Zlodes\PrometheusClient\Exceptions\MetricNotFoundException;
+use Zlodes\PrometheusClient\MetricTypes\Counter;
+use Zlodes\PrometheusClient\MetricTypes\Gauge;
+use Zlodes\PrometheusClient\MetricTypes\Histogram;
+use Zlodes\PrometheusClient\Registry\Registry;
+use Zlodes\PrometheusClient\Storage\Storage;
 
 class CollectorFactoryTest extends TestCase
 {

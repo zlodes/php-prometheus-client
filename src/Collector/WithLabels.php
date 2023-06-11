@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Zlodes\PrometheusExporter\Collector;
+namespace Zlodes\PrometheusClient\Collector;
 
 /**
  * @psalm-internal Zlodes\PrometheusExporter\Collector

@@ -2,11 +2,11 @@
 
 declare(strict_types=1);
 
-namespace Zlodes\PrometheusExporter\Exporter;
+namespace Zlodes\PrometheusClient\Exporter;
 
-use Zlodes\PrometheusExporter\Registry\Registry;
-use Zlodes\PrometheusExporter\Storage\DTO\MetricValue;
-use Zlodes\PrometheusExporter\Storage\Storage;
+use Zlodes\PrometheusClient\Registry\Registry;
+use Zlodes\PrometheusClient\Storage\DTO\MetricValue;
+use Zlodes\PrometheusClient\Storage\Storage;
 
 final class StoredMetricsExporter implements Exporter
 {

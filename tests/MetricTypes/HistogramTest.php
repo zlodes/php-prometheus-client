@@ -2,13 +2,13 @@
 
 declare(strict_types=1);
 
-namespace Zlodes\PrometheusExporter\Tests\MetricTypes;
+namespace Zlodes\PrometheusClient\Tests\MetricTypes;
 
 use InvalidArgumentException;
 use PHPUnit\Framework\Attributes\DataProvider;
-use Zlodes\PrometheusExporter\MetricTypes\Histogram;
+use Zlodes\PrometheusClient\MetricTypes\Histogram;
 use PHPUnit\Framework\TestCase;
-use Zlodes\PrometheusExporter\MetricTypes\MetricType;
+use Zlodes\PrometheusClient\MetricTypes\MetricType;
 
 class HistogramTest extends TestCase
 {

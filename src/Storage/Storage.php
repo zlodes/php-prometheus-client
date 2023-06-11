@@ -2,11 +2,11 @@
 
 declare(strict_types=1);
 
-namespace Zlodes\PrometheusExporter\Storage;
+namespace Zlodes\PrometheusClient\Storage;
 
-use Zlodes\PrometheusExporter\Exceptions\StorageReadException;
-use Zlodes\PrometheusExporter\Exceptions\StorageWriteException;
-use Zlodes\PrometheusExporter\Storage\DTO\MetricValue;
+use Zlodes\PrometheusClient\Exceptions\StorageReadException;
+use Zlodes\PrometheusClient\Exceptions\StorageWriteException;
+use Zlodes\PrometheusClient\Storage\DTO\MetricValue;
 
 interface Storage
 {

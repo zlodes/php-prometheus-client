@@ -2,18 +2,18 @@
 
 declare(strict_types=1);
 
-namespace Zlodes\PrometheusExporter\Tests\Collector\ByType;
+namespace Zlodes\PrometheusClient\Tests\Collector\ByType;
 
 use Mockery;
 use Mockery\Adapter\Phpunit\MockeryPHPUnitIntegration;
 use Psr\Log\LoggerInterface;
 use Psr\Log\NullLogger;
-use Zlodes\PrometheusExporter\Collector\ByType\HistogramCollector;
+use Zlodes\PrometheusClient\Collector\ByType\HistogramCollector;
 use PHPUnit\Framework\TestCase;
-use Zlodes\PrometheusExporter\Exceptions\StorageWriteException;
-use Zlodes\PrometheusExporter\MetricTypes\Histogram;
-use Zlodes\PrometheusExporter\Storage\DTO\MetricValue;
-use Zlodes\PrometheusExporter\Storage\Storage;
+use Zlodes\PrometheusClient\Exceptions\StorageWriteException;
+use Zlodes\PrometheusClient\MetricTypes\Histogram;
+use Zlodes\PrometheusClient\Storage\DTO\MetricValue;
+use Zlodes\PrometheusClient\Storage\Storage;
 
 class HistogramCollectorTest extends TestCase
 {

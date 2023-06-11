@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Zlodes\PrometheusExporter\Storage\DTO;
+namespace Zlodes\PrometheusClient\Storage\DTO;
 
 final class MetricValue
 {

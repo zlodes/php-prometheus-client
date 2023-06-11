@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Zlodes\PrometheusExporter\Exceptions;
+namespace Zlodes\PrometheusClient\Exceptions;
 
 use RuntimeException;
 

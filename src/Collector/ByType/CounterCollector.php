@@ -2,16 +2,16 @@
 
 declare(strict_types=1);
 
-namespace Zlodes\PrometheusExporter\Collector\ByType;
+namespace Zlodes\PrometheusClient\Collector\ByType;
 
 use Psr\Log\LoggerInterface;
 use Webmozart\Assert\Assert;
-use Zlodes\PrometheusExporter\Collector\WithLabels;
-use Zlodes\PrometheusExporter\Exceptions\StorageWriteException;
-use Zlodes\PrometheusExporter\MetricTypes\Counter;
-use Zlodes\PrometheusExporter\Storage\DTO\MetricNameWithLabels;
-use Zlodes\PrometheusExporter\Storage\DTO\MetricValue;
-use Zlodes\PrometheusExporter\Storage\Storage;
+use Zlodes\PrometheusClient\Collector\WithLabels;
+use Zlodes\PrometheusClient\Exceptions\StorageWriteException;
+use Zlodes\PrometheusClient\MetricTypes\Counter;
+use Zlodes\PrometheusClient\Storage\DTO\MetricNameWithLabels;
+use Zlodes\PrometheusClient\Storage\DTO\MetricValue;
+use Zlodes\PrometheusClient\Storage\Storage;
 
 final class CounterCollector
 {

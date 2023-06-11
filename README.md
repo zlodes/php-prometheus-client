@@ -2,6 +2,8 @@
 
 [![codecov](https://codecov.io/gh/zlodes/php-prometheus-client/branch/master/graph/badge.svg?token=ROMQ8VBN0A)](https://codecov.io/gh/zlodes/php-prometheus-client)
 
+This package provides you an ability to collect and export [Prometheus](https://prometheus.io/) metrics from any modern PHP application.
+
 ## Why?
 
 * Until now, there was no working Prometheus client for modern PHP
@@ -10,16 +12,16 @@
 * Won't break your business logic even if something is wrong with Metrics Storage
 * Ready to use with static analysis tools (PHPStan, Psalm)
 
-This package gives you an ability to collect and export [Prometheus](https://prometheus.io/) metrics from any modern PHP app.
+## Supported metric types
 
-Now it still doesn't support Summary.
+1. [Counter](https://prometheus.io/docs/concepts/metric_types/#counter)
+2. [Gauge](https://prometheus.io/docs/concepts/metric_types/#gauge)
+3. [Histogram](https://prometheus.io/docs/concepts/metric_types/#histogram)
 
-> **Warning**
-> This package is still in development. Use it on your own risk until 1.0.0 release.
+Summary is still in development. [What can I do if my client library does not support the metric type I need?](https://prometheus.io/docs/practices/histograms/#what-can-i-do-if-my-client-library-does-not-support-the-metric-type-i-need)
 
 ## Adapters
-
-* For Laravel: [zlodes/prometheus-exporter-laravel](https://github.com/zlodes/php-prometheus-exporter-laravel)
+* For Laravel: [zlodes/prometheus-client-laravel](https://github.com/zlodes/php-prometheus-client-laravel)
 
 ## Installation
 
@@ -37,12 +39,6 @@ composer require zlodes/prometheus-exporter
 
 Each class should be registered as a service. As a `singleton` in Laravel or `shared` service in Symfony.
 
-## Roadmap
-
-- [x] Histogram metric type
-- [x] Configure Semantic Release for GitHub Actions
-- [ ] Summary metric type
-
 ## Simple example
 
 ```php
@@ -51,9 +47,9 @@ Each class should be registered as a service. As a `singleton` in Laravel or `sh
 use Psr\Log\NullLogger;
 use Zlodes\PrometheusClient\Collector\CollectorFactory;
 use Zlodes\PrometheusClient\Exporter\StoredMetricsExporter;
-use Zlodes\PrometheusClient\MetricTypes\Counter;
-use Zlodes\PrometheusClient\MetricTypes\Gauge;
-use Zlodes\PrometheusClient\MetricTypes\Histogram;
+use Zlodes\PrometheusClient\Metric\Counter;
+use Zlodes\PrometheusClient\Metric\Gauge;
+use Zlodes\PrometheusClient\Metric\Histogram;
 use Zlodes\PrometheusClient\Registry\ArrayRegistry;
 use Zlodes\PrometheusClient\Storage\InMemoryStorage;
 

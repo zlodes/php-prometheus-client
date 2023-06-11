@@ -7,7 +7,6 @@ namespace Zlodes\PrometheusClient\Tests\Exporter;
 use Mockery;
 use Mockery\Adapter\Phpunit\MockeryPHPUnitIntegration;
 use PHPUnit\Framework\TestCase;
-use Psr\Log\NullLogger;
 use Throwable;
 use Zlodes\PrometheusClient\Exporter\StoredMetricsExporter;
 use Zlodes\PrometheusClient\Metric\Counter;
@@ -28,8 +27,7 @@ final class ExporterTest extends TestCase
     {
         $exporter = new StoredMetricsExporter(
             $registry = new ArrayRegistry(),
-            $storageMock = Mockery::mock(Storage::class),
-            new NullLogger(),
+            $storageMock = Mockery::mock(Storage::class)
         );
 
         $registry->registerMetric(

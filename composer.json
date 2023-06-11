@@ -16,6 +16,7 @@
   },
   "require-dev": {
     "ergebnis/composer-normalize": "dev-main",
+    "infection/infection": "^0.27.0",
     "mockery/mockery": "^1.5",
     "phpcompatibility/php-compatibility": "^9.3",
     "phpmd/phpmd": "^2.13",
@@ -43,7 +44,8 @@
     "allow-plugins": {
       "ergebnis/composer-normalize": true,
       "dealerdirect/phpcodesniffer-composer-installer": true,
-      "phpstan/extension-installer": true
+      "phpstan/extension-installer": true,
+      "infection/extension-installer": true
     },
     "sort-packages": true
   },
@@ -53,8 +55,10 @@
       "@psalm",
       "@phpstan",
       "@phpmd",
-      "@test:coverage"
+      "@test:coverage",
+      "@infection"
     ],
+    "infection": "./vendor/bin/infection --show-mutations --threads=4",
     "phpcs": "./vendor/bin/phpcs -p src",
     "phpmd": "./vendor/bin/phpmd src text phpmd.xml",
     "phpstan": "./vendor/bin/phpstan",

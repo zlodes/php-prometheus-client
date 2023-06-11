@@ -12,3 +12,4 @@
 /.cspell.json       export-ignore
 /phpstan.neon       export-ignore
 /.releaserc.json    export-ignore
+/infection.json5    export-ignore

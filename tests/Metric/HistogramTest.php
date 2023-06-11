@@ -2,12 +2,12 @@
 
 declare(strict_types=1);
 
-namespace Zlodes\PrometheusClient\Tests\MetricTypes;
+namespace Zlodes\PrometheusClient\Tests\Metric;
 
 use InvalidArgumentException;
 use PHPUnit\Framework\Attributes\DataProvider;
-use Zlodes\PrometheusClient\Metric\Histogram;
 use PHPUnit\Framework\TestCase;
+use Zlodes\PrometheusClient\Metric\Histogram;
 use Zlodes\PrometheusClient\Metric\MetricType;
 
 class HistogramTest extends TestCase
@@ -39,6 +39,15 @@ class HistogramTest extends TestCase
 
         self::assertNotSame($histogram, $newHistogram);
         self::assertEquals([0, 1, 2], $newHistogram->getBuckets());
+    }
+
+    public function testNonUniqueValues(): void
+    {
+        $this->expectException(InvalidArgumentException::class);
+        $this->expectExceptionMessage('Expected an array of unique values');
+
+        (new Histogram('name', 'help', ['foo' => 'bar']))
+            ->withBuckets([0, 1, 2, 2]);
     }
 
     #[DataProvider('invalidBuckets')]

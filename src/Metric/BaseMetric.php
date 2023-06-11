@@ -25,7 +25,8 @@ abstract class BaseMetric implements Metric
         private readonly string $help,
         private readonly array $initialLabels = [],
     ) {
-        Assert::regex($name, '/^[a-zA-Z_:][a-zA-Z0-9_:]*$/', 'Metric name MUST be in snake case');
+        Assert::regex($name, '/^[a-zA-Z][a-zA-Z0-9_:]*$/', 'Metric name MUST be in snake case');
+        Assert::allString(array_keys($initialLabels));
         Assert::allString($initialLabels);
         Assert::allNotEmpty($initialLabels);
     }

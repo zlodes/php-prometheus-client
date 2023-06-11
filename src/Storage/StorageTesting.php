@@ -5,11 +5,15 @@ declare(strict_types=1);
 namespace Zlodes\PrometheusClient\Storage;
 
 use PHPUnit\Framework\Attributes\DataProvider;
+use Zlodes\PrometheusClient\Metric\Summary;
+use Zlodes\PrometheusClient\Registry\ArrayRegistry;
+use Zlodes\PrometheusClient\Registry\Registry;
 use Zlodes\PrometheusClient\Storage\DTO\MetricNameWithLabels;
 use Zlodes\PrometheusClient\Storage\DTO\MetricValue; // phpcs:ignore
 use function PHPUnit\Framework\assertCount;
 use function PHPUnit\Framework\assertEmpty;
 use function PHPUnit\Framework\assertEquals;
+use function PHPUnit\Framework\assertSame;
 use function PHPUnit\Framework\assertSameSize;
 
 trait StorageTesting
@@ -87,7 +91,13 @@ trait StorageTesting
 
     public function testGetAllAndEmpty(): void
     {
-        $storage = $this->createStorage();
+        $registry = new ArrayRegistry();
+        $registry->registerMetric(
+            (new Summary('database_query_time', 'some help'))
+                ->withQuantiles([0.01, 0.5, 0.999])
+        );
+
+        $storage = $this->createStorage($registry);
 
         $storage->clear();
         assertEmpty($this->fetchList($storage));
@@ -107,16 +117,30 @@ trait StorageTesting
             [0.1, 0.5, 1]
         );
 
+        $storage->persistSummary(
+            new MetricValue(
+                new MetricNameWithLabels('database_query_time'),
+                0.5
+            ),
+        );
+
         // 1 of cpu_temp gauge
         // 3 of response_time histogram
         // 1 +Inf of response_time histogram
         // 2 (sum and count) of response_time histogram
-        assertCount(7, $this->fetchList($storage));
+        // 3 of database_query_time summary (quantiles)
+        // 2 (sum and count) of database_query_time summary
+        assertCount(12, $this->fetchList($storage));
 
         $storage->clear();
         assertEmpty($this->fetchList($storage));
     }
 
+    /**
+     * @param non-empty-list<int|float> $buckets
+     * @param non-empty-list<int|float> $values
+     * @param array<string, int|float> $expectedFetched
+     */
     #[DataProvider('histogramDataProvider')]
     public function testHistogram(array $buckets, array $values, array $expectedFetched): void
     {
@@ -160,6 +184,119 @@ trait StorageTesting
         }
 
         assertEquals($expectedFetched, $actualFetched);
+    }
+
+    /**
+     * @param non-empty-list<int|float> $values
+     * @param array<string, int|float> $expectedFetched
+     */
+    #[DataProvider('summaryDataProvider')]
+    public function testSummary(array $values, array $expectedFetched): void
+    {
+        $registry = new ArrayRegistry();
+        $registry->registerMetric(
+            (new Summary('response_time', 'some help'))
+                ->withQuantiles([0.01, 0.5, 0.999])
+        );
+
+        $storage = $this->createStorage($registry);
+
+        $metricNameWithLabels = new MetricNameWithLabels('response_time');
+
+        foreach ($values as $value) {
+            $storage->persistSummary(
+                new MetricValue(
+                    $metricNameWithLabels,
+                    $value
+                )
+            );
+        }
+
+        $fetched = $this->fetchList($storage);
+        assertSameSize($expectedFetched, $fetched);
+
+        $actualFetched = [];
+
+        foreach ($fetched as $metricValue) {
+            $name = $metricValue->metricNameWithLabels->metricName;
+            $labels = $metricValue->metricNameWithLabels->labels;
+            $value = $metricValue->value;
+
+            if (str_ends_with($name, '_sum')) {
+                $actualFetched['sum'] = $value;
+
+                continue;
+            }
+
+            if (str_ends_with($name, '_count')) {
+                $actualFetched['count'] = $value;
+
+                continue;
+            }
+
+            $actualFetched[$labels['quantile']] = $value;
+        }
+
+        assertEquals($expectedFetched, $actualFetched);
+    }
+
+    public function testSummaryWithoutValues(): void
+    {
+        $registry = new ArrayRegistry();
+
+        $registry->registerMetric(
+            (new Summary('response_time', 'some help'))
+                ->withQuantiles([0.01, 0.5, 0.999])
+        );
+
+        $storage = $this->createStorage($registry);
+
+        $fetched = $this->fetchList($storage);
+        assertSame([], $fetched);
+    }
+
+    /**
+     * @codeCoverageIgnore
+     */
+    public static function summaryDataProvider(): iterable
+    {
+        // [
+        //   items array,
+        //   expected metrics output
+        // ]
+
+        yield 'one value' => [
+            [42],
+            [
+                "0.01" => 42,
+                "0.5" => 42,
+                "0.999" => 42,
+                "sum" => 42,
+                "count" => 1,
+            ],
+        ];
+
+        yield 'two values' => [
+            [100, 300],
+            [
+                "0.01" => 102,
+                "0.5" => 200,
+                "0.999" => 299.8,
+                "sum" => 400,
+                "count" => 2,
+            ],
+        ];
+
+        yield 'many values 1' => [
+            [600, 700, 800, 900, 100, 200, 300, 400, 500],
+            [
+                "0.01" => 108,
+                "0.5" => 500,
+                "0.999" => 899.2,
+                "sum" => 4500,
+                "count" => 9,
+            ],
+        ];
     }
 
     /**
@@ -346,7 +483,7 @@ trait StorageTesting
         assertEquals($expectedFetched, $actualFetched);
     }
 
-    abstract protected function createStorage(): Storage;
+    abstract protected function createStorage(Registry $registry = new ArrayRegistry()): Storage;
 
     /**
      * @return list<MetricValue>

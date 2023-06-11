@@ -41,4 +41,11 @@ interface Storage
      * @throws StorageWriteException
      */
     public function persistHistogram(MetricValue $value, array $buckets): void;
+
+    /**
+     * @param MetricValue $value
+     *
+     * @throws StorageWriteException
+     */
+    public function persistSummary(MetricValue $value): void;
 }

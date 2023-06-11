@@ -6,9 +6,9 @@ namespace Zlodes\PrometheusClient\Tests\MetricTypes;
 
 use InvalidArgumentException;
 use PHPUnit\Framework\Attributes\DataProvider;
-use Zlodes\PrometheusClient\MetricTypes\Histogram;
+use Zlodes\PrometheusClient\Metric\Histogram;
 use PHPUnit\Framework\TestCase;
-use Zlodes\PrometheusClient\MetricTypes\MetricType;
+use Zlodes\PrometheusClient\Metric\MetricType;
 
 class HistogramTest extends TestCase
 {

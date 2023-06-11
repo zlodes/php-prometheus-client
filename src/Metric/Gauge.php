@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Zlodes\PrometheusClient\MetricTypes;
+namespace Zlodes\PrometheusClient\Metric;
 
 final class Gauge extends BaseMetric
 {

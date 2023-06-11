@@ -7,8 +7,8 @@ namespace Zlodes\PrometheusClient\KeySerialization;
 use InvalidArgumentException;
 use JsonException;
 use Webmozart\Assert\Assert;
-use Zlodes\PrometheusClient\Exceptions\MetricKeySerializationException;
-use Zlodes\PrometheusClient\Exceptions\MetricKeyUnserializationException;
+use Zlodes\PrometheusClient\Exception\MetricKeySerializationException;
+use Zlodes\PrometheusClient\Exception\MetricKeyUnserializationException;
 use Zlodes\PrometheusClient\Storage\DTO\MetricNameWithLabels;
 
 final class JsonSerializer implements Serializer

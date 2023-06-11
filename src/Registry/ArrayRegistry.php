@@ -4,14 +4,14 @@ declare(strict_types=1);
 
 namespace Zlodes\PrometheusClient\Registry;
 
-use Zlodes\PrometheusClient\Exceptions\MetricAlreadyRegisteredException;
-use Zlodes\PrometheusClient\Exceptions\MetricHasWrongTypeException;
-use Zlodes\PrometheusClient\Exceptions\MetricNotFoundException;
-use Zlodes\PrometheusClient\MetricTypes\Counter;
-use Zlodes\PrometheusClient\MetricTypes\Gauge;
-use Zlodes\PrometheusClient\MetricTypes\Histogram;
-use Zlodes\PrometheusClient\MetricTypes\Metric;
-use Zlodes\PrometheusClient\MetricTypes\MetricType;
+use Zlodes\PrometheusClient\Exception\MetricAlreadyRegisteredException;
+use Zlodes\PrometheusClient\Exception\MetricHasWrongTypeException;
+use Zlodes\PrometheusClient\Exception\MetricNotFoundException;
+use Zlodes\PrometheusClient\Metric\Counter;
+use Zlodes\PrometheusClient\Metric\Gauge;
+use Zlodes\PrometheusClient\Metric\Histogram;
+use Zlodes\PrometheusClient\Metric\Metric;
+use Zlodes\PrometheusClient\Metric\MetricType;
 
 final class ArrayRegistry implements Registry
 {

@@ -4,8 +4,8 @@ declare(strict_types=1);
 
 namespace Zlodes\PrometheusClient\KeySerialization;
 
-use Zlodes\PrometheusClient\Exceptions\MetricKeySerializationException;
-use Zlodes\PrometheusClient\Exceptions\MetricKeyUnserializationException;
+use Zlodes\PrometheusClient\Exception\MetricKeySerializationException;
+use Zlodes\PrometheusClient\Exception\MetricKeyUnserializationException;
 use Zlodes\PrometheusClient\Storage\DTO\MetricNameWithLabels;
 
 interface Serializer

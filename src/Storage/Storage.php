@@ -4,8 +4,8 @@ declare(strict_types=1);
 
 namespace Zlodes\PrometheusClient\Storage;
 
-use Zlodes\PrometheusClient\Exceptions\StorageReadException;
-use Zlodes\PrometheusClient\Exceptions\StorageWriteException;
+use Zlodes\PrometheusClient\Exception\StorageReadException;
+use Zlodes\PrometheusClient\Exception\StorageWriteException;
 use Zlodes\PrometheusClient\Storage\DTO\MetricValue;
 
 interface Storage

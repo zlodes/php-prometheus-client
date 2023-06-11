@@ -9,10 +9,10 @@ use PHPUnit\Framework\TestCase;
 use Mockery\Adapter\Phpunit\MockeryPHPUnitIntegration;
 use Psr\Log\NullLogger;
 use Zlodes\PrometheusClient\Collector\CollectorFactory;
-use Zlodes\PrometheusClient\Exceptions\MetricNotFoundException;
-use Zlodes\PrometheusClient\MetricTypes\Counter;
-use Zlodes\PrometheusClient\MetricTypes\Gauge;
-use Zlodes\PrometheusClient\MetricTypes\Histogram;
+use Zlodes\PrometheusClient\Exception\MetricNotFoundException;
+use Zlodes\PrometheusClient\Metric\Counter;
+use Zlodes\PrometheusClient\Metric\Gauge;
+use Zlodes\PrometheusClient\Metric\Histogram;
 use Zlodes\PrometheusClient\Registry\Registry;
 use Zlodes\PrometheusClient\Storage\Storage;
 

@@ -6,8 +6,8 @@ namespace Zlodes\PrometheusClient\Tests\KeySerialization;
 
 use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\TestCase;
-use Zlodes\PrometheusClient\Exceptions\MetricKeySerializationException;
-use Zlodes\PrometheusClient\Exceptions\MetricKeyUnserializationException;
+use Zlodes\PrometheusClient\Exception\MetricKeySerializationException;
+use Zlodes\PrometheusClient\Exception\MetricKeyUnserializationException;
 use Zlodes\PrometheusClient\KeySerialization\JsonSerializer;
 use Zlodes\PrometheusClient\Storage\DTO\MetricNameWithLabels;
 

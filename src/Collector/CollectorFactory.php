@@ -8,8 +8,8 @@ use Psr\Log\LoggerInterface;
 use Zlodes\PrometheusClient\Collector\ByType\CounterCollector;
 use Zlodes\PrometheusClient\Collector\ByType\GaugeCollector;
 use Zlodes\PrometheusClient\Collector\ByType\HistogramCollector;
-use Zlodes\PrometheusClient\Exceptions\MetricHasWrongTypeException;
-use Zlodes\PrometheusClient\Exceptions\MetricNotFoundException;
+use Zlodes\PrometheusClient\Exception\MetricHasWrongTypeException;
+use Zlodes\PrometheusClient\Exception\MetricNotFoundException;
 use Zlodes\PrometheusClient\Registry\Registry;
 use Zlodes\PrometheusClient\Storage\Storage;
 

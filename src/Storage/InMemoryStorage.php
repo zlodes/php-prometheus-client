@@ -5,10 +5,10 @@ declare(strict_types=1);
 namespace Zlodes\PrometheusClient\Storage;
 
 use Generator;
-use Zlodes\PrometheusClient\Exceptions\MetricKeySerializationException;
-use Zlodes\PrometheusClient\Exceptions\MetricKeyUnserializationException;
-use Zlodes\PrometheusClient\Exceptions\StorageReadException;
-use Zlodes\PrometheusClient\Exceptions\StorageWriteException;
+use Zlodes\PrometheusClient\Exception\MetricKeySerializationException;
+use Zlodes\PrometheusClient\Exception\MetricKeyUnserializationException;
+use Zlodes\PrometheusClient\Exception\StorageReadException;
+use Zlodes\PrometheusClient\Exception\StorageWriteException;
 use Zlodes\PrometheusClient\KeySerialization\JsonSerializer;
 use Zlodes\PrometheusClient\KeySerialization\Serializer;
 use Zlodes\PrometheusClient\Storage\DTO\MetricNameWithLabels;

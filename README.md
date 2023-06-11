@@ -1,6 +1,6 @@
 # PHP Prometheus Client
 
-[![codecov](https://codecov.io/gh/zlodes/php-prometheus-exporter/branch/master/graph/badge.svg?token=ROMQ8VBN0A)](https://codecov.io/gh/zlodes/php-prometheus-exporter)
+[![codecov](https://codecov.io/gh/zlodes/php-prometheus-client/branch/master/graph/badge.svg?token=ROMQ8VBN0A)](https://codecov.io/gh/zlodes/php-prometheus-client)
 
 ## Why?
 

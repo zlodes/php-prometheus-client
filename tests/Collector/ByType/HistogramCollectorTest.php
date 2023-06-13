@@ -116,7 +116,6 @@ class HistogramCollectorTest extends TestCase
 
     public static function invalidValuesDataProvider(): iterable
     {
-        yield 'zero' => [0];
         yield 'negative' => [-1];
     }
 }

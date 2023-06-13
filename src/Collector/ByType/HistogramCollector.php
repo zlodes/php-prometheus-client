@@ -26,11 +26,13 @@ final class HistogramCollector
 
     public function update(float|int $value): void
     {
-        Assert::true($value > 0, 'Value of Histogram metric MUST be positive');
+        Assert::true($value >= 0, 'Value of Histogram metric MUST not be negative');
 
         $histogram = $this->histogram;
         $labels = $this->composeLabels();
         $buckets = $this->histogram->getBuckets();
+
+        // TODO: check value is in range of buckets
 
         try {
             $this->storage->persistHistogram(

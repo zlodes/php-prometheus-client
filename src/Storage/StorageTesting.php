@@ -204,6 +204,136 @@ trait StorageTesting
         ];
     }
 
+    /**
+     * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
+     */
+    public function testHistogramWithLabels(): void
+    {
+        $storage = $this->createStorage();
+
+        $storage->persistHistogram(
+            new MetricValue(
+                new MetricNameWithLabels('some_metric', ['method' => 'GET']),
+                1
+            ),
+            [0, 1, 2, 3, 4, 5]
+        );
+
+        $storage->persistHistogram(
+            new MetricValue(
+                new MetricNameWithLabels('some_metric', ['method' => 'GET']),
+                2
+            ),
+            [0, 1, 2, 3, 4, 5]
+        );
+
+        $storage->persistHistogram(
+            new MetricValue(
+                new MetricNameWithLabels('some_metric', ['method' => 'GET']),
+                5
+            ),
+            [0, 1, 2, 3, 4, 5]
+        );
+
+        $storage->persistHistogram(
+            new MetricValue(
+                new MetricNameWithLabels('some_metric', ['method' => 'POST']),
+                2
+            ),
+            [0, 1, 2, 3, 4, 5]
+        );
+
+        $storage->persistHistogram(
+            new MetricValue(
+                new MetricNameWithLabels('some_metric', ['method' => 'POST']),
+                3
+            ),
+            [0, 1, 2, 3, 4, 5]
+        );
+
+        $actualFetched = $this->fetchList($storage);
+
+        $expectedFetched = [
+            // GET
+            new MetricValue(
+                new MetricNameWithLabels('some_metric', ['le' => '0', 'method' => 'GET']),
+                0.0
+            ),
+            new MetricValue(
+                new MetricNameWithLabels('some_metric', ['le' => '1', 'method' => 'GET']),
+                1.0
+            ),
+            new MetricValue(
+                new MetricNameWithLabels('some_metric', ['le' => '2', 'method' => 'GET']),
+                2.0
+            ),
+            new MetricValue(
+                new MetricNameWithLabels('some_metric', ['le' => '3', 'method' => 'GET']),
+                2.0
+            ),
+            new MetricValue(
+                new MetricNameWithLabels('some_metric', ['le' => '4', 'method' => 'GET']),
+                2.0
+            ),
+            new MetricValue(
+                new MetricNameWithLabels('some_metric', ['le' => '5', 'method' => 'GET']),
+                3.0
+            ),
+            new MetricValue(
+                new MetricNameWithLabels('some_metric', ['le' => '+Inf', 'method' => 'GET']),
+                3.0
+            ),
+            new MetricValue(
+                new MetricNameWithLabels('some_metric_sum', ['method' => 'GET']),
+                8.0
+            ),
+            new MetricValue(
+                new MetricNameWithLabels('some_metric_count', ['method' => 'GET']),
+                3.0
+            ),
+
+            // POST
+            new MetricValue(
+                new MetricNameWithLabels('some_metric', ['le' => '0', 'method' => 'POST']),
+                0.0
+            ),
+            new MetricValue(
+                new MetricNameWithLabels('some_metric', ['le' => '1', 'method' => 'POST']),
+                0.0
+            ),
+            new MetricValue(
+                new MetricNameWithLabels('some_metric', ['le' => '2', 'method' => 'POST']),
+                1.0
+            ),
+            new MetricValue(
+                new MetricNameWithLabels('some_metric', ['le' => '3', 'method' => 'POST']),
+                2.0
+            ),
+            new MetricValue(
+                new MetricNameWithLabels('some_metric', ['le' => '4', 'method' => 'POST']),
+                2.0
+            ),
+            new MetricValue(
+                new MetricNameWithLabels('some_metric', ['le' => '5', 'method' => 'POST']),
+                2.0
+            ),
+            new MetricValue(
+                new MetricNameWithLabels('some_metric', ['le' => '+Inf', 'method' => 'POST']),
+                2.0
+            ),
+            new MetricValue(
+                new MetricNameWithLabels('some_metric_sum', ['method' => 'POST']),
+                5.0
+            ),
+            new MetricValue(
+                new MetricNameWithLabels('some_metric_count', ['method' => 'POST']),
+                2.0
+            ),
+        ];
+
+        assertEquals($expectedFetched, $actualFetched);
+    }
+
     abstract protected function createStorage(): Storage;
 
     /**

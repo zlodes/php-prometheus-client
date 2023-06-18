@@ -41,5 +41,6 @@ class BaseMetricTest extends TestCase
         yield 'strings list' => [['foo', 'bar']];
         yield 'empty string' => [['']];
         yield 'one empty string' => [['foo' => 'bar', 'baz' => '']];
+        yield 'non-string values' => [['foo' => 'bar', 'baz' => 42]];
     }
 }

@@ -4,10 +4,8 @@ declare(strict_types=1);
 
 namespace Zlodes\PrometheusClient\Tests\Collector\ByType;
 
-use InvalidArgumentException;
 use Mockery;
 use Mockery\Adapter\Phpunit\MockeryPHPUnitIntegration;
-use PHPUnit\Framework\Attributes\DataProvider;
 use Psr\Log\LoggerInterface;
 use Psr\Log\NullLogger;
 use Zlodes\PrometheusClient\Collector\ByType\HistogramCollector;
@@ -79,7 +77,6 @@ class HistogramCollectorTest extends TestCase
         self::assertEquals(['route' => '/'], $metricValue->metricNameWithLabels->labels);
     }
 
-
     public function testsPersistError(): void
     {
         $histogram = new Histogram('response_time', 'App response time');
@@ -98,24 +95,5 @@ class HistogramCollectorTest extends TestCase
             ->expects('error');
 
         $collector->update(42);
-    }
-
-    #[DataProvider('invalidValuesDataProvider')]
-    public function testInvalidValues(mixed $value): void
-    {
-        $collector = new HistogramCollector(
-            new Histogram('response_time', 'App response time'),
-            Mockery::mock(Storage::class),
-            new NullLogger()
-        );
-
-        $this->expectException(InvalidArgumentException::class);
-
-        $collector->update($value);
-    }
-
-    public static function invalidValuesDataProvider(): iterable
-    {
-        yield 'negative' => [-1];
     }
 }

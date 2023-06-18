@@ -90,6 +90,21 @@ class JsonSerializerTest extends TestCase
             '',
             'Expected a non-empty value',
         ];
+
+        yield 'malformed labels' => [
+            'foo|false',
+            'Expected an array. Got: boolean',
+        ];
+
+        yield 'empty label' => [
+            'foo|{"bar":""}',
+            'Expected a different value than ""',
+        ];
+
+        yield 'malformed json' => [
+            'foo|{"bar":"baz}',
+            'Control character error, possibly incorrectly encoded',
+        ];
     }
 
     public static function serializeDataProvider(): iterable

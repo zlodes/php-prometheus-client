@@ -5,7 +5,6 @@ declare(strict_types=1);
 namespace Zlodes\PrometheusClient\Collector\ByType;
 
 use Psr\Log\LoggerInterface;
-use Webmozart\Assert\Assert;
 use Zlodes\PrometheusClient\Collector\WithLabels;
 use Zlodes\PrometheusClient\Exception\StorageWriteException;
 use Zlodes\PrometheusClient\Metric\Histogram;
@@ -26,13 +25,9 @@ final class HistogramCollector
 
     public function update(float|int $value): void
     {
-        Assert::true($value >= 0, 'Value of Histogram metric MUST not be negative');
-
         $histogram = $this->histogram;
         $labels = $this->composeLabels();
         $buckets = $this->histogram->getBuckets();
-
-        // TODO: check value is in range of buckets
 
         try {
             $this->storage->persistHistogram(

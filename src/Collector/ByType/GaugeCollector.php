@@ -12,7 +12,12 @@ use Zlodes\PrometheusClient\Storage\DTO\MetricNameWithLabels;
 use Zlodes\PrometheusClient\Storage\DTO\MetricValue;
 use Zlodes\PrometheusClient\Storage\Storage;
 
-final class GaugeCollector
+/**
+ * @internal Zlodes\PrometheusClient\Collector
+ *
+ * @final
+ */
+class GaugeCollector
 {
     use WithLabels;
 

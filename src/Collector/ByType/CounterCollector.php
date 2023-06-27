@@ -13,7 +13,12 @@ use Zlodes\PrometheusClient\Storage\DTO\MetricNameWithLabels;
 use Zlodes\PrometheusClient\Storage\DTO\MetricValue;
 use Zlodes\PrometheusClient\Storage\Storage;
 
-final class CounterCollector
+/**
+ * @internal Zlodes\PrometheusClient\Collector
+ *
+ * @final
+ */
+class CounterCollector
 {
     use WithLabels;
 

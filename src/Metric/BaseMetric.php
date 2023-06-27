@@ -11,7 +11,7 @@ use Webmozart\Assert\Assert;
  *
  * This class shouldn't be used directly anywhere.
  *
- * @internal Zlodes\PrometheusExporter\MetricTypes
+ * @internal Zlodes\PrometheusExporter\Metric
  */
 abstract class BaseMetric implements Metric
 {

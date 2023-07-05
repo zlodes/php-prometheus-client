@@ -1,4 +1,5 @@
 /.github/           export-ignore
+/.git-hooks/        export-ignore
 /.idea/             export-ignore
 /tests/             export-ignore
 /vendor/            export-ignore

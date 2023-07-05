@@ -99,7 +99,19 @@ trait StorageTesting
             )
         );
 
-        assertCount(1, $this->fetchList($storage));
+        $storage->persistHistogram(
+            new MetricValue(
+                new MetricNameWithLabels('response_time'),
+                0.5
+            ),
+            [0.1, 0.5, 1]
+        );
+
+        // 1 of cpu_temp gauge
+        // 3 of response_time histogram
+        // 1 +Inf of response_time histogram
+        // 2 (sum and count) of response_time histogram
+        assertCount(7, $this->fetchList($storage));
 
         $storage->clear();
         assertEmpty($this->fetchList($storage));

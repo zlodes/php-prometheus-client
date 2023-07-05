@@ -37,6 +37,7 @@ final class InMemoryStorage implements Storage
     public function clear(): void
     {
         $this->simpleMetricsStorage = [];
+        $this->histogramStorage = [];
     }
 
     public function setValue(MetricValue $value): void

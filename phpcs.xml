@@ -254,7 +254,7 @@
                 <element value="@mixin"/>
                 <element value="@codeCoverageIgnore,@deprecated"/>
                 <element value="@template,@psalm-template,@psalm-type,@psalm-import-type" />
-                <element value="@internal,@psalm-internal,@psalm-immutable" />
+                <element value="@internal,@final,@psalm-internal,@psalm-immutable" />
                 <element value="@no-named-arguments" />
                 <element value="@inheritDoc"/>
                 <element value="@property\"/>

@@ -15,7 +15,6 @@ use Zlodes\PrometheusClient\Storage\Storage;
 
 /**
  * @internal Zlodes\PrometheusClient\Collector
- *
  * @final
  */
 class CounterCollector

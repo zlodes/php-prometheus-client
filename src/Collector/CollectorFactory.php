@@ -10,6 +10,9 @@ use Zlodes\PrometheusClient\Collector\ByType\GaugeCollector;
 use Zlodes\PrometheusClient\Collector\ByType\HistogramCollector;
 use Zlodes\PrometheusClient\Exception\MetricHasWrongTypeException;
 use Zlodes\PrometheusClient\Exception\MetricNotFoundException;
+use Zlodes\PrometheusClient\Metric\Counter;
+use Zlodes\PrometheusClient\Metric\Gauge;
+use Zlodes\PrometheusClient\Metric\Histogram;
 use Zlodes\PrometheusClient\Registry\Registry;
 use Zlodes\PrometheusClient\Storage\Storage;
 
@@ -37,7 +40,7 @@ class CollectorFactory
      */
     public function counter(string $counterName): CounterCollector
     {
-        $counter = $this->registry->getCounter($counterName);
+        $counter = $this->registry->getMetric($counterName, Counter::class);
 
         return new CounterCollector(
             $counter,
@@ -58,7 +61,7 @@ class CollectorFactory
      */
     public function gauge(string $gaugeName): GaugeCollector
     {
-        $gauge = $this->registry->getGauge($gaugeName);
+        $gauge = $this->registry->getMetric($gaugeName, Gauge::class);
 
         return new GaugeCollector(
             $gauge,
@@ -69,10 +72,17 @@ class CollectorFactory
 
     /**
      * @final
+     *
+     * @param non-empty-string $histogramName
+     *
+     * @return HistogramCollector
+     *
+     * @throws MetricNotFoundException
+     * @throws MetricHasWrongTypeException
      */
     public function histogram(string $histogramName): HistogramCollector
     {
-        $histogram = $this->registry->getHistogram($histogramName);
+        $histogram = $this->registry->getMetric($histogramName, Histogram::class);
 
         return new HistogramCollector(
             $histogram,

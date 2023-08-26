@@ -27,9 +27,9 @@ final class Histogram extends BaseMetric
         10,
     ];
 
-    public function getType(): MetricType
+    public function getPrometheusType(): string
     {
-        return MetricType::HISTOGRAM;
+        return 'histogram';
     }
 
     public function getDependentMetrics(): array

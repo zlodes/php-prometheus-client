@@ -4,17 +4,20 @@ declare(strict_types=1);
 
 namespace Zlodes\PrometheusClient\Tests\Registry;
 
+use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\TestCase;
 use Zlodes\PrometheusClient\Exception\MetricAlreadyRegisteredException;
 use Zlodes\PrometheusClient\Exception\MetricHasWrongTypeException;
+use Zlodes\PrometheusClient\Exception\MetricNotFoundException;
 use Zlodes\PrometheusClient\Metric\Counter;
 use Zlodes\PrometheusClient\Metric\Gauge;
 use Zlodes\PrometheusClient\Metric\Histogram;
+use Zlodes\PrometheusClient\Metric\Metric;
 use Zlodes\PrometheusClient\Registry\ArrayRegistry;
 
 final class ArrayRegistryTest extends TestCase
 {
-    public function testRegisterAndGet(): void
+    public function testRegisterAndGetSuccessful(): void
     {
         $registry = new ArrayRegistry();
 
@@ -36,23 +39,22 @@ final class ArrayRegistryTest extends TestCase
 
         self::assertInstanceOf(
             Gauge::class,
-            $registry->getMetric('bar_gauge')
+            $registry->getMetric('bar_gauge', Gauge::class)
         );
 
-        self::assertNull(
-            $registry->getMetric('nonexistent')
+        self::assertInstanceOf(
+            Counter::class,
+            $registry->getMetric('foo_counter', Counter::class)
         );
 
-        self::assertNotNull(
-            $registry->getCounter('foo_counter')
+        self::assertInstanceOf(
+            Gauge::class,
+            $registry->getMetric('bar_gauge', Gauge::class)
         );
 
-        self::assertNotNull(
-            $registry->getGauge('bar_gauge')
-        );
-
-        self::assertNotNull(
-            $registry->getHistogram('baz_histogram')
+        self::assertInstanceOf(
+            Histogram::class,
+            $registry->getMetric('baz_histogram', Histogram::class)
         );
     }
 
@@ -71,48 +73,47 @@ final class ArrayRegistryTest extends TestCase
         );
     }
 
-    public function testGetCounterWithWrongType(): void
+    public function testMetricNotFound(): void
     {
         $registry = new ArrayRegistry();
 
-        $registry->registerMetric(
-            new Gauge('gauge', 'help')
-        );
+        $this->expectException(MetricNotFoundException::class);
+
+        $registry->getMetric('foo', Counter::class);
+    }
+
+    #[DataProvider('wrongTypesDataProvider')]
+    public function testWrongType(string $expectedClass, Metric $actualMetric): void
+    {
+        $registry = new ArrayRegistry();
+        $registry->registerMetric($actualMetric);
 
         $this->expectException(MetricHasWrongTypeException::class);
+        $this->expectExceptionMessage($actualMetric::class);
+        $this->expectExceptionMessage($expectedClass);
 
-        self::assertNull(
-            $registry->getCounter('gauge')
+        $registry->getMetric(
+            $actualMetric->getName(),
+            $expectedClass
         );
     }
 
-    public function testGetGaugeWithWrongType(): void
+    public static function wrongTypesDataProvider(): iterable
     {
-        $registry = new ArrayRegistry();
+        $counter = new Counter('counter', 'help');
+        $gauge = new Gauge('gauge', 'help');
+        $histogram = new Histogram('histogram', 'help');
 
-        $registry->registerMetric(
-            new Counter('counter', 'help')
-        );
+        // Counter expected
+        yield 'expected counter, gauge given' => [Counter::class, $gauge];
+        yield 'expected counter, histogram given' => [Counter::class, $histogram];
 
-        $this->expectException(MetricHasWrongTypeException::class);
+        // Gauge expected
+        yield 'expected gauge, counter given' => [Gauge::class, $counter];
+        yield 'expected gauge, histogram given' => [Gauge::class, $histogram];
 
-        self::assertNull(
-            $registry->getGauge('counter')
-        );
-    }
-
-    public function testGetHistogramWithWrongType(): void
-    {
-        $registry = new ArrayRegistry();
-
-        $registry->registerMetric(
-            new Counter('counter', 'help')
-        );
-
-        $this->expectException(MetricHasWrongTypeException::class);
-
-        self::assertNull(
-            $registry->getHistogram('counter')
-        );
+        // Histogram expected
+        yield 'expected histogram, counter given' => [Histogram::class, $counter];
+        yield 'expected histogram, gauge given' => [Histogram::class, $gauge];
     }
 }

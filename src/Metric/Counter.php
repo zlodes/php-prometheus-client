@@ -6,8 +6,8 @@ namespace Zlodes\PrometheusClient\Metric;
 
 final class Counter extends BaseMetric
 {
-    public function getType(): MetricType
+    public function getPrometheusType(): string
     {
-        return MetricType::COUNTER;
+        return 'counter';
     }
 }

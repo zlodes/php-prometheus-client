@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Zlodes\PrometheusClient\Tests\Collector;
 
+use a;
 use Mockery;
 use PHPUnit\Framework\TestCase;
 use Mockery\Adapter\Phpunit\MockeryPHPUnitIntegration;
@@ -29,8 +30,8 @@ class CollectorFactoryTest extends TestCase
         );
 
         $registryMock
-            ->expects('getCounter')
-            ->with('counter_name')
+            ->expects('getMetric')
+            ->with('counter_name', Counter::class)
             ->andReturn(new Counter('counter_name', 'Foo'));
 
         $factory->counter('counter_name');
@@ -45,8 +46,8 @@ class CollectorFactoryTest extends TestCase
         );
 
         $registryMock
-            ->expects('getCounter')
-            ->with('counter_name')
+            ->expects('getMetric')
+            ->with('counter_name', Counter::class)
             ->andThrow(new MetricNotFoundException());
 
         $this->expectException(MetricNotFoundException::class);
@@ -63,8 +64,8 @@ class CollectorFactoryTest extends TestCase
         );
 
         $registryMock
-            ->expects('getGauge')
-            ->with('gauge_name')
+            ->expects('getMetric')
+            ->with('gauge_name', Gauge::class)
             ->andReturn(new Gauge('gauge_name', 'Foo'));
 
         $factory->gauge('gauge_name');
@@ -79,8 +80,8 @@ class CollectorFactoryTest extends TestCase
         );
 
         $registryMock
-            ->expects('getGauge')
-            ->with('gauge_name')
+            ->expects('getMetric')
+            ->with('gauge_name', Gauge::class)
             ->andThrow(new MetricNotFoundException());
 
         $this->expectException(MetricNotFoundException::class);
@@ -97,8 +98,8 @@ class CollectorFactoryTest extends TestCase
         );
 
         $registryMock
-            ->expects('getHistogram')
-            ->with('histogram_name')
+            ->expects('getMetric')
+            ->with('histogram_name', Histogram::class)
             ->andReturn(new Histogram('histogram_name', 'Foo'));
 
         $factory->histogram('histogram_name');
@@ -113,8 +114,8 @@ class CollectorFactoryTest extends TestCase
         );
 
         $registryMock
-            ->expects('getHistogram')
-            ->with('histogram_name')
+            ->expects('getMetric')
+            ->with('histogram_name', Histogram::class)
             ->andThrow(new MetricNotFoundException());
 
         $this->expectException(MetricNotFoundException::class);

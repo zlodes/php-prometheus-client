@@ -28,7 +28,7 @@ final class StoredMetricsExporter implements Exporter
         foreach ($this->registry->getAll() as $name => $metric) {
             $metricStrings = [
                 "# HELP $name {$metric->getHelp()}",
-                "# TYPE $name {$metric->getType()->value}",
+                "# TYPE $name {$metric->getPrometheusType()}",
             ];
 
             $metricNameWithDependant = [

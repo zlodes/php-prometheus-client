@@ -7,11 +7,7 @@ namespace Zlodes\PrometheusClient\Registry;
 use Zlodes\PrometheusClient\Exception\MetricAlreadyRegisteredException;
 use Zlodes\PrometheusClient\Exception\MetricHasWrongTypeException;
 use Zlodes\PrometheusClient\Exception\MetricNotFoundException;
-use Zlodes\PrometheusClient\Metric\Counter;
-use Zlodes\PrometheusClient\Metric\Gauge;
-use Zlodes\PrometheusClient\Metric\Histogram;
 use Zlodes\PrometheusClient\Metric\Metric;
-use Zlodes\PrometheusClient\Metric\MetricType;
 
 final class ArrayRegistry implements Registry
 {
@@ -41,39 +37,12 @@ final class ArrayRegistry implements Registry
         return $this->metrics;
     }
 
-    public function getMetric(string $name): ?Metric
+    public function getMetric(string $name, string $class): Metric
     {
-        return $this->metrics[$name] ?? null;
-    }
+        $metric = $this->metrics[$name] ?? throw new MetricNotFoundException("Metric $name is not registered");
 
-    public function getCounter(string $name): Counter
-    {
-        $metric = $this->getMetric($name) ?? throw new MetricNotFoundException("Metric $name is not registered");
-
-        if (!$metric instanceof Counter) {
-            throw new MetricHasWrongTypeException(MetricType::COUNTER, $metric->getType());
-        }
-
-        return $metric;
-    }
-
-    public function getGauge(string $name): Gauge
-    {
-        $metric = $this->getMetric($name) ?? throw new MetricNotFoundException("Metric $name is not registered");
-
-        if (!$metric instanceof Gauge) {
-            throw new MetricHasWrongTypeException(MetricType::GAUGE, $metric->getType());
-        }
-
-        return $metric;
-    }
-
-    public function getHistogram(string $name): Histogram
-    {
-        $metric = $this->getMetric($name) ?? throw new MetricNotFoundException("Metric $name is not registered");
-
-        if (!$metric instanceof Histogram) {
-            throw new MetricHasWrongTypeException(MetricType::HISTOGRAM, $metric->getType());
+        if (is_a($metric, $class) === false) {
+            throw new MetricHasWrongTypeException($class, $metric::class);
         }
 
         return $metric;

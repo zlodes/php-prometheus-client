@@ -7,9 +7,9 @@ namespace Zlodes\PrometheusClient\Metric;
 interface Metric
 {
     /**
-     * @return MetricType Will be shown near metric output
+     * @return string Will be shown near metric output
      */
-    public function getType(): MetricType;
+    public function getPrometheusType(): string;
 
     /**
      * @return non-empty-string Metric name

@@ -6,8 +6,8 @@ namespace Zlodes\PrometheusClient\Metric;
 
 final class Gauge extends BaseMetric
 {
-    public function getType(): MetricType
+    public function getPrometheusType(): string
     {
-        return MetricType::GAUGE;
+        return 'gauge';
     }
 }

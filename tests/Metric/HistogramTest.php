@@ -8,17 +8,9 @@ use InvalidArgumentException;
 use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\TestCase;
 use Zlodes\PrometheusClient\Metric\Histogram;
-use Zlodes\PrometheusClient\Metric\MetricType;
 
 class HistogramTest extends TestCase
 {
-    public function testsCorrectType(): void
-    {
-        $histogram = new Histogram('response_time', 'App response time');
-
-        self::assertSame(MetricType::HISTOGRAM, $histogram->getType());
-    }
-
     public function testGetDependentMetrics(): void
     {
         $histogram = new Histogram('response_time', 'App response time');

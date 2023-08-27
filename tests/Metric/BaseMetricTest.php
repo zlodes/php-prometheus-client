@@ -8,6 +8,9 @@ use InvalidArgumentException;
 use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\TestCase;
 use Zlodes\PrometheusClient\Metric\Counter;
+use Zlodes\PrometheusClient\Metric\Gauge;
+use Zlodes\PrometheusClient\Metric\Histogram;
+use Zlodes\PrometheusClient\Metric\Metric;
 
 class BaseMetricTest extends TestCase
 {
@@ -42,5 +45,21 @@ class BaseMetricTest extends TestCase
         yield 'empty string' => [['']];
         yield 'one empty string' => [['foo' => 'bar', 'baz' => '']];
         yield 'non-string values' => [['foo' => 'bar', 'baz' => 42]];
+    }
+
+    #[DataProvider('prometheusMetricNameDataProvider')]
+    public function testMetricsHaveCorrectPrometheusType(string $expectedName, Metric $metric): void
+    {
+        self::assertEquals(
+            $expectedName,
+            $metric->getPrometheusType()
+        );
+    }
+
+    public static function prometheusMetricNameDataProvider(): iterable
+    {
+        yield 'counter' => ['counter', new Counter('foo', 'help')];
+        yield 'gauge' => ['gauge', new Gauge('foo', 'help')];
+        yield 'histogram' => ['histogram', new Histogram('foo', 'help')];
     }
 }

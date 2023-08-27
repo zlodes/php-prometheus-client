@@ -6,6 +6,7 @@ namespace Zlodes\PrometheusClient\Storage;
 
 use Zlodes\PrometheusClient\Storage\DTO\MetricValue;
 
+/** @codeCoverageIgnore */
 final class NullStorage implements Storage
 {
     public function fetch(): iterable

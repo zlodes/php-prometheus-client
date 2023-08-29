@@ -14,13 +14,15 @@ use Zlodes\PrometheusClient\Storage\DTO\MetricValue;
 use Zlodes\PrometheusClient\Storage\Storage;
 
 /**
- * @internal Zlodes\PrometheusClient\Collector
  * @final
  */
 class CounterCollector
 {
     use WithLabels;
 
+    /**
+     * @internal Zlodes\PrometheusClient\Collector
+     */
     public function __construct(
         private readonly Counter $counter,
         private readonly Storage $storage,

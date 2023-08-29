@@ -26,7 +26,7 @@ Summary is still in development. [What can I do if my client library does not su
 ## Installation
 
 ```shell
-composer require zlodes/prometheus-exporter
+composer require zlodes/prometheus-client
 ```
 
 ## Class responsibilities

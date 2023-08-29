@@ -10,8 +10,6 @@ use Webmozart\Assert\Assert;
  * TODO: Might be refactored
  *
  * This class shouldn't be used directly anywhere.
- *
- * @internal Zlodes\PrometheusExporter\Metric
  */
 abstract class BaseMetric implements Metric
 {

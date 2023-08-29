@@ -13,13 +13,15 @@ use Zlodes\PrometheusClient\Storage\DTO\MetricValue;
 use Zlodes\PrometheusClient\Storage\Storage;
 
 /**
- * @internal Zlodes\PrometheusClient\Collector
  * @final
  */
 class HistogramCollector
 {
     use WithLabels;
 
+    /**
+     * @internal Zlodes\PrometheusClient\Collector
+     */
     public function __construct(
         private readonly Histogram $histogram,
         private readonly Storage $storage,

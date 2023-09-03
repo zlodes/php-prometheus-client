@@ -14,7 +14,7 @@ use Zlodes\PrometheusClient\Exception\StorageWriteException;
 use Zlodes\PrometheusClient\KeySerialization\Serializer;
 use Zlodes\PrometheusClient\Storage\DTO\MetricNameWithLabels;
 use Zlodes\PrometheusClient\Storage\DTO\MetricValue;
-use Zlodes\PrometheusClient\Storage\InMemoryStorage;
+use Zlodes\PrometheusClient\Storage\InMemory\InMemoryStorage;
 use Zlodes\PrometheusClient\Storage\Storage;
 use Zlodes\PrometheusClient\Storage\StorageTesting;
 

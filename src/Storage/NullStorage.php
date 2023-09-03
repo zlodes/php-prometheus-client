@@ -33,4 +33,9 @@ final class NullStorage implements Storage
     {
         // Do nothing
     }
+
+    public function persistSummary(MetricValue $value): void
+    {
+        // Do nothing
+    }
 }

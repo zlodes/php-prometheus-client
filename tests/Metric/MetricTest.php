@@ -11,6 +11,7 @@ use Zlodes\PrometheusClient\Metric\Counter;
 use Zlodes\PrometheusClient\Metric\Gauge;
 use Zlodes\PrometheusClient\Metric\Histogram;
 use Zlodes\PrometheusClient\Metric\Metric;
+use Zlodes\PrometheusClient\Metric\Summary;
 
 class MetricTest extends TestCase
 {
@@ -44,5 +45,6 @@ class MetricTest extends TestCase
         yield 'counter' => ['counter', new Counter('foo', 'help')];
         yield 'gauge' => ['gauge', new Gauge('foo', 'help')];
         yield 'histogram' => ['histogram', new Histogram('foo', 'help')];
+        yield 'summary' => ['summary', new Summary('foo', 'help')];
     }
 }

@@ -5,7 +5,7 @@ declare(strict_types=1);
 namespace Zlodes\PrometheusClient\Collector\ByType;
 
 use Psr\Log\LoggerInterface;
-use Zlodes\PrometheusClient\Collector\WithLabels;
+use Zlodes\PrometheusClient\Collector\Collector;
 use Zlodes\PrometheusClient\Exception\StorageWriteException;
 use Zlodes\PrometheusClient\Metric\Gauge;
 use Zlodes\PrometheusClient\Storage\DTO\MetricNameWithLabels;
@@ -15,10 +15,8 @@ use Zlodes\PrometheusClient\Storage\Storage;
 /**
  * @final
  */
-class GaugeCollector
+class GaugeCollector extends Collector
 {
-    use WithLabels;
-
     /**
      * @internal Zlodes\PrometheusClient\Collector
      */
@@ -37,7 +35,7 @@ class GaugeCollector
     public function increment(int|float $value = 1): void
     {
         $gauge = $this->gauge;
-        $labels = $this->composeLabels();
+        $labels = $this->getLabels();
 
         try {
             $this->storage->incrementValue(
@@ -54,7 +52,7 @@ class GaugeCollector
     public function update(int|float $value): void
     {
         $gauge = $this->gauge;
-        $labels = $this->composeLabels();
+        $labels = $this->getLabels();
 
         try {
             $this->storage->setValue(
@@ -66,13 +64,5 @@ class GaugeCollector
         } catch (StorageWriteException $e) {
             $this->logger->error("Cannot set value of gauge {$gauge->getName()}: $e");
         }
-    }
-
-    /**
-     * @return array<non-empty-string, non-empty-string>
-     */
-    private function composeLabels(): array
-    {
-        return array_merge($this->gauge->getInitialLabels(), $this->labels);
     }
 }

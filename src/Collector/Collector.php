@@ -4,10 +4,7 @@ declare(strict_types=1);
 
 namespace Zlodes\PrometheusClient\Collector;
 
-/**
- * @psalm-internal Zlodes\PrometheusExporter\Collector
- */
-trait WithLabels
+abstract class Collector
 {
     /** @var array<non-empty-string, non-empty-string> */
     private array $labels = [];
@@ -15,13 +12,21 @@ trait WithLabels
     /**
      * @param non-empty-array<non-empty-string, non-empty-string> $labels
      *
-     * @return self
+     * @return static
      */
-    public function withLabels(array $labels): self
+    public function withLabels(array $labels): static
     {
         $instance = clone $this;
         $instance->labels = $labels;
 
         return $instance;
+    }
+
+    /**
+     * @return array<non-empty-string, non-empty-string>
+     */
+    public function getLabels(): array
+    {
+        return $this->labels;
     }
 }

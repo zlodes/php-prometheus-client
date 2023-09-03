@@ -26,9 +26,6 @@ class CounterCollectorTest extends TestCase
         $counter = new Counter(
             'mileage',
             'Mileage in kilometres',
-            [
-                'country' => 'US',
-            ]
         );
 
         $collector = new CounterCollector(
@@ -49,7 +46,6 @@ class CounterCollectorTest extends TestCase
             ->increment();
 
         $expectedLabels = [
-            'country' => 'US',
             'vin' => '1FT7W212345656558',
         ];
 

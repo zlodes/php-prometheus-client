@@ -5,7 +5,7 @@ declare(strict_types=1);
 namespace Zlodes\PrometheusClient\Collector\ByType;
 
 use Psr\Log\LoggerInterface;
-use Zlodes\PrometheusClient\Collector\WithLabels;
+use Zlodes\PrometheusClient\Collector\Collector;
 use Zlodes\PrometheusClient\Exception\StorageWriteException;
 use Zlodes\PrometheusClient\Metric\Histogram;
 use Zlodes\PrometheusClient\Storage\DTO\MetricNameWithLabels;
@@ -15,10 +15,8 @@ use Zlodes\PrometheusClient\Storage\Storage;
 /**
  * @final
  */
-class HistogramCollector
+class HistogramCollector extends Collector
 {
-    use WithLabels;
-
     /**
      * @internal Zlodes\PrometheusClient\Collector
      */
@@ -32,7 +30,7 @@ class HistogramCollector
     public function update(float|int $value): void
     {
         $histogram = $this->histogram;
-        $labels = $this->composeLabels();
+        $labels = $this->getLabels();
         $buckets = $this->histogram->getBuckets();
 
         try {
@@ -51,13 +49,5 @@ class HistogramCollector
     public function startTimer(): HistogramTimer
     {
         return new HistogramTimer($this);
-    }
-
-    /**
-     * @return array<non-empty-string, non-empty-string>
-     */
-    private function composeLabels(): array
-    {
-        return array_merge($this->histogram->getInitialLabels(), $this->labels);
     }
 }

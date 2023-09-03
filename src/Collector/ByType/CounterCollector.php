@@ -6,7 +6,7 @@ namespace Zlodes\PrometheusClient\Collector\ByType;
 
 use Psr\Log\LoggerInterface;
 use Webmozart\Assert\Assert;
-use Zlodes\PrometheusClient\Collector\WithLabels;
+use Zlodes\PrometheusClient\Collector\Collector;
 use Zlodes\PrometheusClient\Exception\StorageWriteException;
 use Zlodes\PrometheusClient\Metric\Counter;
 use Zlodes\PrometheusClient\Storage\DTO\MetricNameWithLabels;
@@ -16,10 +16,8 @@ use Zlodes\PrometheusClient\Storage\Storage;
 /**
  * @final
  */
-class CounterCollector
+class CounterCollector extends Collector
 {
-    use WithLabels;
-
     /**
      * @internal Zlodes\PrometheusClient\Collector
      */
@@ -40,7 +38,7 @@ class CounterCollector
         Assert::true($value > 0, 'Increment value of Counter metric MUST be positive');
 
         $counter = $this->counter;
-        $labels = $this->composeLabels();
+        $labels = $this->getLabels();
 
         try {
             $this->storage->incrementValue(
@@ -52,13 +50,5 @@ class CounterCollector
         } catch (StorageWriteException $e) {
             $this->logger->error("Cannot increment counter {$counter->getName()}: $e");
         }
-    }
-
-    /**
-     * @return array<non-empty-string, non-empty-string>
-     */
-    private function composeLabels(): array
-    {
-        return array_merge($this->counter->getInitialLabels(), $this->labels);
     }
 }

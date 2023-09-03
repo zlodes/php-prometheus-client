@@ -63,7 +63,7 @@
     "phpmd": "./vendor/bin/phpmd src text phpmd.xml",
     "phpstan": "./vendor/bin/phpstan",
     "psalm": "./vendor/bin/psalm --show-info=true",
-    "test": "./vendor/bin/phpunit",
+    "test": "./vendor/bin/phpunit --display-warnings",
     "test:coverage": [
       "@putenv XDEBUG_MODE=coverage",
       "@test"

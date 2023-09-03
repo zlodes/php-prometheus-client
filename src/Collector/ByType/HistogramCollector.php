@@ -8,6 +8,8 @@ use Psr\Log\LoggerInterface;
 use Zlodes\PrometheusClient\Collector\Collector;
 use Zlodes\PrometheusClient\Exception\StorageWriteException;
 use Zlodes\PrometheusClient\Metric\Histogram;
+use Zlodes\PrometheusClient\StopWatch\HRTimeStopWatch;
+use Zlodes\PrometheusClient\StopWatch\StopWatch;
 use Zlodes\PrometheusClient\Storage\DTO\MetricNameWithLabels;
 use Zlodes\PrometheusClient\Storage\DTO\MetricValue;
 use Zlodes\PrometheusClient\Storage\Storage;
@@ -19,11 +21,14 @@ class HistogramCollector extends Collector
 {
     /**
      * @internal Zlodes\PrometheusClient\Collector
+     *
+     * @param class-string<StopWatch> $stopWatchClass
      */
     public function __construct(
         private readonly Histogram $histogram,
         private readonly Storage $storage,
         private readonly LoggerInterface $logger,
+        private readonly string $stopWatchClass = HRTimeStopWatch::class,
     ) {
     }
 
@@ -46,8 +51,12 @@ class HistogramCollector extends Collector
         }
     }
 
-    public function startTimer(): HistogramTimer
+    public function startTimer(): StopWatch
     {
-        return new HistogramTimer($this);
+        $stopWatchClass = $this->stopWatchClass;
+
+        return new $stopWatchClass(function (float $elapsed): void {
+            $this->update($elapsed);
+        });
     }
 }

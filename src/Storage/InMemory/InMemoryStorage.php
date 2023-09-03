@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Zlodes\PrometheusClient\Storage;
+namespace Zlodes\PrometheusClient\Storage\InMemory;
 
 use Generator;
 use Zlodes\PrometheusClient\Exception\MetricKeySerializationException;
@@ -13,6 +13,7 @@ use Zlodes\PrometheusClient\KeySerialization\JsonSerializer;
 use Zlodes\PrometheusClient\KeySerialization\Serializer;
 use Zlodes\PrometheusClient\Storage\DTO\MetricNameWithLabels;
 use Zlodes\PrometheusClient\Storage\DTO\MetricValue;
+use Zlodes\PrometheusClient\Storage\Storage;
 
 final class InMemoryStorage implements Storage
 {

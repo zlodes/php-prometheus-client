@@ -8,11 +8,13 @@ use Psr\Log\LoggerInterface;
 use Zlodes\PrometheusClient\Collector\ByType\CounterCollector;
 use Zlodes\PrometheusClient\Collector\ByType\GaugeCollector;
 use Zlodes\PrometheusClient\Collector\ByType\HistogramCollector;
+use Zlodes\PrometheusClient\Collector\ByType\SummaryCollector;
 use Zlodes\PrometheusClient\Exception\MetricHasWrongTypeException;
 use Zlodes\PrometheusClient\Exception\MetricNotFoundException;
 use Zlodes\PrometheusClient\Metric\Counter;
 use Zlodes\PrometheusClient\Metric\Gauge;
 use Zlodes\PrometheusClient\Metric\Histogram;
+use Zlodes\PrometheusClient\Metric\Summary;
 use Zlodes\PrometheusClient\Registry\Registry;
 use Zlodes\PrometheusClient\Storage\Storage;
 
@@ -86,6 +88,25 @@ class CollectorFactory
 
         return new HistogramCollector(
             $histogram,
+            $this->storage,
+            $this->logger
+        );
+    }
+
+    /**
+     * @param non-empty-string $summaryName
+     *
+     * @return SummaryCollector
+     *
+     * @throws MetricNotFoundException
+     * @throws MetricHasWrongTypeException
+     */
+    final public function summary(string $summaryName): SummaryCollector
+    {
+        $summary = $this->registry->getMetric($summaryName, Summary::class);
+
+        return new SummaryCollector(
+            $summary,
             $this->storage,
             $this->logger
         );

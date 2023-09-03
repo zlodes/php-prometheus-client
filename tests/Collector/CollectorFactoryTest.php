@@ -14,6 +14,7 @@ use Zlodes\PrometheusClient\Exception\MetricNotFoundException;
 use Zlodes\PrometheusClient\Metric\Counter;
 use Zlodes\PrometheusClient\Metric\Gauge;
 use Zlodes\PrometheusClient\Metric\Histogram;
+use Zlodes\PrometheusClient\Metric\Summary;
 use Zlodes\PrometheusClient\Registry\Registry;
 use Zlodes\PrometheusClient\Storage\Storage;
 
@@ -121,5 +122,39 @@ class CollectorFactoryTest extends TestCase
         $this->expectException(MetricNotFoundException::class);
 
         $factory->histogram('histogram_name');
+    }
+
+    public function testSummaryFound(): void
+    {
+        $factory = new CollectorFactory(
+            $registryMock = Mockery::mock(Registry::class),
+            Mockery::mock(Storage::class),
+            new NullLogger(),
+        );
+
+        $registryMock
+            ->expects('getMetric')
+            ->with('summary_name', Summary::class)
+            ->andReturn(new Summary('summary_name', 'Foo'));
+
+        $factory->summary('summary_name');
+    }
+
+    public function testSummaryNotFound(): void
+    {
+        $factory = new CollectorFactory(
+            $registryMock = Mockery::mock(Registry::class),
+            Mockery::mock(Storage::class),
+            new NullLogger(),
+        );
+
+        $registryMock
+            ->expects('getMetric')
+            ->with('summary_name', Summary::class)
+            ->andThrow(new MetricNotFoundException());
+
+        $this->expectException(MetricNotFoundException::class);
+
+        $factory->summary('summary_name');
     }
 }

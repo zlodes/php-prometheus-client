@@ -12,14 +12,6 @@ This package provides you an ability to collect and export [Prometheus](https://
 * Won't break your business logic even if something is wrong with Metrics Storage
 * Ready to use with static analysis tools (PHPStan, Psalm)
 
-## Supported metric types
-
-1. [Counter](https://prometheus.io/docs/concepts/metric_types/#counter)
-2. [Gauge](https://prometheus.io/docs/concepts/metric_types/#gauge)
-3. [Histogram](https://prometheus.io/docs/concepts/metric_types/#histogram)
-
-Summary is still in development. [What can I do if my client library does not support the metric type I need?](https://prometheus.io/docs/practices/histograms/#what-can-i-do-if-my-client-library-does-not-support-the-metric-type-i-need)
-
 ## Adapters
 * For Laravel: [zlodes/prometheus-client-laravel](https://github.com/zlodes/php-prometheus-client-laravel)
 

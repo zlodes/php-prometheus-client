@@ -12,6 +12,8 @@ use Zlodes\PrometheusClient\Exception\MetricKeyUnserializationException;
 use Zlodes\PrometheusClient\Exception\StorageReadException;
 use Zlodes\PrometheusClient\Exception\StorageWriteException;
 use Zlodes\PrometheusClient\KeySerialization\Serializer;
+use Zlodes\PrometheusClient\Registry\ArrayRegistry;
+use Zlodes\PrometheusClient\Registry\Registry;
 use Zlodes\PrometheusClient\Storage\DTO\MetricNameWithLabels;
 use Zlodes\PrometheusClient\Storage\DTO\MetricValue;
 use Zlodes\PrometheusClient\Storage\InMemory\InMemoryStorage;
@@ -27,7 +29,7 @@ class InMemoryStorageTest extends TestCase
     {
         $keySerializerMock = Mockery::mock(Serializer::class);
 
-        $storage = new InMemoryStorage($keySerializerMock);
+        $storage = new InMemoryStorage(new ArrayRegistry(), $keySerializerMock);
 
         $keySerializerMock
             ->expects('serialize');
@@ -55,7 +57,7 @@ class InMemoryStorageTest extends TestCase
     {
         $keySerializerMock = Mockery::mock(Serializer::class);
 
-        $storage = new InMemoryStorage($keySerializerMock);
+        $storage = new InMemoryStorage(new ArrayRegistry(), $keySerializerMock);
 
         $keySerializerMock
             ->expects('serialize')
@@ -80,7 +82,7 @@ class InMemoryStorageTest extends TestCase
     {
         $keySerializerMock = Mockery::mock(Serializer::class);
 
-        $storage = new InMemoryStorage($keySerializerMock);
+        $storage = new InMemoryStorage(new ArrayRegistry(), $keySerializerMock);
 
         $keySerializerMock
             ->expects('serialize')
@@ -105,7 +107,7 @@ class InMemoryStorageTest extends TestCase
     {
         $keySerializerMock = Mockery::mock(Serializer::class);
 
-        $storage = new InMemoryStorage($keySerializerMock);
+        $storage = new InMemoryStorage(new ArrayRegistry(), $keySerializerMock);
 
         $keySerializerMock
             ->expects('serialize');
@@ -134,7 +136,7 @@ class InMemoryStorageTest extends TestCase
     {
         $keySerializerMock = Mockery::mock(Serializer::class);
 
-        $storage = new InMemoryStorage($keySerializerMock);
+        $storage = new InMemoryStorage(new ArrayRegistry(), $keySerializerMock);
 
         $keySerializerMock
             ->expects('serialize')
@@ -154,8 +156,59 @@ class InMemoryStorageTest extends TestCase
         );
     }
 
-    protected function createStorage(): Storage
+    public function testKeyUnserializeErrorWhileFetchingSummary(): void
     {
-        return new InMemoryStorage();
+        $keySerializerMock = Mockery::mock(Serializer::class);
+
+        $storage = new InMemoryStorage(new ArrayRegistry(), $keySerializerMock);
+
+        $keySerializerMock
+            ->expects('serialize');
+
+        $storage->persistSummary(
+            new MetricValue(
+                new MetricNameWithLabels('foo', []),
+                1
+            )
+        );
+
+        $keySerializerMock
+            ->expects('unserialize')
+            ->andThrow(
+                new MetricKeyUnserializationException('Something went wrong')
+            );
+
+        $this->expectException(StorageReadException::class);
+        $this->expectExceptionMessage('Cannot unserialize metrics key');
+
+        iterator_to_array($storage->fetch());
+    }
+
+    public function testSerializationExceptionWhilePersistingSummary(): void
+    {
+        $keySerializerMock = Mockery::mock(Serializer::class);
+
+        $storage = new InMemoryStorage(new ArrayRegistry(), $keySerializerMock);
+
+        $keySerializerMock
+            ->expects('serialize')
+            ->andThrow(
+                new MetricKeySerializationException('Something went wrong')
+            );
+
+        $this->expectException(StorageWriteException::class);
+        $this->expectExceptionMessage('Cannot serialize metric key');
+
+        $storage->persistSummary(
+            new MetricValue(
+                new MetricNameWithLabels('foo', []),
+                1
+            )
+        );
+    }
+
+    protected function createStorage(Registry $registry = new ArrayRegistry()): Storage
+    {
+        return new InMemoryStorage($registry);
     }
 }

@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Zlodes\PrometheusClient\Storage;
+namespace Zlodes\PrometheusClient\Storage\InMemory;
 
 final class InMemoryHistogram
 {

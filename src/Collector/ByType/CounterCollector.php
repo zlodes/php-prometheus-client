@@ -9,9 +9,9 @@ use Webmozart\Assert\Assert;
 use Zlodes\PrometheusClient\Collector\Collector;
 use Zlodes\PrometheusClient\Exception\StorageWriteException;
 use Zlodes\PrometheusClient\Metric\Counter;
+use Zlodes\PrometheusClient\Storage\Commands\IncrementCounter;
+use Zlodes\PrometheusClient\Storage\Contracts\CounterStorage;
 use Zlodes\PrometheusClient\Storage\DTO\MetricNameWithLabels;
-use Zlodes\PrometheusClient\Storage\DTO\MetricValue;
-use Zlodes\PrometheusClient\Storage\Storage;
 
 /**
  * @final
@@ -23,7 +23,7 @@ class CounterCollector extends Collector
      */
     public function __construct(
         private readonly Counter $counter,
-        private readonly Storage $storage,
+        private readonly CounterStorage $storage,
         private readonly LoggerInterface $logger,
     ) {
     }
@@ -41,14 +41,14 @@ class CounterCollector extends Collector
         $labels = $this->getLabels();
 
         try {
-            $this->storage->incrementValue(
-                new MetricValue(
-                    new MetricNameWithLabels($counter->getName(), $labels),
+            $this->storage->incrementCounter(
+                new IncrementCounter(
+                    new MetricNameWithLabels($counter->name, $labels),
                     $value
                 )
             );
         } catch (StorageWriteException $e) {
-            $this->logger->error("Cannot increment counter {$counter->getName()}: $e");
+            $this->logger->error("Cannot increment counter {$counter->name}: $e");
         }
     }
 }

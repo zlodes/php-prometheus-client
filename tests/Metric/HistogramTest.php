@@ -11,18 +11,6 @@ use Zlodes\PrometheusClient\Metric\Histogram;
 
 class HistogramTest extends TestCase
 {
-    public function testGetDependentMetrics(): void
-    {
-        $histogram = new Histogram('response_time', 'App response time');
-
-        $expectedDependentMetrics = [
-            'response_time_sum',
-            'response_time_count',
-        ];
-
-        self::assertEquals($expectedDependentMetrics, $histogram->getDependentMetrics());
-    }
-
     public function testWithBuckets(): void
     {
         $histogram = new Histogram('response_time', 'App response time');

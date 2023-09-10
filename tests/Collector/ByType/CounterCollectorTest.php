@@ -14,8 +14,8 @@ use Psr\Log\NullLogger;
 use Zlodes\PrometheusClient\Collector\ByType\CounterCollector;
 use Zlodes\PrometheusClient\Exception\StorageWriteException;
 use Zlodes\PrometheusClient\Metric\Counter;
-use Zlodes\PrometheusClient\Storage\DTO\MetricValue;
-use Zlodes\PrometheusClient\Storage\Storage;
+use Zlodes\PrometheusClient\Storage\Commands\IncrementCounter;
+use Zlodes\PrometheusClient\Storage\Contracts\CounterStorage;
 
 class CounterCollectorTest extends TestCase
 {
@@ -30,14 +30,14 @@ class CounterCollectorTest extends TestCase
 
         $collector = new CounterCollector(
             $counter,
-            $storageMock = Mockery::mock(Storage::class),
+            $storageMock = Mockery::mock(CounterStorage::class),
             new NullLogger()
         );
 
-        /** @var MetricValue $metricValue */
+        /** @var IncrementCounter $incrementCommand */
         $storageMock
-            ->expects('incrementValue')
-            ->with(Mockery::capture($metricValue));
+            ->expects('incrementCounter')
+            ->with(Mockery::capture($incrementCommand));
 
         $collector
             ->withLabels([
@@ -49,9 +49,9 @@ class CounterCollectorTest extends TestCase
             'vin' => '1FT7W212345656558',
         ];
 
-        self::assertEquals(1, $metricValue->value);
-        self::assertEquals('mileage', $metricValue->metricNameWithLabels->metricName);
-        self::assertEquals($expectedLabels, $metricValue->metricNameWithLabels->labels);
+        self::assertEquals(1, $incrementCommand->value);
+        self::assertEquals('mileage', $incrementCommand->metricNameWithLabels->metricName);
+        self::assertEquals($expectedLabels, $incrementCommand->metricNameWithLabels->labels);
     }
 
     public function testStorageError(): void
@@ -60,12 +60,12 @@ class CounterCollectorTest extends TestCase
 
         $collector = new CounterCollector(
             $counter,
-            $storageMock = Mockery::mock(Storage::class),
+            $storageMock = Mockery::mock(CounterStorage::class),
             $loggerMock = Mockery::mock(LoggerInterface::class),
         );
 
         $storageMock
-            ->expects('incrementValue')
+            ->expects('incrementCounter')
             ->andThrow(new StorageWriteException('Cannot write'));
 
         $loggerMock
@@ -79,7 +79,7 @@ class CounterCollectorTest extends TestCase
     {
         $collector = new CounterCollector(
             new Counter('mileage', 'Mileage in kilometres'),
-            Mockery::mock(Storage::class),
+            Mockery::mock(CounterStorage::class),
             new NullLogger()
         );
 

@@ -2,39 +2,28 @@
 
 declare(strict_types=1);
 
-namespace Zlodes\PrometheusClient\Tests\Storage;
+namespace Zlodes\PrometheusClient\Tests\Summary;
 
+use InvalidArgumentException;
 use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\TestCase;
-use Zlodes\PrometheusClient\Storage\InMemory\InMemorySummary;
+use Zlodes\PrometheusClient\Summary\QuantileCalculator;
 
-class InMemorySummaryTest extends TestCase
+class QuantileCalculatorTest extends TestCase
 {
-    public static function sumAndCountDataProvider(): iterable
+    #[DataProvider('quantilesDataProvider')]
+    public function testCalculate(array $items, float $actualResult, float $expectedResult): void
     {
-        // [
-        //   items array,
-        //   expected count,
-        //   expected sum
-        // ]
+        $actualResult = QuantileCalculator::calculate($items, $actualResult);
 
-        yield 'empty' => [
-            [],
-            0,
-            0,
-        ];
+        self::assertEquals($expectedResult, $actualResult);
+    }
 
-        yield 'one value' => [
-            [42],
-            1,
-            42,
-        ];
+    public function testCalculateEmptyItems(): void
+    {
+        $this->expectException(InvalidArgumentException::class);
 
-        yield 'two values' => [
-            [42],
-            1,
-            42,
-        ];
+        QuantileCalculator::calculate([], 0.5);
     }
 
     public static function quantilesDataProvider(): iterable
@@ -44,12 +33,6 @@ class InMemorySummaryTest extends TestCase
         //   quantile,
         //   expected value
         // ]
-
-        yield 'empty' => [
-            [],
-            0.5,
-            0,
-        ];
 
         yield 'one value 0.01' => [
             [42],
@@ -130,38 +113,4 @@ class InMemorySummaryTest extends TestCase
         ];
     }
 
-    #[DataProvider('sumAndCountDataProvider')]
-    public function testSummarySumAndCount(array $items, int $expectedCount, float $expectedSum): void
-    {
-        $summary = new InMemorySummary($items);
-
-        self::assertEquals($expectedCount, $summary->getCount());
-        self::assertEquals($expectedSum, $summary->getSum());
-    }
-
-    #[DataProvider('quantilesDataProvider')]
-    public function testGetQuantile(array $items, float $actualResult, float $expectedResult): void
-    {
-        $summary = new InMemorySummary($items);
-
-        $actualResult = $summary->getQuantile($actualResult);
-
-        self::assertEquals($expectedResult, $actualResult);
-    }
-
-    public function testMaxValues(): void
-    {
-        $summary = new InMemorySummary(maxLength: 4);
-
-        $summary->push(1, 2, 3, 4);
-        self::assertSame([1,2,3,4], $summary->getItems());
-
-        // Single push
-        $summary->push(5);
-        self::assertSame([2, 3, 4, 5], $summary->getItems());
-
-        // Multiple push
-        $summary->push(6, 7);
-        self::assertSame([4, 5, 6, 7], $summary->getItems());
-    }
 }

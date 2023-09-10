@@ -32,16 +32,6 @@ final class Histogram extends Metric
         return 'histogram';
     }
 
-    public function getDependentMetrics(): array
-    {
-        $selfName = $this->getName();
-
-        return [
-            "{$selfName}_sum",
-            "{$selfName}_count",
-        ];
-    }
-
     /**
      * @return non-empty-list<float>
      */

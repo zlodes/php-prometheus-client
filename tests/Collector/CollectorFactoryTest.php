@@ -16,7 +16,10 @@ use Zlodes\PrometheusClient\Metric\Gauge;
 use Zlodes\PrometheusClient\Metric\Histogram;
 use Zlodes\PrometheusClient\Metric\Summary;
 use Zlodes\PrometheusClient\Registry\Registry;
-use Zlodes\PrometheusClient\Storage\Storage;
+use Zlodes\PrometheusClient\Storage\Contracts\CounterStorage;
+use Zlodes\PrometheusClient\Storage\Contracts\GaugeStorage;
+use Zlodes\PrometheusClient\Storage\Contracts\HistogramStorage;
+use Zlodes\PrometheusClient\Storage\Contracts\SummaryStorage;
 
 class CollectorFactoryTest extends TestCase
 {
@@ -24,10 +27,8 @@ class CollectorFactoryTest extends TestCase
 
     public function testCounterFound(): void
     {
-        $factory = new CollectorFactory(
-            $registryMock = Mockery::mock(Registry::class),
-            Mockery::mock(Storage::class),
-            new NullLogger(),
+        $factory = $this->createCollectorFactory(
+            $registryMock = Mockery::mock(Registry::class)
         );
 
         $registryMock
@@ -40,10 +41,8 @@ class CollectorFactoryTest extends TestCase
 
     public function testCounterNotFound(): void
     {
-        $factory = new CollectorFactory(
-            $registryMock = Mockery::mock(Registry::class),
-            Mockery::mock(Storage::class),
-            new NullLogger(),
+        $factory = $this->createCollectorFactory(
+            $registryMock = Mockery::mock(Registry::class)
         );
 
         $registryMock
@@ -58,10 +57,8 @@ class CollectorFactoryTest extends TestCase
 
     public function testGaugeFound(): void
     {
-        $factory = new CollectorFactory(
-            $registryMock = Mockery::mock(Registry::class),
-            Mockery::mock(Storage::class),
-            new NullLogger(),
+        $factory = $this->createCollectorFactory(
+            $registryMock = Mockery::mock(Registry::class)
         );
 
         $registryMock
@@ -74,10 +71,8 @@ class CollectorFactoryTest extends TestCase
 
     public function testGaugeNotFound(): void
     {
-        $factory = new CollectorFactory(
-            $registryMock = Mockery::mock(Registry::class),
-            Mockery::mock(Storage::class),
-            new NullLogger(),
+        $factory = $this->createCollectorFactory(
+            $registryMock = Mockery::mock(Registry::class)
         );
 
         $registryMock
@@ -92,10 +87,8 @@ class CollectorFactoryTest extends TestCase
 
     public function testHistogramFound(): void
     {
-        $factory = new CollectorFactory(
-            $registryMock = Mockery::mock(Registry::class),
-            Mockery::mock(Storage::class),
-            new NullLogger(),
+        $factory = $this->createCollectorFactory(
+            $registryMock = Mockery::mock(Registry::class)
         );
 
         $registryMock
@@ -108,10 +101,8 @@ class CollectorFactoryTest extends TestCase
 
     public function testHistogramNotFound(): void
     {
-        $factory = new CollectorFactory(
-            $registryMock = Mockery::mock(Registry::class),
-            Mockery::mock(Storage::class),
-            new NullLogger(),
+        $factory = $this->createCollectorFactory(
+            $registryMock = Mockery::mock(Registry::class)
         );
 
         $registryMock
@@ -126,10 +117,8 @@ class CollectorFactoryTest extends TestCase
 
     public function testSummaryFound(): void
     {
-        $factory = new CollectorFactory(
-            $registryMock = Mockery::mock(Registry::class),
-            Mockery::mock(Storage::class),
-            new NullLogger(),
+        $factory = $this->createCollectorFactory(
+            $registryMock = Mockery::mock(Registry::class)
         );
 
         $registryMock
@@ -142,10 +131,8 @@ class CollectorFactoryTest extends TestCase
 
     public function testSummaryNotFound(): void
     {
-        $factory = new CollectorFactory(
-            $registryMock = Mockery::mock(Registry::class),
-            Mockery::mock(Storage::class),
-            new NullLogger(),
+        $factory = $this->createCollectorFactory(
+            $registryMock = Mockery::mock(Registry::class)
         );
 
         $registryMock
@@ -156,5 +143,17 @@ class CollectorFactoryTest extends TestCase
         $this->expectException(MetricNotFoundException::class);
 
         $factory->summary('summary_name');
+    }
+
+    private function createCollectorFactory(Registry $registry): CollectorFactory
+    {
+        return new CollectorFactory(
+            $registry,
+            Mockery::mock(CounterStorage::class),
+            Mockery::mock(GaugeStorage::class),
+            Mockery::mock(HistogramStorage::class),
+            Mockery::mock(SummaryStorage::class),
+            new NullLogger(),
+        );
     }
 }

@@ -4,17 +4,18 @@ declare(strict_types=1);
 
 namespace Zlodes\PrometheusClient\Tests\Exporter;
 
+use Generator;
 use Mockery;
 use Mockery\Adapter\Phpunit\MockeryPHPUnitIntegration;
 use PHPUnit\Framework\TestCase;
 use Throwable;
-use Zlodes\PrometheusClient\Exporter\StoredMetricsExporter;
+use Zlodes\PrometheusClient\Exporter\FetcherExporter;
+use Zlodes\PrometheusClient\Fetcher\DTO\FetchedMetric;
+use Zlodes\PrometheusClient\Fetcher\Fetcher;
 use Zlodes\PrometheusClient\Metric\Counter;
 use Zlodes\PrometheusClient\Metric\Gauge;
-use Zlodes\PrometheusClient\Registry\ArrayRegistry;
 use Zlodes\PrometheusClient\Storage\DTO\MetricNameWithLabels;
 use Zlodes\PrometheusClient\Storage\DTO\MetricValue;
-use Zlodes\PrometheusClient\Storage\Storage;
 
 final class ExporterTest extends TestCase
 {
@@ -25,35 +26,37 @@ final class ExporterTest extends TestCase
      */
     public function testExport(): void
     {
-        $exporter = new StoredMetricsExporter(
-            $registry = new ArrayRegistry(),
-            $storageMock = Mockery::mock(Storage::class)
+        $exporter = new FetcherExporter(
+            $fetcherMock = Mockery::mock(Fetcher::class)
         );
 
-        $registry->registerMetric(
-            new Gauge('temperature', 'Temperature of Bob\'s body, Celsius')
-        );
-
-        $registry->registerMetric(
-            new Counter('jumps', 'Number of Bob\'s jumps')
-        );
-
-        $storageMock
+        $fetcherMock
             ->expects('fetch')
-            ->andReturn([
-                new MetricValue(
-                    new MetricNameWithLabels('temperature', ['source' => 'armpit', 'side' => 'left']),
-                    36.5
-                ),
-                new MetricValue(
-                    new MetricNameWithLabels('temperature', ['source' => 'ass']),
-                    37.2
-                ),
-                new MetricValue(
-                    new MetricNameWithLabels('jumps'),
-                    42
-                ),
-            ]);
+            ->andReturnUsing(static function (): Generator {
+                yield new FetchedMetric(
+                    new Gauge('temperature', 'Temperature of Bob\'s body, Celsius'),
+                    [
+                        new MetricValue(
+                            new MetricNameWithLabels('temperature', ['source' => 'armpit', 'side' => 'left']),
+                            36.5
+                        ),
+                        new MetricValue(
+                            new MetricNameWithLabels('temperature', ['source' => 'ass']),
+                            37.2
+                        ),
+                    ]
+                );
+
+                yield new FetchedMetric(
+                    new Counter('jumps', 'Number of Bob\'s jumps'),
+                    [
+                        new MetricValue(
+                            new MetricNameWithLabels('jumps'),
+                            42
+                        )
+                    ]
+                );
+            });
 
         $exportedStrings = [];
 

@@ -10,9 +10,9 @@ use Zlodes\PrometheusClient\Exception\StorageWriteException;
 use Zlodes\PrometheusClient\Metric\Summary;
 use Zlodes\PrometheusClient\StopWatch\HRTimeStopWatch;
 use Zlodes\PrometheusClient\StopWatch\StopWatch;
+use Zlodes\PrometheusClient\Storage\Commands\UpdateSummary;
+use Zlodes\PrometheusClient\Storage\Contracts\SummaryStorage;
 use Zlodes\PrometheusClient\Storage\DTO\MetricNameWithLabels;
-use Zlodes\PrometheusClient\Storage\DTO\MetricValue;
-use Zlodes\PrometheusClient\Storage\Storage;
 
 /**
  * @final
@@ -26,7 +26,7 @@ final class SummaryCollector extends Collector
      */
     public function __construct(
         private readonly Summary $summary,
-        private readonly Storage $storage,
+        private readonly SummaryStorage $storage,
         private readonly LoggerInterface $logger,
         private readonly string $stopWatchClass = HRTimeStopWatch::class,
     ) {
@@ -38,14 +38,14 @@ final class SummaryCollector extends Collector
         $labels = $this->getLabels();
 
         try {
-            $this->storage->persistSummary(
-                new MetricValue(
-                    new MetricNameWithLabels($summary->getName(), $labels),
+            $this->storage->updateSummary(
+                new UpdateSummary(
+                    new MetricNameWithLabels($summary->name, $labels),
                     $value,
                 )
             );
         } catch (StorageWriteException $e) {
-            $this->logger->error("Cannot persist Summary {$summary->getName()}: $e");
+            $this->logger->error("Cannot persist Summary {$summary->name}: $e");
         }
     }
 

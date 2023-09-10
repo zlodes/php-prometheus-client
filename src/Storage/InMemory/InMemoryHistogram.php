@@ -50,7 +50,7 @@ final class InMemoryHistogram
     }
 
     /**
-     * @return non-empty-array<non-empty-string|positive-int, int|float>
+     * @return non-empty-array<non-empty-string, int|float>
      */
     public function getBuckets(): array
     {

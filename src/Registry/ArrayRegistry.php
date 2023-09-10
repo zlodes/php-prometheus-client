@@ -21,7 +21,7 @@ final class ArrayRegistry implements Registry
      */
     public function registerMetric(Metric $metric): self
     {
-        $name = $metric->getName();
+        $name = $metric->name;
 
         if (array_key_exists($name, $this->metrics)) {
             throw new MetricAlreadyRegisteredException($name);

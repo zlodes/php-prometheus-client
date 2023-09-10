@@ -12,8 +12,9 @@ use Zlodes\PrometheusClient\Collector\ByType\HistogramCollector;
 use PHPUnit\Framework\TestCase;
 use Zlodes\PrometheusClient\Exception\StorageWriteException;
 use Zlodes\PrometheusClient\Metric\Histogram;
+use Zlodes\PrometheusClient\Storage\Commands\UpdateHistogram;
+use Zlodes\PrometheusClient\Storage\Contracts\HistogramStorage;
 use Zlodes\PrometheusClient\Storage\DTO\MetricValue;
-use Zlodes\PrometheusClient\Storage\Storage;
 
 class HistogramCollectorTest extends TestCase
 {
@@ -21,29 +22,30 @@ class HistogramCollectorTest extends TestCase
 
     public function testUpdate(): void
     {
-        $histogram = new Histogram('response_time', 'App response time');
+        $histogram = (new Histogram('response_time', 'App response time'))
+            ->withBuckets([0.5, 0.6, 1]);
 
         $collector = new HistogramCollector(
             $histogram,
-            $storageMock = Mockery::mock(Storage::class),
+            $storageMock = Mockery::mock(HistogramStorage::class),
             new NullLogger()
         );
 
-        /** @var MetricValue $metricValue */
+        /** @var UpdateHistogram $updateCommand */
         $storageMock
-            ->expects('persistHistogram')
+            ->expects('updateHistogram')
             ->with(
-                Mockery::capture($metricValue),
-                $histogram->getBuckets()
+                Mockery::capture($updateCommand),
             );
 
         $collector
             ->withLabels(['route' => '/'])
             ->update(0.65);
 
-        self::assertEquals('response_time', $metricValue->metricNameWithLabels->metricName);
-        self::assertEquals(0.65, $metricValue->value);
-        self::assertEquals(['route' => '/'], $metricValue->metricNameWithLabels->labels);
+        self::assertEquals('response_time', $updateCommand->metricNameWithLabels->metricName);
+        self::assertEquals(0.65, $updateCommand->value);
+        self::assertEquals(['route' => '/'], $updateCommand->metricNameWithLabels->labels);
+        self::assertEquals([0.5, 0.6, 1], $updateCommand->buckets);
     }
 
     public function testTimer(): void
@@ -52,16 +54,15 @@ class HistogramCollectorTest extends TestCase
 
         $collector = new HistogramCollector(
             $histogram,
-            $storageMock = Mockery::mock(Storage::class),
+            $storageMock = Mockery::mock(HistogramStorage::class),
             new NullLogger()
         );
 
-        /** @var MetricValue $metricValue */
+        /** @var UpdateHistogram $updateCommand */
         $storageMock
-            ->expects('persistHistogram')
+            ->expects('updateHistogram')
             ->with(
-                Mockery::capture($metricValue),
-                $histogram->getBuckets()
+                Mockery::capture($updateCommand),
             );
 
         $timer = $collector
@@ -72,9 +73,9 @@ class HistogramCollectorTest extends TestCase
 
         $timer->stop();
 
-        self::assertEquals('response_time', $metricValue->metricNameWithLabels->metricName);
-        self::assertTrue($metricValue->value > 0.02 && $metricValue->value < 0.021);
-        self::assertEquals(['route' => '/'], $metricValue->metricNameWithLabels->labels);
+        self::assertEquals('response_time', $updateCommand->metricNameWithLabels->metricName);
+        self::assertTrue($updateCommand->value > 0.02 && $updateCommand->value < 0.021);
+        self::assertEquals(['route' => '/'], $updateCommand->metricNameWithLabels->labels);
     }
 
     public function testsPersistError(): void
@@ -83,12 +84,12 @@ class HistogramCollectorTest extends TestCase
 
         $collector = new HistogramCollector(
             $histogram,
-            $storageMock = Mockery::mock(Storage::class),
+            $storageMock = Mockery::mock(HistogramStorage::class),
             $loggerMock = Mockery::mock(LoggerInterface::class)
         );
 
         $storageMock
-            ->expects('persistHistogram')
+            ->expects('updateHistogram')
             ->andThrow(new StorageWriteException('Cannot write'));
 
         $loggerMock

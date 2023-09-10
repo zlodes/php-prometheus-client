@@ -10,9 +10,9 @@ use Zlodes\PrometheusClient\Exception\StorageWriteException;
 use Zlodes\PrometheusClient\Metric\Histogram;
 use Zlodes\PrometheusClient\StopWatch\HRTimeStopWatch;
 use Zlodes\PrometheusClient\StopWatch\StopWatch;
+use Zlodes\PrometheusClient\Storage\Commands\UpdateHistogram;
+use Zlodes\PrometheusClient\Storage\Contracts\HistogramStorage;
 use Zlodes\PrometheusClient\Storage\DTO\MetricNameWithLabels;
-use Zlodes\PrometheusClient\Storage\DTO\MetricValue;
-use Zlodes\PrometheusClient\Storage\Storage;
 
 /**
  * @final
@@ -26,7 +26,7 @@ class HistogramCollector extends Collector
      */
     public function __construct(
         private readonly Histogram $histogram,
-        private readonly Storage $storage,
+        private readonly HistogramStorage $storage,
         private readonly LoggerInterface $logger,
         private readonly string $stopWatchClass = HRTimeStopWatch::class,
     ) {
@@ -39,15 +39,15 @@ class HistogramCollector extends Collector
         $buckets = $this->histogram->getBuckets();
 
         try {
-            $this->storage->persistHistogram(
-                new MetricValue(
-                    new MetricNameWithLabels($histogram->getName(), $labels),
-                    $value,
-                ),
-                $buckets
+            $this->storage->updateHistogram(
+                new UpdateHistogram(
+                    new MetricNameWithLabels($histogram->name, $labels),
+                    $buckets,
+                    $value
+                )
             );
         } catch (StorageWriteException $e) {
-            $this->logger->error("Cannot persist Histogram {$histogram->getName()}: $e");
+            $this->logger->error("Cannot persist Histogram {$histogram->name}: $e");
         }
     }
 

@@ -34,62 +34,11 @@ final class InMemorySummary
         }
     }
 
-    public function getCount(): int
-    {
-        return count($this->items);
-    }
-
-    public function getSum(): float
-    {
-        return array_sum($this->items);
-    }
-
     /**
      * @return list<int|float>
      */
     public function getItems(): array
     {
         return $this->items;
-    }
-
-    /**
-     * @param float $quantile
-     *
-     * @return float|int|null Calculated quantile value or null if there are no items
-     */
-    public function getQuantile(float $quantile): float|int|null
-    {
-        Assert::range($quantile, 0.0, 1.0);
-
-        $items = $this->items;
-
-        $itemsCount = count($items);
-
-        if ($itemsCount === 0) {
-            return null;
-        }
-
-        if ($itemsCount === 1) {
-            return $items[0];
-        }
-
-        sort($items);
-
-        $index = $quantile * (count($items) - 1);
-
-        $integerIndex = (int) $index;
-        $fractionalPartOfIndex = fmod($index, 1);
-
-        $integerIndexValue = $items[$integerIndex];
-
-        // If index is a whole number we should return the exact item
-        if ($fractionalPartOfIndex === 0.0) {
-            return $integerIndexValue;
-        }
-
-        $nextIndexValue = $items[$integerIndex + 1];
-
-        // Linear interpolation to get the exact quantile value
-        return $integerIndexValue + $fractionalPartOfIndex * ($nextIndexValue - $integerIndexValue);
     }
 }

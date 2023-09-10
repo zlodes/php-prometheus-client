@@ -16,7 +16,10 @@ use Zlodes\PrometheusClient\Metric\Gauge;
 use Zlodes\PrometheusClient\Metric\Histogram;
 use Zlodes\PrometheusClient\Metric\Summary;
 use Zlodes\PrometheusClient\Registry\Registry;
-use Zlodes\PrometheusClient\Storage\Storage;
+use Zlodes\PrometheusClient\Storage\Contracts\CounterStorage;
+use Zlodes\PrometheusClient\Storage\Contracts\GaugeStorage;
+use Zlodes\PrometheusClient\Storage\Contracts\HistogramStorage;
+use Zlodes\PrometheusClient\Storage\Contracts\SummaryStorage;
 
 /**
  * @final
@@ -25,7 +28,10 @@ class CollectorFactory
 {
     public function __construct(
         private readonly Registry $registry,
-        private readonly Storage $storage,
+        private readonly CounterStorage $counterStorage,
+        private readonly GaugeStorage $gaugeStorage,
+        private readonly HistogramStorage $histogramStorage,
+        private readonly SummaryStorage $summaryStorage,
         private readonly LoggerInterface $logger,
     ) {
     }
@@ -46,7 +52,7 @@ class CollectorFactory
 
         return new CounterCollector(
             $counter,
-            $this->storage,
+            $this->counterStorage,
             $this->logger
         );
     }
@@ -67,7 +73,7 @@ class CollectorFactory
 
         return new GaugeCollector(
             $gauge,
-            $this->storage,
+            $this->gaugeStorage,
             $this->logger
         );
     }
@@ -88,7 +94,7 @@ class CollectorFactory
 
         return new HistogramCollector(
             $histogram,
-            $this->storage,
+            $this->histogramStorage,
             $this->logger
         );
     }
@@ -107,7 +113,7 @@ class CollectorFactory
 
         return new SummaryCollector(
             $summary,
-            $this->storage,
+            $this->summaryStorage,
             $this->logger
         );
     }

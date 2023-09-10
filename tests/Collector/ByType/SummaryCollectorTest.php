@@ -12,10 +12,10 @@ use Zlodes\PrometheusClient\Collector\ByType\HistogramCollector;
 use Zlodes\PrometheusClient\Collector\ByType\SummaryCollector;
 use PHPUnit\Framework\TestCase;
 use Zlodes\PrometheusClient\Exception\StorageWriteException;
-use Zlodes\PrometheusClient\Metric\Histogram;
 use Zlodes\PrometheusClient\Metric\Summary;
+use Zlodes\PrometheusClient\Storage\Commands\UpdateSummary;
+use Zlodes\PrometheusClient\Storage\Contracts\SummaryStorage;
 use Zlodes\PrometheusClient\Storage\DTO\MetricValue;
-use Zlodes\PrometheusClient\Storage\Storage;
 
 class SummaryCollectorTest extends TestCase
 {
@@ -27,24 +27,24 @@ class SummaryCollectorTest extends TestCase
 
         $collector = new SummaryCollector(
             $summary,
-            $storageMock = Mockery::mock(Storage::class),
+            $storageMock = Mockery::mock(SummaryStorage::class),
             new NullLogger()
         );
 
-        /** @var MetricValue $metricValue */
+        /** @var UpdateSummary $updateCommand */
         $storageMock
-            ->expects('persistSummary')
+            ->expects('updateSummary')
             ->with(
-                Mockery::capture($metricValue)
+                Mockery::capture($updateCommand)
             );
 
         $collector
             ->withLabels(['route' => '/'])
             ->update(0.65);
 
-        self::assertEquals('response_time', $metricValue->metricNameWithLabels->metricName);
-        self::assertEquals(0.65, $metricValue->value);
-        self::assertEquals(['route' => '/'], $metricValue->metricNameWithLabels->labels);
+        self::assertEquals('response_time', $updateCommand->metricNameWithLabels->metricName);
+        self::assertEquals(0.65, $updateCommand->value);
+        self::assertEquals(['route' => '/'], $updateCommand->metricNameWithLabels->labels);
     }
 
     public function testTimer(): void
@@ -53,15 +53,15 @@ class SummaryCollectorTest extends TestCase
 
         $collector = new SummaryCollector(
             $summary,
-            $storageMock = Mockery::mock(Storage::class),
+            $storageMock = Mockery::mock(SummaryStorage::class),
             new NullLogger()
         );
 
-        /** @var MetricValue $metricValue */
+        /** @var UpdateSummary $updateCommand */
         $storageMock
-            ->expects('persistSummary')
+            ->expects('updateSummary')
             ->with(
-                Mockery::capture($metricValue)
+                Mockery::capture($updateCommand)
             );
 
         $timer = $collector
@@ -72,9 +72,9 @@ class SummaryCollectorTest extends TestCase
 
         $timer->stop();
 
-        self::assertEquals('response_time', $metricValue->metricNameWithLabels->metricName);
-        self::assertTrue($metricValue->value > 0.02 && $metricValue->value < 0.021);
-        self::assertEquals(['route' => '/'], $metricValue->metricNameWithLabels->labels);
+        self::assertEquals('response_time', $updateCommand->metricNameWithLabels->metricName);
+        self::assertTrue($updateCommand->value > 0.02 && $updateCommand->value < 0.021);
+        self::assertEquals(['route' => '/'], $updateCommand->metricNameWithLabels->labels);
     }
 
     public function testsPersistError(): void
@@ -83,13 +83,13 @@ class SummaryCollectorTest extends TestCase
 
         $collector = new SummaryCollector(
             $summary,
-            $storageMock = Mockery::mock(Storage::class),
+            $storageMock = Mockery::mock(SummaryStorage::class),
             $loggerMock = Mockery::mock(LoggerInterface::class)
         );
 
         /** @var MetricValue $metricValue */
         $storageMock
-            ->expects('persistSummary')
+            ->expects('updateSummary')
             ->andThrow(new StorageWriteException('Cannot write'));
 
         $loggerMock

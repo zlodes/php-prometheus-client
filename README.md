@@ -21,13 +21,9 @@ This package provides you an ability to collect and export [Prometheus](https://
 composer require zlodes/prometheus-client
 ```
 
-## Class responsibilities
+## Flow
 
-| Interface                             | Description                  | Default implementation                                          |
-|---------------------------------------|------------------------------|-----------------------------------------------------------------|
-| [Registry](src/Registry/Registry.php) | To declare a specific metric | [ArrayRegistry](src/Registry/ArrayRegistry.php)                 |
-| [Storage](src/Storage/Storage.php)    | Metrics values storage       | [InMemoryStorage](src/Storage/InMemoryStorage.php)              |
-| [Exporter](src/Exporter/Exporter.php) | Output collected metrics     | [StoredMetricsExporter](src/Exporter/StoredMetricsExporter.php) |
+
 
 Each class should be registered as a service. As a `singleton` in Laravel or `shared` service in Symfony.
 
@@ -38,7 +34,7 @@ Each class should be registered as a service. As a `singleton` in Laravel or `sh
 
 use Psr\Log\NullLogger;
 use Zlodes\PrometheusClient\Collector\CollectorFactory;
-use Zlodes\PrometheusClient\Exporter\StoredMetricsExporter;
+use Zlodes\PrometheusClient\Exporter\FetcherExporter;
 use Zlodes\PrometheusClient\Metric\Counter;
 use Zlodes\PrometheusClient\Metric\Gauge;
 use Zlodes\PrometheusClient\Metric\Histogram;
@@ -91,7 +87,7 @@ usleep(50_000);
 $requestTimer->stop();
 
 // Export metrics
-$exporter = new StoredMetricsExporter(
+$exporter = new FetcherExporter(
     $registry,
     $storage,
 );

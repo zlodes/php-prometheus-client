@@ -1,0 +1,34 @@
+@startuml
+'https://plantuml.com/component-diagram
+
+node "Userland code" {
+  HTTP - [Metrics Controller]
+
+  [Configuration]
+}
+
+node "zlodes/php-prometheus-client" {
+    [Fetcher]
+    [Exporter]
+    [Registry]
+    [CollectorFactory]
+
+    package "Storages" {
+        [CounterStorage]
+        [GaugeStorage]
+        [HistogramStorage]
+        [SummaryStorage]
+    }
+}
+
+[Metrics Controller] --> [Exporter]: Get output strings iterator for exporter
+[Exporter] -> [Fetcher]: Get metrics with values
+[Fetcher] -> [Registry]: Get metric definition
+[Fetcher] --> [CounterStorage]: Get values
+[Fetcher] --> [GaugeStorage]: Get values
+[Fetcher] --> [HistogramStorage]: Get values
+[Fetcher] --> [SummaryStorage]: Get values
+
+[Configuration] --> [Registry]: Register a metric
+
+@enduml

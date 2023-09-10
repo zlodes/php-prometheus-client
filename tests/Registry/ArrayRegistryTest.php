@@ -93,7 +93,7 @@ final class ArrayRegistryTest extends TestCase
         $this->expectExceptionMessage($expectedClass);
 
         $registry->getMetric(
-            $actualMetric->getName(),
+            $actualMetric->name,
             $expectedClass
         );
     }

@@ -11,18 +11,6 @@ use PHPUnit\Framework\TestCase;
 
 class SummaryTest extends TestCase
 {
-    public function testGetDependentMetrics(): void
-    {
-        $summary = new Summary('response_time', 'App response time');
-
-        $expectedDependentMetrics = [
-            'response_time_sum',
-            'response_time_count',
-        ];
-
-        self::assertEquals($expectedDependentMetrics, $summary->getDependentMetrics());
-    }
-
     public function testWithQuantiles(): void
     {
         $beforeQuantiles = new Summary('response_time', 'App response time');

@@ -17,16 +17,6 @@ final class Summary extends Metric
         return 'summary';
     }
 
-    public function getDependentMetrics(): array
-    {
-        $selfName = $this->getName();
-
-        return [
-            "{$selfName}_sum",
-            "{$selfName}_count",
-        ];
-    }
-
     /**
      * @return non-empty-list<float>
      */

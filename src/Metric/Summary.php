@@ -12,6 +12,9 @@ final class Summary extends Metric
     /** @var non-empty-list<float> */
     private array $quantiles = [0.01, 0.05, 0.5, 0.9, 0.95, 0.99, 0.999];
 
+    /** @var positive-int */
+    private int $maxItems = 1_000_000;
+
     public function getPrometheusType(): string
     {
         return 'summary';
@@ -36,6 +39,24 @@ final class Summary extends Metric
 
         $summary = clone $this;
         $summary->quantiles = $quantiles;
+
+        return $summary;
+    }
+
+    /**
+     * @return positive-int
+     */
+    public function getMaxItems(): int
+    {
+        return $this->maxItems;
+    }
+
+    public function withMaxItems(int $maxItems): self
+    {
+        Assert::positiveInteger($maxItems);
+
+        $summary = clone $this;
+        $summary->maxItems = $maxItems;
 
         return $summary;
     }

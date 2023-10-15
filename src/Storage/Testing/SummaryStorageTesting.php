@@ -67,7 +67,7 @@ trait SummaryStorageTesting
         assertCount(3, $fetched);
 
         // sort fetched values to have predictable order
-        usort($fetched, static function  (SummaryMetricValue $a, SummaryMetricValue $b) {
+        usort($fetched, static function (SummaryMetricValue $a, SummaryMetricValue $b) {
             $keyA = $a->metricNameWithLabels->metricName . ':' . serialize($a->metricNameWithLabels->labels);
             $keyB = $b->metricNameWithLabels->metricName . ':' . serialize($b->metricNameWithLabels->labels);
 

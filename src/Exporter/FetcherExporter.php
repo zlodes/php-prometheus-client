@@ -26,7 +26,7 @@ final class FetcherExporter implements Exporter
             foreach ($fetchedMetric->values as $value) {
                 $metricStrings[] = sprintf(
                     "%s%s %s",
-                    $metric->name,
+                    $value->metricNameWithLabels->metricName,
                     $this->buildLabelsString($value->metricNameWithLabels->labels),
                     $value->value
                 );

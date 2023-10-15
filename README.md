@@ -23,11 +23,29 @@ composer require zlodes/prometheus-client
 
 ## Flow
 
-### Fetching metrics
+TL;DR: Read [Simple example](#simple-example).
+
+### 1. Preparation
+
+1. Set up a storage to store metrics. There are four interfaces can be implemented:
+    1. [CounterStorage](./src/Storage/Contracts/CounterStorage.php)
+    2. [GaugeStorage](./src/Storage/Contracts/GaugeStorage.php)
+    3. [HistogramStorage](./src/Storage/Contracts/HistogramStorage.php)
+    4. [SummaryStorage](./src/Storage/Contracts/SummaryStorage.php)
+2. Set up a [Registry](./src/Registry/Registry.php) to register your metrics. [ArrayRegistry](./src/Registry/ArrayRegistry.php) is a default implementation.
+3. Register your metrics using the Registry from step 2.
+
+### 2. Collecting
+
+1. Get a collector for your metric from a [CollectorFactory](./src/Collector/CollectorFactory.php)
+2. Call metric update method (e.g. `increment` on CounterCollector)
+
+### 3. Exporting
+
+1. Create a controller to export metrics. Your controller should use [Exporter](./src/Exporter/Exporter.php). [FetcherExporter](./src/Exporter/FetcherExporter.php) is a default implementation.
+2. Set up a Prometheus to scrape metrics from your application using the controller from step 1.
 
 ![](./docs/export.png)
-
-Each class should be registered as a service. As a `singleton` in Laravel or `shared` service in Symfony.
 
 ## Simple example
 

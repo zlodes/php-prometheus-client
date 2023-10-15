@@ -26,7 +26,6 @@ class InMemorySummaryStorageTest extends TestCase
         return new InMemorySummaryStorage();
     }
 
-
     public function testKeyUnserializeErrorWhileFetchingSummary(): void
     {
         $keySerializerMock = Mockery::mock(Serializer::class);

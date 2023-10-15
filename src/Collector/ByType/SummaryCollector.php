@@ -42,6 +42,7 @@ final class SummaryCollector extends Collector
                 new UpdateSummary(
                     new MetricNameWithLabels($summary->name, $labels),
                     $value,
+                    $summary->getMaxItems()
                 )
             );
         } catch (StorageWriteException $e) {

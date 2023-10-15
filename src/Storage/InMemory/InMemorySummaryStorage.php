@@ -33,7 +33,7 @@ final class InMemorySummaryStorage implements SummaryStorage
             throw new StorageWriteException('Cannot serialize metric key', previous: $e);
         }
 
-        $summary = $this->storage[$key] ??= new InMemorySummary();
+        $summary = $this->storage[$key] ??= new InMemorySummary(maxLength: $command->maxItems);
 
         $summary->push($command->value);
     }

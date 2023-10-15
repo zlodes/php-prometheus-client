@@ -11,6 +11,7 @@ final class UpdateSummary
     public function __construct(
         public readonly MetricNameWithLabels $metricNameWithLabels,
         public readonly int|float $value,
+        public readonly int $maxItems = 1_000_000,
     ) {
     }
 }

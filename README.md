@@ -160,16 +160,16 @@ http_request_duration_seconds{le="0.1"} 1
 http_request_duration_seconds{le="0.5"} 1
 http_request_duration_seconds{le="1"} 1
 http_request_duration_seconds{le="+Inf"} 1
-http_request_duration_seconds 0.050070474
-http_request_duration_seconds 1
+http_request_duration_seconds_sum 0.050071506
+http_request_duration_seconds_count 1
 
 # HELP memory_used Used memory in bytes
 # TYPE memory_used summary
 memory_used{quantile="0.5"} 150
 memory_used{quantile="0.9"} 190
 memory_used{quantile="0.99"} 199
-memory_used 300
-memory_used 2
+memory_used_sum 300
+memory_used_count 2
 ```
 
 ## Testing

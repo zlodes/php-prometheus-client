@@ -244,7 +244,5 @@ class StoredMetricsFetcherTest extends TestCase
         self::assertSame($memoryUsageSummary->name . "_count", $fetchedSummary->values[3]->metricNameWithLabels->metricName);
         self::assertSame([], $fetchedSummary->values[3]->metricNameWithLabels->labels);
         self::assertSame(5, $fetchedSummary->values[3]->value);
-
-        // FIXME: ...
     }
 }

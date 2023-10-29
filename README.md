@@ -190,16 +190,32 @@ Example can be found in [InMemoryStorage](PrometheusClient/Storage/InMemoryStora
 
 #### Storage Testing
 
-There is a simple [trait](PrometheusClient/Storage/StorageTesting.php) to tests any storage you want. Here is an example:
+There are four useful traits to simplify your storage testing:
+
+1. [CounterStorageTesting](./src/Storage/Testing/CounterStorageTesting.php)
+2. [GaugeStorageTesting](./src/Storage/Testing/GaugeStorageTesting.php)
+3. [HistogramStorageTesting](./src/Storage/Testing/HistogramStorageTesting.php)
+4. [SummaryStorageTesting](./src/Storage/Testing/SummaryStorageTesting.php)
+
+They provide you a set of tests to check your storage implementation to be compatible with the library.
+
+Example:
 
 ```php
-class InMemoryStorageTest extends TestCase
-{
-    use StorageTesting;
+<?php
 
-    private function createStorage(): Storage
+use PHPUnit\Framework\TestCase;
+use Zlodes\PrometheusClient\Storage\Contracts\CounterStorage;
+use Zlodes\PrometheusClient\Storage\InMemory\InMemoryCounterStorage;
+use Zlodes\PrometheusClient\Storage\Testing\CounterStorageTesting;
+
+class InMemoryCounterStorageTest extends TestCase
+{
+    use CounterStorageTesting;
+
+    private function createStorage(): CounterStorage
     {
-        return new InMemoryStorage();
+        return new InMemoryCounterStorage();
     }
 }
 ```

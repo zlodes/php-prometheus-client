@@ -100,6 +100,8 @@ class CollectorFactory
     }
 
     /**
+     * @final
+     *
      * @param non-empty-string $summaryName
      *
      * @return SummaryCollector
@@ -107,7 +109,7 @@ class CollectorFactory
      * @throws MetricNotFoundException
      * @throws MetricHasWrongTypeException
      */
-    final public function summary(string $summaryName): SummaryCollector
+    public function summary(string $summaryName): SummaryCollector
     {
         $summary = $this->registry->getMetric($summaryName, Summary::class);
 

@@ -128,10 +128,6 @@
     <rule ref="SlevomatCodingStandard.ControlStructures.JumpStatementsSpacing">
         <properties>
             <property name="allowSingleLineYieldStacking" value="false"/>
-            <property name="linesCountBeforeControlStructure" value="1"/>
-            <property name="linesCountBeforeFirstControlStructure" value="0"/>
-            <property name="linesCountAfterControlStructure" value="0"/>
-            <property name="linesCountAfterLastControlStructure" value="0"/>
         </properties>
     </rule>
     <rule ref="SlevomatCodingStandard.ControlStructures.LanguageConstructWithParentheses"/>
@@ -139,8 +135,6 @@
     <rule ref="SlevomatCodingStandard.ControlStructures.RequireMultiLineTernaryOperator">
         <properties>
             <property name="lineLengthLimit" value="120"/>
-            <property name="ignoreComments" value="true" />
-            <property name="ignoreImports" value="true" />
         </properties>
     </rule>
     <rule ref="SlevomatCodingStandard.ControlStructures.RequireShortTernaryOperator"/>

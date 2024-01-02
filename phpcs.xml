@@ -286,7 +286,6 @@
         </properties>
     </rule>
     <rule ref="SlevomatCodingStandard.TypeHints.UselessConstantTypeHint"/>
-    <rule ref="SlevomatCodingStandard.Exceptions.ReferenceThrowableOnly"/>
     <rule ref="SlevomatCodingStandard.Exceptions.RequireNonCapturingCatch"/>
     <rule ref="SlevomatCodingStandard.Classes.RequireConstructorPropertyPromotion"/>
     <rule ref="SlevomatCodingStandard.ControlStructures.RequireNullCoalesceEqualOperator"/>

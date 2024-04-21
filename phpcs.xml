@@ -299,7 +299,6 @@
     <rule ref="SlevomatCodingStandard.TypeHints.LongTypeHints"/>
     <rule ref="SlevomatCodingStandard.Namespaces.UseDoesNotStartWithBackslash"/>
     <rule ref="SlevomatCodingStandard.Commenting.UselessFunctionDocComment"/>
-    <rule ref="SlevomatCodingStandard.Exceptions.DisallowNonCapturingCatch"/>
     <rule ref="SlevomatCodingStandard.TypeHints.DisallowArrayTypeHintSyntax"/>
     <rule ref="SlevomatCodingStandard.Commenting.UselessInheritDocComment"/>
     <rule ref="SlevomatCodingStandard.Functions.ArrowFunctionDeclaration">

@@ -7,6 +7,8 @@ namespace Zlodes\PrometheusClient\Tests\Fetcher;
 use Generator;
 use Mockery;
 use PHPUnit\Framework\TestCase;
+use Psr\Log\NullLogger;
+use Zlodes\PrometheusClient\Collector\ByType\CounterCollector;
 use Zlodes\PrometheusClient\Fetcher\DTO\FetchedMetric;
 use Zlodes\PrometheusClient\Fetcher\StoredMetricsFetcher;
 use Zlodes\PrometheusClient\Metric\Counter;
@@ -22,6 +24,10 @@ use Zlodes\PrometheusClient\Storage\DTO\HistogramMetricValue;
 use Zlodes\PrometheusClient\Storage\DTO\MetricNameWithLabels;
 use Zlodes\PrometheusClient\Storage\DTO\MetricValue;
 use Zlodes\PrometheusClient\Storage\DTO\SummaryMetricValue;
+use Zlodes\PrometheusClient\Storage\InMemory\InMemoryCounterStorage;
+use Zlodes\PrometheusClient\Tests\Stubs\GaugeStorageStub;
+use Zlodes\PrometheusClient\Tests\Stubs\HistogramStorageStub;
+use Zlodes\PrometheusClient\Tests\Stubs\SummaryStorageStub;
 
 /**
  * Kinda stupid test to check that the fetcher return metric as expected: with correct values and order
@@ -108,7 +114,7 @@ class StoredMetricsFetcherTest extends TestCase
 
         $summaryStorageMock
             ->expects('fetchSummaries')
-            ->andReturnUsing(static function(): Generator {
+            ->andReturnUsing(static function (): Generator {
                 yield new SummaryMetricValue(
                     new MetricNameWithLabels('memory_usage'),
                     [300, 500, 200, 500, 400]
@@ -244,5 +250,35 @@ class StoredMetricsFetcherTest extends TestCase
         self::assertSame($memoryUsageSummary->name . "_count", $fetchedSummary->values[3]->metricNameWithLabels->metricName);
         self::assertSame([], $fetchedSummary->values[3]->metricNameWithLabels->labels);
         self::assertSame(5, $fetchedSummary->values[3]->value);
+    }
+
+    /**
+     * Storage can return metric that was removed from the registry, it shouldn't break the fetcher
+     */
+    public function testRemovedMetricExistsInStorage(): void
+    {
+        $counterStorage = new InMemoryCounterStorage();
+
+        $counter = new Counter('foo_counter', 'help');
+
+        $counterCollector = new CounterCollector(
+            $counter,
+            $counterStorage,
+            new NullLogger(),
+        );
+
+        $counterCollector->increment();
+
+        $fetcher = new StoredMetricsFetcher(
+            registry: new ArrayRegistry(),
+            counterStorage: $counterStorage,
+            gaugeStorage: new GaugeStorageStub(),
+            histogramStorage: new HistogramStorageStub(),
+            summaryStorage: new SummaryStorageStub(),
+        );
+
+        $fetched = [...$fetcher->fetch()];
+
+        self::assertEmpty($fetched);
     }
 }

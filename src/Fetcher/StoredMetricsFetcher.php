@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace Zlodes\PrometheusClient\Fetcher;
 
 use Generator;
+use Zlodes\PrometheusClient\Exception\MetricNotFoundException;
 use Zlodes\PrometheusClient\Fetcher\DTO\FetchedMetric;
 use Zlodes\PrometheusClient\Metric\Counter;
 use Zlodes\PrometheusClient\Metric\Gauge;
@@ -58,12 +59,16 @@ final class StoredMetricsFetcher implements Fetcher
         }
 
         foreach ($countersByName as $metricName => $values) {
-            $metric = $this->registry->getMetric($metricName, Counter::class);
+            try {
+                $metric = $this->registry->getMetric($metricName, Counter::class);
 
-            yield new FetchedMetric(
-                $metric,
-                $values
-            );
+                yield new FetchedMetric(
+                    $metric,
+                    $values
+                );
+            } catch (MetricNotFoundException) {
+                // Skip. Metric might be removed from the registry after using
+            }
         }
     }
 

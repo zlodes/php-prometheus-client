@@ -19,7 +19,7 @@
     </source>
 
     <logging>
-        <junit outputFile="./vendor/junit.xml"/>
+        <junit outputFile="junit.xml"/>
     </logging>
 
     <coverage>

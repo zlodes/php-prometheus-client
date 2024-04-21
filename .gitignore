@@ -4,3 +4,4 @@ composer.lock
 
 # PHPUnit
 .phpunit.result.cache
+junit.xml

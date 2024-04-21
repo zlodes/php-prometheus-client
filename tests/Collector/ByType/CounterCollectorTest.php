@@ -16,6 +16,7 @@ use Zlodes\PrometheusClient\Exception\StorageWriteException;
 use Zlodes\PrometheusClient\Metric\Counter;
 use Zlodes\PrometheusClient\Storage\Commands\IncrementCounter;
 use Zlodes\PrometheusClient\Storage\Contracts\CounterStorage;
+use Zlodes\PrometheusClient\Tests\Stubs\CounterStorageStub;
 
 class CounterCollectorTest extends TestCase
 {
@@ -79,7 +80,7 @@ class CounterCollectorTest extends TestCase
     {
         $collector = new CounterCollector(
             new Counter('mileage', 'Mileage in kilometres'),
-            Mockery::mock(CounterStorage::class),
+            new CounterStorageStub(),
             new NullLogger()
         );
 

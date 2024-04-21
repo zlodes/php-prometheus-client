@@ -4,7 +4,6 @@ declare(strict_types=1);
 
 namespace Zlodes\PrometheusClient\Tests\Collector;
 
-use a;
 use Mockery;
 use PHPUnit\Framework\TestCase;
 use Mockery\Adapter\Phpunit\MockeryPHPUnitIntegration;
@@ -16,10 +15,10 @@ use Zlodes\PrometheusClient\Metric\Gauge;
 use Zlodes\PrometheusClient\Metric\Histogram;
 use Zlodes\PrometheusClient\Metric\Summary;
 use Zlodes\PrometheusClient\Registry\Registry;
-use Zlodes\PrometheusClient\Storage\Contracts\CounterStorage;
-use Zlodes\PrometheusClient\Storage\Contracts\GaugeStorage;
-use Zlodes\PrometheusClient\Storage\Contracts\HistogramStorage;
-use Zlodes\PrometheusClient\Storage\Contracts\SummaryStorage;
+use Zlodes\PrometheusClient\Tests\Stubs\CounterStorageStub;
+use Zlodes\PrometheusClient\Tests\Stubs\GaugeStorageStub;
+use Zlodes\PrometheusClient\Tests\Stubs\HistogramStorageStub;
+use Zlodes\PrometheusClient\Tests\Stubs\SummaryStorageStub;
 
 class CollectorFactoryTest extends TestCase
 {
@@ -149,10 +148,10 @@ class CollectorFactoryTest extends TestCase
     {
         return new CollectorFactory(
             $registry,
-            Mockery::mock(CounterStorage::class),
-            Mockery::mock(GaugeStorage::class),
-            Mockery::mock(HistogramStorage::class),
-            Mockery::mock(SummaryStorage::class),
+            new CounterStorageStub(),
+            new GaugeStorageStub(),
+            new HistogramStorageStub(),
+            new SummaryStorageStub(),
             new NullLogger(),
         );
     }

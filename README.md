@@ -59,7 +59,12 @@ use Zlodes\PrometheusClient\Metric\Counter;
 use Zlodes\PrometheusClient\Metric\Gauge;
 use Zlodes\PrometheusClient\Metric\Histogram;
 use Zlodes\PrometheusClient\Registry\ArrayRegistry;
-use Zlodes\PrometheusClient\Storage\InMemoryStorage;
+use Zlodes\PrometheusClient\Storage\InMemory\InMemoryCounterStorage;
+use Zlodes\PrometheusClient\Storage\InMemory\InMemoryGaugeStorage;
+use Zlodes\PrometheusClient\Storage\InMemory\InMemoryHistogramStorage;
+use Zlodes\PrometheusClient\Storage\InMemory\InMemorySummaryStorage;
+use Zlodes\PrometheusClient\Metric\Summary;
+use Zlodes\PrometheusClient\Fetcher\StoredMetricsFetcher;
 
 $registry = new ArrayRegistry();
 

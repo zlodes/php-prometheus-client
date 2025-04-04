@@ -32,7 +32,7 @@ use Zlodes\PrometheusClient\Tests\Stubs\SummaryStorageStub;
 /**
  * Kinda stupid test to check that the fetcher return metric as expected: with correct values and order
  */
-class StoredMetricsFetcherTest extends TestCase
+final class StoredMetricsFetcherTest extends TestCase
 {
     public function testFetch(): void
     {

@@ -10,7 +10,7 @@ use PHPUnit\Framework\Attributes\DataProvider;
 use Zlodes\PrometheusClient\Metric\Summary;
 use PHPUnit\Framework\TestCase;
 
-class SummaryTest extends TestCase
+final class SummaryTest extends TestCase
 {
     public function testWithQuantiles(): void
     {

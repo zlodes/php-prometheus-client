@@ -17,7 +17,7 @@ use Zlodes\PrometheusClient\Storage\DTO\MetricNameWithLabels;
 use Zlodes\PrometheusClient\Storage\InMemory\InMemoryCounterStorage;
 use Zlodes\PrometheusClient\Storage\Testing\CounterStorageTesting;
 
-class InMemoryCounterStorageTest extends TestCase
+final class InMemoryCounterStorageTest extends TestCase
 {
     use CounterStorageTesting;
 

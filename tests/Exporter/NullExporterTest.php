@@ -7,7 +7,7 @@ namespace Zlodes\PrometheusClient\Tests\Exporter;
 use Zlodes\PrometheusClient\Exporter\NullExporter;
 use PHPUnit\Framework\TestCase;
 
-class NullExporterTest extends TestCase
+final class NullExporterTest extends TestCase
 {
     public function testExport(): void
     {

@@ -17,7 +17,7 @@ use Zlodes\PrometheusClient\Storage\DTO\MetricNameWithLabels;
 use Zlodes\PrometheusClient\Storage\InMemory\InMemoryHistogramStorage;
 use Zlodes\PrometheusClient\Storage\Testing\HistogramStorageTesting;
 
-class InMemoryHistogramStorageTest extends TestCase
+final class InMemoryHistogramStorageTest extends TestCase
 {
     use HistogramStorageTesting;
 

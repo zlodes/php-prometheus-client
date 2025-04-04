@@ -20,7 +20,7 @@ use Zlodes\PrometheusClient\Tests\Stubs\GaugeStorageStub;
 use Zlodes\PrometheusClient\Tests\Stubs\HistogramStorageStub;
 use Zlodes\PrometheusClient\Tests\Stubs\SummaryStorageStub;
 
-class CollectorFactoryTest extends TestCase
+final class CollectorFactoryTest extends TestCase
 {
     use MockeryPHPUnitIntegration;
 

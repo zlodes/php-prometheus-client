@@ -7,7 +7,7 @@ namespace Zlodes\PrometheusClient\Tests\Collector;
 use PHPUnit\Framework\TestCase;
 use Zlodes\PrometheusClient\Collector\Collector;
 
-class CollectorTest extends TestCase
+final class CollectorTest extends TestCase
 {
     public function testReturnClone(): void
     {

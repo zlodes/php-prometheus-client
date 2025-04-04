@@ -13,7 +13,7 @@ use Zlodes\PrometheusClient\Metric\Histogram;
 use Zlodes\PrometheusClient\Metric\Metric;
 use Zlodes\PrometheusClient\Metric\Summary;
 
-class MetricTest extends TestCase
+final class MetricTest extends TestCase
 {
     #[DataProvider('wrongNamesDataProvider')]
     public function testWrongNames(string $name): void

@@ -11,7 +11,7 @@ use Zlodes\PrometheusClient\Exception\MetricKeyUnserializationException;
 use Zlodes\PrometheusClient\KeySerialization\JsonSerializer;
 use Zlodes\PrometheusClient\Storage\DTO\MetricNameWithLabels;
 
-class JsonSerializerTest extends TestCase
+final class JsonSerializerTest extends TestCase
 {
     #[DataProvider('serializeDataProvider')]
     public function testSerialization(string $name, array $labels, string $expectedKey): void

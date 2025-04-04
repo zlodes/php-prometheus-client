@@ -18,7 +18,7 @@ use Zlodes\PrometheusClient\Storage\Commands\IncrementCounter;
 use Zlodes\PrometheusClient\Storage\Contracts\CounterStorage;
 use Zlodes\PrometheusClient\Tests\Stubs\CounterStorageStub;
 
-class CounterCollectorTest extends TestCase
+final class CounterCollectorTest extends TestCase
 {
     use MockeryPHPUnitIntegration;
 

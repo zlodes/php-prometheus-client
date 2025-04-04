@@ -9,7 +9,7 @@ use PHPUnit\Framework\Attributes\DataProvider;
 use Zlodes\PrometheusClient\Storage\DTO\MetricNameWithLabels;
 use PHPUnit\Framework\TestCase;
 
-class MetricNameWithLabelsTest extends TestCase
+final class MetricNameWithLabelsTest extends TestCase
 {
     #[DataProvider('wrongLabelsDataProvider')]
     public function testWrongLabels(array $labels): void

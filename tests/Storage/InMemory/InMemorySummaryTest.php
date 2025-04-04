@@ -2,12 +2,12 @@
 
 declare(strict_types=1);
 
-namespace Storage\InMemory;
+namespace Zlodes\PrometheusClient\Tests\Storage\InMemory;
 
 use PHPUnit\Framework\TestCase;
 use Zlodes\PrometheusClient\Storage\InMemory\InMemorySummary;
 
-class InMemorySummaryTest extends TestCase
+final class InMemorySummaryTest extends TestCase
 {
     public function testMaxValues(): void
     {

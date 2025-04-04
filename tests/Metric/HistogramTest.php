@@ -9,7 +9,7 @@ use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\TestCase;
 use Zlodes\PrometheusClient\Metric\Histogram;
 
-class HistogramTest extends TestCase
+final class HistogramTest extends TestCase
 {
     public function testWithBuckets(): void
     {

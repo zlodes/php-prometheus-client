@@ -8,7 +8,6 @@ use Mockery;
 use Mockery\Adapter\Phpunit\MockeryPHPUnitIntegration;
 use Psr\Log\LoggerInterface;
 use Psr\Log\NullLogger;
-use Zlodes\PrometheusClient\Collector\ByType\HistogramCollector;
 use Zlodes\PrometheusClient\Collector\ByType\SummaryCollector;
 use PHPUnit\Framework\TestCase;
 use Zlodes\PrometheusClient\Exception\StorageWriteException;
@@ -17,7 +16,7 @@ use Zlodes\PrometheusClient\Storage\Commands\UpdateSummary;
 use Zlodes\PrometheusClient\Storage\Contracts\SummaryStorage;
 use Zlodes\PrometheusClient\Storage\DTO\MetricValue;
 
-class SummaryCollectorTest extends TestCase
+final class SummaryCollectorTest extends TestCase
 {
     use MockeryPHPUnitIntegration;
 

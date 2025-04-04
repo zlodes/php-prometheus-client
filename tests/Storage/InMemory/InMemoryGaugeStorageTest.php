@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Storage\InMemory;
+namespace Zlodes\PrometheusClient\Tests\Storage\InMemory;
 
 use Mockery;
 use PHPUnit\Framework\TestCase;
@@ -11,17 +11,13 @@ use Zlodes\PrometheusClient\Exception\MetricKeyUnserializationException;
 use Zlodes\PrometheusClient\Exception\StorageReadException;
 use Zlodes\PrometheusClient\Exception\StorageWriteException;
 use Zlodes\PrometheusClient\KeySerialization\Serializer;
-use Zlodes\PrometheusClient\Storage\Commands\IncrementCounter;
 use Zlodes\PrometheusClient\Storage\Commands\UpdateGauge;
-use Zlodes\PrometheusClient\Storage\Contracts\CounterStorage;
 use Zlodes\PrometheusClient\Storage\Contracts\GaugeStorage;
 use Zlodes\PrometheusClient\Storage\DTO\MetricNameWithLabels;
-use Zlodes\PrometheusClient\Storage\InMemory\InMemoryCounterStorage;
 use Zlodes\PrometheusClient\Storage\InMemory\InMemoryGaugeStorage;
-use Zlodes\PrometheusClient\Storage\Testing\CounterStorageTesting;
 use Zlodes\PrometheusClient\Storage\Testing\GaugeStorageTesting;
 
-class InMemoryGaugeStorageTest extends TestCase
+final class InMemoryGaugeStorageTest extends TestCase
 {
     use GaugeStorageTesting;
 

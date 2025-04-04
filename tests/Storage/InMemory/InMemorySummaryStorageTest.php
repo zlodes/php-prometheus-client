@@ -17,7 +17,7 @@ use Zlodes\PrometheusClient\Storage\InMemory\InMemorySummaryStorage;
 use PHPUnit\Framework\TestCase;
 use Zlodes\PrometheusClient\Storage\Testing\SummaryStorageTesting;
 
-class InMemorySummaryStorageTest extends TestCase
+final class InMemorySummaryStorageTest extends TestCase
 {
     use SummaryStorageTesting;
 

@@ -14,9 +14,8 @@ use Zlodes\PrometheusClient\Exception\StorageWriteException;
 use Zlodes\PrometheusClient\Metric\Histogram;
 use Zlodes\PrometheusClient\Storage\Commands\UpdateHistogram;
 use Zlodes\PrometheusClient\Storage\Contracts\HistogramStorage;
-use Zlodes\PrometheusClient\Storage\DTO\MetricValue;
 
-class HistogramCollectorTest extends TestCase
+final class HistogramCollectorTest extends TestCase
 {
     use MockeryPHPUnitIntegration;
 

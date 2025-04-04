@@ -15,7 +15,7 @@ use Zlodes\PrometheusClient\Metric\Gauge;
 use Zlodes\PrometheusClient\Storage\Commands\UpdateGauge;
 use Zlodes\PrometheusClient\Storage\Contracts\GaugeStorage;
 
-class GaugeCollectorTest extends TestCase
+final class GaugeCollectorTest extends TestCase
 {
     use MockeryPHPUnitIntegration;
 

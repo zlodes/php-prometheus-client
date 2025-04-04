@@ -6,12 +6,12 @@ namespace Zlodes\PrometheusClient\Storage\Commands;
 
 use Zlodes\PrometheusClient\Storage\DTO\MetricNameWithLabels;
 
-final class UpdateSummary
+final readonly class UpdateSummary
 {
     public function __construct(
-        public readonly MetricNameWithLabels $metricNameWithLabels,
-        public readonly int|float $value,
-        public readonly int $maxItems = 1_000_000,
+        public MetricNameWithLabels $metricNameWithLabels,
+        public int|float $value,
+        public int $maxItems = 1_000_000,
     ) {
     }
 }

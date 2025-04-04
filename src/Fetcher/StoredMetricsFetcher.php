@@ -22,14 +22,14 @@ use Zlodes\PrometheusClient\Storage\DTO\MetricValue;
 use Zlodes\PrometheusClient\Storage\DTO\SummaryMetricValue;
 use Zlodes\PrometheusClient\Summary\QuantileCalculator;
 
-final class StoredMetricsFetcher implements Fetcher
+final readonly class StoredMetricsFetcher implements Fetcher
 {
     public function __construct(
-        private readonly Registry $registry,
-        private readonly CounterStorage $counterStorage,
-        private readonly GaugeStorage $gaugeStorage,
-        private readonly HistogramStorage $histogramStorage,
-        private readonly SummaryStorage $summaryStorage,
+        private Registry $registry,
+        private CounterStorage $counterStorage,
+        private GaugeStorage $gaugeStorage,
+        private HistogramStorage $histogramStorage,
+        private SummaryStorage $summaryStorage,
     ) {
     }
 

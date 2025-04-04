@@ -9,11 +9,11 @@ use Closure;
 /**
  * @see https://www.php.net/manual/en/class.hrtime-stopwatch.php
  */
-final class HRTimeStopWatch implements StopWatch
+final readonly class HRTimeStopWatch implements StopWatch
 {
-    private readonly float $startedAt;
+    private float $startedAt;
 
-    public function __construct(private readonly Closure $onStop)
+    public function __construct(private Closure $onStop)
     {
         $this->startedAt = hrtime(true);
     }

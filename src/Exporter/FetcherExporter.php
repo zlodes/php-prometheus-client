@@ -6,10 +6,10 @@ namespace Zlodes\PrometheusClient\Exporter;
 
 use Zlodes\PrometheusClient\Fetcher\Fetcher;
 
-final class FetcherExporter implements Exporter
+final readonly class FetcherExporter implements Exporter
 {
     public function __construct(
-        private readonly Fetcher $fetcher,
+        private Fetcher $fetcher,
     ) {
     }
 

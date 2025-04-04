@@ -6,11 +6,11 @@ namespace Zlodes\PrometheusClient\Storage\Commands;
 
 use Zlodes\PrometheusClient\Storage\DTO\MetricNameWithLabels;
 
-final class UpdateGauge
+final readonly class UpdateGauge
 {
     public function __construct(
-        public readonly MetricNameWithLabels $metricNameWithLabels,
-        public readonly int|float $value,
+        public MetricNameWithLabels $metricNameWithLabels,
+        public int|float $value,
     ) {
     }
 }

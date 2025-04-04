@@ -6,15 +6,15 @@ namespace Zlodes\PrometheusClient\Storage\Commands;
 
 use Zlodes\PrometheusClient\Storage\DTO\MetricNameWithLabels;
 
-final class UpdateHistogram
+final readonly class UpdateHistogram
 {
     /**
      * @param non-empty-list<float> $buckets
      */
     public function __construct(
-        public readonly MetricNameWithLabels $metricNameWithLabels,
-        public readonly array $buckets,
-        public readonly int|float $value,
+        public MetricNameWithLabels $metricNameWithLabels,
+        public array $buckets,
+        public int|float $value,
     ) {
     }
 }

@@ -4,8 +4,6 @@ declare(strict_types=1);
 
 namespace Zlodes\PrometheusClient\Storage\DTO;
 
-use Webmozart\Assert\Assert;
-
 final readonly class MetricNameWithLabels
 {
     /**
@@ -16,7 +14,5 @@ final readonly class MetricNameWithLabels
         public string $metricName,
         public array $labels = [],
     ) {
-        Assert::allString(array_keys($labels));
-        Assert::allStringNotEmpty($labels);
     }
 }

@@ -56,7 +56,7 @@ final class Histogram extends Metric
     }
 
     /**
-     * @param non-empty-list<float> $buckets
+     * @param list<mixed> $buckets
      *
      * @throws InvalidArgumentException
      */

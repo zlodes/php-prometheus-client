@@ -62,7 +62,7 @@ final class Summary extends Metric
     }
 
     /**
-     * @param non-empty-list<float> $quantiles
+     * @param list<mixed> $quantiles
      *
      * @throws InvalidArgumentException
      */

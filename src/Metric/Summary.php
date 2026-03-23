@@ -30,8 +30,6 @@ final class Summary extends Metric
 
     /**
      * @param non-empty-list<float> $quantiles
-     *
-     * @return $this
      */
     public function withQuantiles(array $quantiles): self
     {

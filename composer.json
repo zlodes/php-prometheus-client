@@ -12,11 +12,11 @@
   "require": {
     "php": "^8.2",
     "psr/log": "^1.0 || ^2.0 || ^3.0",
-    "webmozart/assert": "^1.11"
+    "webmozart/assert": "^1.11 || ^2.0"
   },
   "require-dev": {
     "ergebnis/composer-normalize": "dev-main",
-    "infection/infection": "^0.29.14",
+    "infection/infection": "^0.32.6",
     "mockery/mockery": "^1.6.12",
     "phpcompatibility/php-compatibility": "^9.3.5",
     "phpmd/phpmd": "^2.15",
@@ -26,6 +26,7 @@
     "phpunit/phpunit": "^11.5.15",
     "rector/rector": "^2.0",
     "roave/security-advisories": "dev-latest",
+    "savinmikhail/dist-size-optimizer": "^0.2.7",
     "slevomat/coding-standard": "^8.16.2",
     "squizlabs/php_codesniffer": "^3.12.1",
     "vimeo/psalm": "^6.10"
@@ -48,6 +49,7 @@
       "infection/extension-installer": true,
       "phpstan/extension-installer": true
     },
+    "lock": true,
     "sort-packages": true
   },
   "scripts": {

@@ -48,7 +48,7 @@ final class JsonSerializer implements Serializer
                 : [];
 
             Assert::isArray($labels);
-            Assert::allStringNotEmpty($labels);
+            Assert::allStringNotEmpty($labels, 'Labels keys and values must be non-empty strings');
             /** @psalm-var array<non-empty-string, non-empty-string> $labels */
 
             return new MetricNameWithLabels($name, $labels);

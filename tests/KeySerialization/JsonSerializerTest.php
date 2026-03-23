@@ -98,7 +98,7 @@ final class JsonSerializerTest extends TestCase
 
         yield 'empty label' => [
             'foo|{"bar":""}',
-            'Expected a different value than ""',
+            'Labels keys and values must be non-empty strings',
         ];
 
         yield 'malformed json' => [
